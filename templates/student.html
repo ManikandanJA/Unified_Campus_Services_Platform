@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student Dashboard – UCSP</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body,html{width:100%;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#0d1b2a;color:#fff;min-height:100vh;overflow-x:hidden;}
+/* NAV */
+.snav{position:sticky;top:0;z-index:200;background:rgba(13,27,42,.97);border-bottom:1px solid rgba(255,255,255,.08);padding:0 16px;height:54px;display:flex;align-items:center;justify-content:space-between;}
+.snav-title{font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;}
+.snav-right{display:flex;align-items:center;gap:8px;}
+.snbadge{font-size:.68rem;background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.3);color:#4a9eff;border-radius:6px;padding:2px 8px;font-weight:700;}
+.slogout{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#ef4444;border-radius:8px;padding:5px 12px;font-size:.72rem;font-weight:700;cursor:pointer;font-family:inherit;}
+/* PAGES */
+.spage{display:none;padding:16px 16px 80px;}
+.spage.active{display:block;}
+/* BACK BAR */
+.back-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.back-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:5px 12px;font-size:.78rem;cursor:pointer;font-family:inherit;}
+.page-ttl{font-weight:800;font-size:1rem;}
+/* PROFILE */
+.profile-card{background:linear-gradient(135deg,#0a1628,#162040);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;gap:14px;align-items:center;}
+.s-avatar{width:62px;height:62px;border-radius:50%;background:rgba(74,158,255,.15);border:2px solid rgba(74,158,255,.3);display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;overflow:hidden;}
+.s-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.profile-name{font-size:1rem;font-weight:800;color:#fff;margin-bottom:5px;}
+.pmeta-row{display:flex;flex-wrap:wrap;gap:5px;}
+.pmeta{background:rgba(255,255,255,.07);border-radius:5px;padding:2px 7px;font-size:.68rem;color:rgba(255,255,255,.6);}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.stat{background:#162035;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 6px;text-align:center;}
+.stat-num{font-size:1.3rem;font-weight:800;}
+.stat-lbl{font-size:.55rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+/* QUICK NAV */
+.qnav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.qbtn{background:#162035;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:.15s;}
+.qbtn:active{background:#1e2e45;}
+.qicon{font-size:1.5rem;margin-bottom:5px;}
+.qlbl{font-size:.68rem;font-weight:700;color:rgba(255,255,255,.7);}
+/* SEC TITLE */
+.sec-ttl{font-size:.65rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;margin-top:14px;}
+/* CARD */
+.card{background:#162035;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;margin-bottom:12px;}
+.card-ttl{font-size:.82rem;font-weight:800;color:#fff;margin-bottom:10px;}
+/* NOTIF */
+.notif{border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.notif.info{background:rgba(74,158,255,.07);border:1px solid rgba(74,158,255,.18);}
+.notif.warn{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);}
+.notif.success{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);}
+.notif.danger{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);}
+.notif-ttl{font-size:.8rem;font-weight:700;color:#fff;margin-bottom:2px;}
+.notif-meta{font-size:.67rem;color:rgba(255,255,255,.4);}
+/* ATTENDANCE */
+.att-item{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.att-item:last-child{border:none;}
+.att-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.att-sub{font-size:.8rem;font-weight:600;color:#fff;}
+.att-pct{font-size:.82rem;font-weight:800;}
+.att-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);}
+.att-fill{height:5px;border-radius:3px;}
+.att-info{font-size:.65rem;color:rgba(255,255,255,.35);margin-top:3px;}
+/* MARKS */
+.mark-row{display:flex;justify-content:space-between;align-items:center;padding:9px 10px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:6px;}
+/* TIMETABLE */
+.tt-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tt{width:100%;border-collapse:collapse;font-size:.62rem;min-width:500px;}
+.tt th{padding:6px 3px;text-align:center;color:rgba(255,255,255,.45);border-bottom:1px solid rgba(255,255,255,.07);background:#0a1628;white-space:nowrap;}
+.tt td{padding:4px 2px;text-align:center;border:1px solid rgba(255,255,255,.04);}
+.th-c{background:rgba(59,130,246,.22);border-radius:4px;padding:4px 2px;color:#fff;font-weight:700;font-size:.62rem;}
+.lab-c{background:rgba(234,179,8,.15);border-radius:4px;padding:4px 2px;color:#fde68a;font-weight:700;font-size:.62rem;}
+.day-c{font-weight:800;color:rgba(255,255,255,.5);font-size:.62rem;text-align:center;}
+/* EXAM */
+.exam-card{background:#162035;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border-left:3px solid #4a9eff;}
+.exam-sub{font-size:.82rem;font-weight:700;color:#fff;}
+.exam-meta{font-size:.7rem;color:rgba(255,255,255,.45);margin-top:3px;}
+.exam-date-box{text-align:right;flex-shrink:0;margin-left:10px;}
+.exam-d{font-size:1.1rem;font-weight:800;}
+.exam-m{font-size:.65rem;color:rgba(255,255,255,.4);}
+/* ASSIGNMENTS */
+.asn-card{background:#162035;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+.asn-ttl{font-size:.85rem;font-weight:700;color:#fff;margin-bottom:5px;}
+.asn-meta{font-size:.7rem;color:rgba(255,255,255,.45);margin-bottom:8px;}
+.asn-desc{font-size:.75rem;color:rgba(255,255,255,.55);margin-bottom:10px;}
+.upload-box{border:1.5px dashed rgba(74,158,255,.35);border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:rgba(74,158,255,.04);margin-bottom:8px;}
+.upload-box-icon{font-size:1.5rem;margin-bottom:4px;}
+.upload-box-txt{font-size:.75rem;color:#4a9eff;font-weight:600;}
+.upload-note{font-size:.65rem;color:rgba(255,255,255,.3);margin-top:3px;}
+.chip{display:inline-block;font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:5px;margin-right:4px;}
+.chip-due{background:rgba(245,158,11,.12);color:#f59e0b;}
+.chip-sub{background:rgba(34,197,94,.12);color:#22c55e;}
+.chip-late{background:rgba(239,68,68,.12);color:#ef4444;}
+.chip-grade{background:rgba(74,158,255,.12);color:#4a9eff;}
+/* FORM INPUTS */
+.finp{width:100%;background:#0a1628;border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:9px;padding:9px 12px;font-size:.82rem;margin-bottom:10px;font-family:inherit;outline:none;}
+.finp:focus{border-color:rgba(74,158,255,.5);}
+select.finp{cursor:pointer;}
+textarea.finp{height:70px;resize:vertical;}
+.flbl{font-size:.72rem;color:rgba(255,255,255,.45);display:block;margin-bottom:4px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sbtn{background:linear-gradient(135deg,#1d4ed8,#3b82f6);border:none;color:#fff;border-radius:9px;padding:10px;font-size:.82rem;font-weight:700;cursor:pointer;width:100%;font-family:inherit;}
+/* LEAVE STATUS */
+.ls-card{background:#162035;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,.07);}
+.ls-info .ls-name{font-size:.82rem;font-weight:600;color:#fff;}
+.ls-info .ls-meta{font-size:.68rem;color:rgba(255,255,255,.4);margin-top:3px;}
+.spill{font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:6px;flex-shrink:0;}
+.s-pend{color:#f59e0b;background:rgba(245,158,11,.12);}
+.s-appr{color:#22c55e;background:rgba(34,197,94,.12);}
+.s-reje{color:#ef4444;background:rgba(239,68,68,.12);}
+/* NOTES */
+.note-card{background:#162035;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.note-ttl{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.note-meta{font-size:.68rem;color:rgba(255,255,255,.4);}
+.dl-btn{background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.3);color:#4a9eff;border-radius:8px;padding:6px 12px;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit;}
+/* BUS */
+.bus-card{background:#162035;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px 14px;margin-bottom:8px;}
+.bus-label{font-size:.85rem;font-weight:700;color:#fff;margin-bottom:8px;}
+.bus-row{display:flex;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.5);margin-bottom:4px;}
+.bus-time{color:#fff;font-weight:600;}
+/* BOTTOM TABS */
+.sbtabs{position:fixed;bottom:0;left:0;right:0;background:rgba(10,22,40,.98);border-top:1px solid rgba(255,255,255,.08);display:flex;z-index:300;}
+.sbtab{flex:1;padding:8px 0 10px;text-align:center;cursor:pointer;font-size:.56rem;color:rgba(255,255,255,.35);font-weight:700;border:none;background:none;font-family:inherit;}
+.sbtab.active{color:#4a9eff;}
+.sbtab-icon{font-size:1.15rem;display:block;margin-bottom:2px;}
+/* NOTIF DOT */
+.ndot{width:7px;height:7px;background:#ef4444;border-radius:50%;display:inline-block;vertical-align:middle;margin-left:3px;}
+/* TOAST */
+.stoast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:.82rem;font-weight:600;z-index:9999;color:#fff;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+
+<div id="stu-splash" style="display:none;position:fixed;inset:0;background:linear-gradient(135deg,#0f2044,#1e3a6e,#0d1b2a);z-index:9999;flex-direction:column;align-items:center;justify-content:center;">
+  <div id="stu-splash-inner" style="text-align:center;transform:translateY(30px);opacity:0;transition:all .5s ease">
+    <div style="font-size:4rem;margin-bottom:16px">&#127891;</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:8px">Welcome Back!</div>
+    <div id="stu-splash-name" style="font-size:1.1rem;color:#60a5fa;font-weight:700;margin-bottom:6px"></div>
+    <div style="font-size:.85rem;color:rgba(255,255,255,.5);margin-bottom:24px">Loading your dashboard...</div>
+    <div style="width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin:0 auto">
+      <div id="stu-splash-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:4px;transition:width 1s ease"></div>
+    </div>
+  </div>
+</div>
+<div class="snav">
+  <div class="snav-title">🎓 UCSP Student</div>
+  <div class="snav-right">
+    <span class="snbadge" id="sn-badge">Loading...</span>
+    <button class="slogout" onclick="stuLogout()">Logout</button>
+  </div>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<div class="spage active" id="spg-home">
+  <div class="profile-card">
+    <div class="s-avatar" id="s-avatar-box"><span>👨‍🎓</span></div>
+    <div style="flex:1">
+      <div class="profile-name" id="s-prof-name">Loading...</div>
+      <div class="pmeta-row">
+        <span class="pmeta" id="s-prof-reg">—</span>
+        <span class="pmeta" id="s-prof-yr">—</span>
+        <span class="pmeta" id="s-prof-sec">—</span>
+        <span class="pmeta" id="s-prof-dept">—</span>
+      </div>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-num" style="color:#4a9eff" id="s-stat-att">—</div><div class="stat-lbl">Attend</div></div>
+    <div class="stat"><div class="stat-num" style="color:#22c55e" id="s-stat-marks">—</div><div class="stat-lbl">Avg Mark</div></div>
+    <div class="stat"><div class="stat-num" style="color:#f59e0b" id="s-stat-asn">—</div><div class="stat-lbl">Pending</div></div>
+    <div class="stat"><div class="stat-num" style="color:#a78bfa" id="s-stat-notif">0</div><div class="stat-lbl">Notifs</div></div>
+  </div>
+  <div class="sec-ttl">Quick Access</div>
+  <div class="qnav">
+    <div class="qbtn" onclick="sGo('spg-att','stab-att')"><div class="qicon">✅</div><div class="qlbl">Attendance</div></div>
+    <div class="qbtn" onclick="sGo('spg-marks','stab-marks')"><div class="qicon">📊</div><div class="qlbl">Marks</div></div>
+    <div class="qbtn" onclick="sGo('spg-tt','stab-tt')"><div class="qicon">📅</div><div class="qlbl">Timetable</div></div>
+    <div class="qbtn" onclick="sGo('spg-exam',null)"><div class="qicon">📋</div><div class="qlbl">Exam</div></div>
+    <div class="qbtn" onclick="sGo('spg-asn',null)"><div class="qicon">📁</div><div class="qlbl">Assignments</div></div>
+    <div class="qbtn" onclick="sGo('spg-leave','stab-leave')"><div class="qicon">🏖️</div><div class="qlbl">Leave</div></div>
+    <div class="qbtn" onclick="sGoCalc()"><div class="qicon">🧮</div><div class="qlbl">Calculator</div></div>
+    <div class="qbtn" onclick="sGo('spg-notes',null)"><div class="qicon">📝</div><div class="qlbl">Notes</div></div>
+    <div class="qbtn" onclick="sGo('spg-bus',null)"><div class="qicon">🚌</div><div class="qlbl">Bus</div></div>
+    <div class="qbtn" onclick="sGo('spg-chgpw',null)"><div class="qicon">🔐</div><div class="qlbl">Password</div></div>
+    <div class="qbtn" onclick="sGo('spg-circular',null)"><div class="qicon">📜</div><div class="qlbl">Circulars</div></div>
+    <div class="qbtn" onclick="sGo('spg-notif',null);clearNotifBadge()"><div class="qicon" style="position:relative">🔔<span id="notif-badge" style="position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border-radius:50%;font-size:.5rem;font-weight:800;min-width:14px;height:14px;display:none;align-items:center;justify-content:center;line-height:1">0</span></div><div class="qlbl">Notifs <span class="ndot" id="ndot-home" style="display:none"></span></div></div>
+  </div>
+  <div class="sec-ttl">🔔 Latest Notifications</div>
+  <div id="s-home-notifs"><div style="color:rgba(255,255,255,.3);font-size:.8rem;text-align:center;padding:16px">Loading...</div></div>
+</div>
+
+<!-- ═══ ATTENDANCE ═══ -->
+<div class="spage" id="spg-att">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">✅ Attendance</span></div>
+  <div class="card">
+    <div class="card-ttl" id="att-card-ttl">Subject-wise Attendance</div>
+    <div id="att-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:20px;font-size:.82rem">Loading...</div></div>
+  </div>
+  <div class="card" id="att-overall-card" style="background:rgba(74,158,255,.07);border-color:rgba(74,158,255,.2);text-align:center;display:none">
+    <div style="font-size:.82rem;color:rgba(255,255,255,.6)">Overall Attendance</div>
+    <div style="font-size:2rem;font-weight:800;color:#4a9eff;margin:4px 0" id="att-overall">—</div>
+    <div style="font-size:.7rem;color:rgba(255,255,255,.35)">Minimum Required: 75%</div>
+  </div>
+</div>
+
+<!-- ═══ MARKS ═══ -->
+<div class="spage" id="spg-marks">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">📊 Marks</span></div>
+  <div class="card">
+    <div class="card-ttl" id="marks-card-ttl">Internal Assessment</div>
+    <div id="marks-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:20px;font-size:.82rem">Loading...</div></div>
+  </div>
+  <div id="marks-avg-card" style="display:none" class="card"></div>
+</div>
+
+<!-- ═══ TIMETABLE ═══ -->
+<div class="spage" id="spg-tt">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">📅 Timetable</span></div>
+  <div style="font-size:.7rem;color:rgba(255,255,255,.4);margin-bottom:10px" id="tt-info">Loading...</div>
+  <div id="tt-grid"></div>
+</div>
+
+<!-- ═══ EXAM SCHEDULE ═══ -->
+<div class="spage" id="spg-exam">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">📋 Exam Timetables</span></div>
+  <div id="exam-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">Loading...</div></div>
+</div>
+
+<!-- ═══ ASSIGNMENTS ═══ -->
+<div class="spage" id="spg-asn">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">📁 Assignments</span></div>
+  <div id="asn-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">Loading...</div></div>
+</div>
+
+<!-- ═══ LEAVE ═══ -->
+<div class="spage" id="spg-leave">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">🏖️ Leave</span></div>
+  <div class="card">
+    <div class="card-ttl">➕ Apply Leave</div>
+    <label class="flbl">Leave Type</label>
+    <select class="finp" id="slv-type"><option>Medical Leave</option><option>Personal Leave</option><option>Emergency Leave</option><option>Other</option></select>
+    <div class="row2">
+      <div><label class="flbl">From Date</label><input type="date" class="finp" id="slv-from" style="color-scheme:dark" oninput="sLeavePreview()"/></div>
+      <div><label class="flbl">To Date</label><input type="date" class="finp" id="slv-to" style="color-scheme:dark" oninput="sLeavePreview()"/></div>
+    </div>
+    <label class="flbl">Reason</label>
+    <textarea class="finp" id="slv-reason" placeholder="Reason for leave..." oninput="sLeavePreview()"></textarea>
+    <!-- Preview -->
+    <div id="slv-preview" style="display:none;background:#0a1628;border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px;margin-bottom:12px">
+      <div style="font-size:.68rem;font-weight:800;color:#4a9eff;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">📋 Preview</div>
+      <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:4px"><span style="color:rgba(255,255,255,.45)">Duration</span><span id="slvp-dur" style="font-weight:700;color:#fff"></span></div>
+      <div style="display:flex;justify-content:space-between;font-size:.78rem"><span style="color:rgba(255,255,255,.45)">Status</span><span style="font-weight:800;color:#f59e0b">⏳ Pending</span></div>
+    </div>
+    <button class="sbtn" onclick="sApplyLeave()">✓ Submit Leave Request</button>
+  </div>
+  <div class="sec-ttl">📋 Leave Status <span style="font-size:.6rem;color:rgba(255,255,255,.3);text-transform:none;letter-spacing:0">(Faculty will Approve / Reject)</span></div>
+  <div id="slv-status-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:20px;font-size:.82rem">Loading...</div></div>
+</div>
+
+<!-- ═══ NOTES ═══ -->
+<div class="spage" id="spg-notes">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">📝 Notes</span></div>
+  <div id="notes-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">Loading...</div></div>
+</div>
+
+<!-- ═══ BUS ═══ -->
+<div class="spage" id="spg-bus">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">🚌 Bus Routes</span></div>
+  <div id="bus-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">Loading...</div></div>
+</div>
+
+<!-- ═══ NOTIFICATIONS ═══ -->
+<div class="spage" id="spg-notif">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">🔔 Notifications</span></div>
+  <div id="notif-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">Loading...</div></div>
+</div>
+
+<!-- BOTTOM TABS -->
+<div class="sbtabs">
+  <button class="sbtab active" id="stab-home" onclick="sGo('spg-home','stab-home')"><span class="sbtab-icon">🏠</span>Home</button>
+  <button class="sbtab" id="stab-att" onclick="sGo('spg-att','stab-att')"><span class="sbtab-icon">✅</span>Attend</button>
+  <button class="sbtab" id="stab-marks" onclick="sGo('spg-marks','stab-marks')"><span class="sbtab-icon">📊</span>Marks</button>
+  <button class="sbtab" id="stab-tt" onclick="sGo('spg-tt','stab-tt')"><span class="sbtab-icon">📅</span>TT</button>
+  <button class="sbtab" id="stab-leave" onclick="sGo('spg-leave','stab-leave')"><span class="sbtab-icon">🏖️</span>Leave</button>
+    <button class="sbtab" onclick="sGo('spg-chgpw',null)"><span class="sbtab-icon">🔐</span>Password</button>
+</div>
+
+<script>
+var curStu=null;
+var D={attendance:[],marks:[],assignments:[],notes:[],bus:[],notifications:[],timetable:{},exams:[]};
+
+// ── HELPERS ──────────────────────────────────────────────────────────
+function g(id){return document.getElementById(id);}
+function toast(msg,type){
+  var t=document.createElement('div');t.className='stoast';
+  t.style.background=type==='error'?'#e74c3c':'#27ae60';
+  t.textContent=msg;document.body.appendChild(t);
+  setTimeout(function(){t.remove();},3000);
+}
+async function api(method,url,body){
+  try{
+    var opts={method:method,headers:{'Content-Type':'application/json'}};
+    if(body)opts.body=JSON.stringify(body);
+    var res=await fetch(url,opts);
+    if(!res.ok&&res.status>=500)return {ok:false,msg:'Server error'};
+    return await res.json();
+  }catch(ex){return {ok:false,msg:String(ex)};}
+}
+function sGo(pageId,tabId){
+  document.querySelectorAll('.spage').forEach(function(p){p.classList.remove('active');});
+  var pg=g(pageId);if(pg)pg.classList.add('active');
+  document.querySelectorAll('.sbtab').forEach(function(t){t.classList.remove('active');});
+  if(tabId&&g(tabId))g(tabId).classList.add('active');
+  window.scrollTo(0,0);
+  // Load page data
+  if(pageId==='spg-att')renderAttendance();
+  if(pageId==='spg-marks')renderMarks();
+  if(pageId==='spg-tt')renderTimetable();
+  if(pageId==='spg-exam')renderExams();
+  if(pageId==='spg-circular')loadAndRenderCirculars();
+  if(pageId==='spg-asn')renderAssignments();
+  if(pageId==='spg-leave')renderLeaveStatus();
+  if(pageId==='spg-notes')renderNotes();
+  if(pageId==='spg-bus')renderBus();
+  if(pageId==='spg-notif')renderNotifications();
+}
+function stuLogout(){
+  curStu=null;
+  try{sessionStorage.removeItem('ucsp_stu_page');}catch(e){}
+  fetch('/api/student/logout',{method:'POST'}).finally(function(){window.location.href='/';});
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',function(){
+  fetch('/api/student/session').then(function(r){return r.json();}).then(function(res){
+    if(!res.ok){window.location.href='/';return;}
+    var s=res.student;
+    s.nm=s.nm||s.name||'';
+    s.reg=s.reg||s.reg_no||'';
+    s.yr=s.yr||s.year||'';
+    s.sec=s.sec||s.section||'';
+    s.dept=s.dept||s.department||'';
+    curStu=s;
+    loadAllData();
+  }).catch(function(){window.location.href='/';});
+});
+
+async function loadAllData(){
+  if(!curStu)return;
+  var splash=g('stu-splash'),inner=g('stu-splash-inner'),bar=g('stu-splash-bar'),nm=g('stu-splash-name');
+  if(splash){
+    if(nm)nm.textContent=curStu.nm||curStu.name||'';
+    splash.style.display='flex';
+    setTimeout(function(){if(inner){inner.style.opacity='1';inner.style.transform='translateY(0)';}},60);
+    setTimeout(function(){if(bar)bar.style.width='100%';},150);
+  }
+  initProfile();
+  await Promise.all([
+    loadAttendance(),
+    loadMarks(),
+    loadAssignments(),
+    loadNotes(),
+    loadBus(),
+    loadNotifications(),
+    loadExams(),
+    loadLeaveStatus(),
+    loadTimetableData()
+  ]);
+  updateStats();
+  renderHomeNotifs();
+  setTimeout(function(){
+    var splash=g('stu-splash'),inner=g('stu-splash-inner');
+    if(!splash)return;
+    if(inner){inner.style.transition='all .35s ease';inner.style.transform='translateY(-20px)';inner.style.opacity='0';}
+    setTimeout(function(){
+      splash.style.transition='opacity .3s ease';splash.style.opacity='0';
+      setTimeout(function(){splash.style.display='none';splash.style.opacity='1';
+        document.querySelectorAll('.stat-card').forEach(function(c,i){
+          c.style.opacity='0';c.style.transform='translateY(18px)';
+          setTimeout(function(){c.style.transition='all .38s ease';c.style.opacity='1';c.style.transform='translateY(0)';},i*70);
+        });
+      },300);
+    },300);
+  },1200);
+  // Welcome animation
+  setTimeout(function(){
+    document.querySelectorAll('.stat-card').forEach(function(c,i){
+      c.style.opacity='0';c.style.transform='translateY(15px)';
+      setTimeout(function(){c.style.transition='all .35s ease';c.style.opacity='1';c.style.transform='translateY(0)';},i*60);
+    });
+  },100);
+}
+
+function initProfile(){
+  var s=curStu;
+  var dmap={'Computer Science & Engineering':'CSE','Electronics & Communication':'ECE','Information Technology':'IT','MCA':'MCA','Mechanical Engineering':'MECH','MBA':'MBA','Civil Engineering':'CIVIL'};
+  var dc=dmap[s.dept]||s.dept.substring(0,3).toUpperCase();
+  if(g('s-prof-name'))g('s-prof-name').textContent=s.nm||s.name||'Student';
+  if(g('s-prof-reg'))g('s-prof-reg').textContent='📋 '+(s.reg||'—');
+  if(g('s-prof-yr'))g('s-prof-yr').textContent='📅 '+(s.yr||'—');
+  if(g('s-prof-sec'))g('s-prof-sec').textContent='🏷️ Sec '+(s.sec||'—');
+  if(g('s-prof-dept'))g('s-prof-dept').textContent='💻 '+dc;
+  if(g('sn-badge'))g('sn-badge').textContent=(s.reg||s.nm||'Student')+' · '+dc;
+  // Fetch photo separately (not in session to avoid large headers)
+  fetch('/api/student/photo').then(function(r){return r.json();}).then(function(res){
+    if(res.ok&&res.photo){
+      var av=g('s-avatar-box');
+      if(av)av.innerHTML='<img src="'+res.photo+'" alt="photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>';
+    }
+  }).catch(function(){});
+}
+
+// ── DATA LOADERS ─────────────────────────────────────────────────────
+async function loadAttendance(){
+  if(!curStu)return;
+  var res=await api('GET','/api/attendance?student_id='+curStu.id);
+  D.attendance=Array.isArray(res)?res:[];
+}
+async function loadMarks(){
+  if(!curStu)return;
+  var res=await api('GET','/api/marks?student_id='+curStu.id);
+  D.marks=Array.isArray(res)?res:[];
+}
+async function loadAssignments(){
+  if(!curStu)return;
+  var res=await api('GET','/api/assignments?dept='+encodeURIComponent(curStu.dept)+'&year='+encodeURIComponent(curStu.yr));
+  // Filter: show assignments for own section OR 'All'
+  D.assignments=Array.isArray(res)?res.filter(function(a){
+    return !a.section||a.section==='All'||a.section===curStu.sec;
+  }):[];
+  // Load submissions for this student
+  var subs=await api('GET','/api/submissions?student_id='+curStu.id);
+  D.submissions=Array.isArray(subs)?subs:[];
+}
+async function loadNotes(){
+  if(!curStu)return;
+  var res=await api('GET','/api/notes?dept='+encodeURIComponent(curStu.dept));
+  // Filter: show notes for own section OR 'All'
+  D.notes=Array.isArray(res)?res.filter(function(n){
+    var ns=n.section||'All';
+    var ny=n.year_group||'All';
+    var secOk=ns==='All'||ns===curStu.sec;
+    var yrOk=ny==='All'||ny===curStu.yr;
+    return secOk&&yrOk;
+  }):[];
+}
+async function loadBus(){
+  var res=await api('GET','/api/data');
+  D.bus=(res.bus||[]).map(function(b){return Object.assign({},b,{lb:b.lb||b.label||'',dt:b.dt||b.date_str||'',inn:b.inn||b.inbound||'',out:b.out||b.outbound||''});});
+}
+async function loadNotifications(){
+  if(!curStu)return;
+  var res=await api('GET','/api/data');
+  var all=Array.isArray(res&&res.updates)?res.updates:[];
+  D.notifications=all.filter(function(u){return !u.dept||u.dept==='All'||u.dept===curStu.dept;});
+  // Show badge
+  var lastSeen=parseInt(localStorage.getItem('ucsp_notif_seen')||'0');
+  var unread=D.notifications.filter(function(n){return n.id>lastSeen;}).length;
+  var badge=g('notif-badge');
+  if(badge){
+    if(unread>0){badge.textContent=unread>9?'9+':unread;badge.style.display='flex';}
+    else{badge.style.display='none';}
+  }
+}
+function clearNotifBadge(){
+  var badge=g('notif-badge');if(badge)badge.style.display='none';
+  if(D.notifications&&D.notifications.length){
+    var maxId=Math.max.apply(null,D.notifications.map(function(n){return n.id||0;}));
+    localStorage.setItem('ucsp_notif_seen',String(maxId));
+  }
+}
+async function loadExams(){
+  if(!curStu)return;
+  var res=await api('GET','/api/exam_timetables');
+  if(Array.isArray(res)){
+    D.exams=res.filter(function(e){
+      return !e.dept || e.dept===curStu.dept || e.dept==='All';
+    });
+  } else { D.exams=[]; }
+}
+async function loadLeaveStatus(){
+  if(!curStu)return;
+  var res=await api('GET','/api/student_leaves?student_id='+curStu.id);
+  D.leaves=Array.isArray(res)?res:[];
+}
+async function loadTimetableData(){
+  if(!curStu)return;
+  var res=await api('GET','/api/timetable?dept='+encodeURIComponent(curStu.dept)+'&year='+encodeURIComponent(curStu.yr)+'&section='+encodeURIComponent(curStu.sec));
+  D.timetable=res&&typeof res==='object'?res:{};
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────
+function updateStats(){
+  // Attendance
+  if(D.attendance.length){
+    var subs={};
+    D.attendance.forEach(function(a){
+      if(!subs[a.subject])subs[a.subject]={p:0,t:0};
+      subs[a.subject].t++;
+      if(a.status==='Present')subs[a.subject].p++;
+    });
+    var keys=Object.keys(subs);
+    if(keys.length){
+      var tot=keys.reduce(function(s,k){return s+(subs[k].p/subs[k].t)*100;},0);
+      var avg=Math.round(tot/keys.length);
+      if(g('s-stat-att'))g('s-stat-att').textContent=avg+'%';
+    }
+  }else{if(g('s-stat-att'))g('s-stat-att').textContent='—';}
+
+  // Marks
+  if(D.marks.length){
+    var tot=D.marks.reduce(function(s,m){return s+(m.mark/m.max_mark)*100;},0);
+    var avg=Math.round(tot/D.marks.length);
+    if(g('s-stat-marks'))g('s-stat-marks').textContent=avg;
+  }else{if(g('s-stat-marks'))g('s-stat-marks').textContent='—';}
+
+  // Pending assignments
+  var pending=D.assignments.filter(function(a){
+    return !(D.submissions||[]).find(function(s){return s.assignment_id===a.id;});
+  }).length;
+  if(g('s-stat-asn'))g('s-stat-asn').textContent=pending;
+
+  // Notifications
+  if(g('s-stat-notif'))g('s-stat-notif').textContent=D.notifications.length;
+  if(D.notifications.length>0){
+    var nd=g('ndot-home');if(nd)nd.style.display='inline-block';
+  }
+}
+
+// ── RENDERERS ────────────────────────────────────────────────────────
+function renderHomeNotifs(){
+  var el=g('s-home-notifs');if(!el)return;
+  if(!D.notifications||!D.notifications.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);font-size:.78rem;text-align:center;padding:16px">No notifications yet.</div>';return;
+  }
+  var notifs=D.notifications.slice().reverse().slice(0,3);
+  el.innerHTML=notifs.map(function(n){
+    var msg=n.message||n.title||n.msg||'';
+    var typ=n.type||'📢';
+    var timeAgo=n.created_at?timeSince(n.created_at):'';
+    var col=typ==='⚠️'?'#f59e0b':typ==='🏆'?'#eab308':'#4a9eff';
+    return '<div style="background:rgba(255,255,255,.04);border-left:3px solid '+col+';border-radius:0 8px 8px 0;padding:9px 12px;margin-bottom:6px">'
+      +'<div style="font-size:.82rem;color:#e2e8f0;font-weight:600">'+typ+' '+msg+'</div>'
+      +'<div style="font-size:.68rem;color:#64748b;margin-top:3px">'+timeAgo+'</div>'
+      +'</div>';
+  }).join('');
+}
+function timeSince(dateStr){
+  var d=new Date(dateStr),now=new Date();
+  var diff=Math.floor((now-d)/1000);
+  if(diff<60)return 'Just now';
+  if(diff<3600)return Math.floor(diff/60)+' min ago';
+  if(diff<86400)return Math.floor(diff/3600)+' hr ago';
+  return Math.floor(diff/86400)+' days ago';
+}
+
+function renderAttendance(){
+  var el=g('att-list');if(!el)return;
+  if(!D.attendance.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px;font-size:.82rem">No attendance records yet.</div>';
+    return;
+  }
+  // Group by subject
+  var subs={};
+  D.attendance.forEach(function(a){
+    if(!subs[a.subject])subs[a.subject]={p:0,t:0,dates:[]};
+    subs[a.subject].t++;
+    if(a.status==='Present')subs[a.subject].p++;
+    var dateStr=a.att_date||a.date||'';
+    if(dateStr&&subs[a.subject].dates.indexOf(dateStr)<0)subs[a.subject].dates.push(dateStr);
+  });
+  var keys=Object.keys(subs);
+  var h='';
+  var totalPct=0;
+  keys.forEach(function(sub){
+    var pct=Math.round((subs[sub].p/subs[sub].t)*100);
+    totalPct+=pct;
+    var col=pct>=75?'#22c55e':pct>=60?'#f59e0b':'#ef4444';
+    var warn=pct<75?' &nbsp;<span style="color:#ef4444">⚠️ Below 75%</span>':'';
+    if(pct<75){
+      var needed=Math.ceil((0.75*subs[sub].t-subs[sub].p)/(1-0.75));
+      warn+='<div style="font-size:.68rem;color:#f59e0b;margin-top:3px">Need '+Math.max(0,needed)+' more classes to reach 75%</div>';
+    }
+    // Sort and show last 3 dates
+    var dates=subs[sub].dates.slice().sort().reverse().slice(0,3);
+    var dateHtml=dates.length?'<div style="font-size:.65rem;color:#64748b;margin-top:4px">Dates: '+dates.join(', ')+(subs[sub].dates.length>3?' +more':'')+'</div>':'';
+    h+='<div class="att-item">'
+      +'<div class="att-top"><span class="att-sub">'+sub+'</span><span class="att-pct" style="color:'+col+'">'+pct+'%</span></div>'
+      +'<div class="att-bar"><div class="att-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'
+      +'<div class="att-info">'+subs[sub].p+'/'+subs[sub].t+' classes attended'+warn+'</div>'
+      +dateHtml
+      +'</div>';
+  });
+  el.innerHTML=h;
+  if(keys.length){
+    var overall=Math.round(totalPct/keys.length);
+    var oc=g('att-overall-card'),ov=g('att-overall');
+    if(oc)oc.style.display='block';
+    if(ov)ov.textContent=overall+'%';
+    if(g('att-card-ttl'))g('att-card-ttl').textContent='Subject-wise · '+curStu.yr+' Sec '+curStu.sec;
+    if(g('s-stat-att'))g('s-stat-att').textContent=overall+'%';
+  }
+}
+function renderMarks(){
+  var el=g('marks-list');if(!el)return;
+  if(!D.marks.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px;font-size:.82rem">No marks recorded yet.</div>';return;
+  }
+  var tot=0,cnt=0;
+  var h=D.marks.map(function(m){
+    var pct=m.max_mark>0?Math.round((m.mark/m.max_mark)*100):0;
+    var col=pct>=75?'#22c55e':pct>=50?'#f59e0b':'#ef4444';
+    var grade=pct>=90?'O':pct>=80?'A+':pct>=70?'A':pct>=60?'B+':pct>=50?'B':pct>=40?'C':'F';
+    var gBg=pct>=75?'rgba(34,197,94,.15)':pct>=50?'rgba(245,158,11,.15)':'rgba(239,68,68,.15)';
+    tot+=pct;cnt++;
+    return '<div style="background:#111827;border-radius:12px;padding:12px 14px;margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+      +'<div>'
+      +'<div style="font-size:.82rem;font-weight:700;color:#e2e8f0">'+m.subject+'</div>'
+      +'<div style="font-size:.68rem;color:#64748b;margin-top:1px">'+m.exam_type+'</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+      +'<span style="font-size:.78rem;font-weight:700;color:'+col+'">'+m.mark+'/'+m.max_mark+'</span>'
+      +'<span style="background:'+gBg+';color:'+col+';border-radius:8px;padding:2px 8px;font-size:.7rem;font-weight:800;border:1px solid '+col+'50">'+grade+'</span>'
+      +'</div></div>'
+      +'<div style="height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden">'
+      +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:4px;transition:width .6s ease"></div>'
+      +'</div>'
+      +'<div style="font-size:.65rem;color:#64748b;margin-top:4px;text-align:right">'+pct+'%</div>'
+      +'</div>';
+  }).join('');
+  el.innerHTML=h;
+  if(cnt){
+    var avg=Math.round(tot/cnt);
+    var avgCard=g('marks-avg-card');
+    var col2=avg>=75?'#22c55e':avg>=50?'#f59e0b':'#ef4444';
+    if(avgCard){
+      avgCard.style.display='block';
+      avgCard.style.background='rgba(34,197,94,.07)';
+      avgCard.style.borderColor='rgba(34,197,94,.2)';
+      avgCard.style.textAlign='center';
+      avgCard.innerHTML='<div style="font-size:.82rem;color:rgba(255,255,255,.6)">Average Score</div>'
+        +'<div style="font-size:2rem;font-weight:800;color:'+col2+';margin:4px 0">'+avg+'%</div>'
+        +'<div style="font-size:.7rem;color:rgba(255,255,255,.35)">Grade: '+getGrade(avg)+'</div>';
+    }
+    if(g('marks-card-ttl'))g('marks-card-ttl').textContent='Internal Assessment · '+curStu.yr+' Sec '+curStu.sec;
+    if(g('s-stat-marks'))g('s-stat-marks').textContent=avg+'%';
+  }
+}function getGrade(avg){
+  if(avg>=90)return 'O (Outstanding)';if(avg>=80)return 'A+ (Excellent)';
+  if(avg>=70)return 'A (Very Good)';if(avg>=60)return 'B+ (Good)';
+  if(avg>=50)return 'B (Average)';return 'C (Below Average)';
+}
+
+function renderTimetable(){
+  var el=g('tt-grid');if(!el)return;
+  var infoEl=g('tt-info');
+  var yrLabel=curStu.yr||'2nd Year';
+  var sec=curStu.sec||'A';
+  var yrN={'1st Year':1,'2nd Year':2,'3rd Year':3,'4th Year':4}[yrLabel]||2;
+  var key=curStu.dept+'|'+yrN+'|'+sec;
+  var cfg=D.timetable[key]||{subjects:[],labs:[]};
+  var subjects=cfg.subjects||[],labs=cfg.labs||[];
+  if(infoEl)infoEl.textContent=yrLabel+' · Section '+sec+' · '+curStu.dept;
+  if(!subjects.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">📅 Timetable not configured yet. Faculty will set it up.</div>';return;
+  }
+  var TIMES=['8:00','8:50','9:50','10:40','11:30','1:00','1:50'];
+  var TENDS=['8:50','9:40','10:40','11:30','12:20','1:50','2:40'];
+  var DAYS=['MON','TUE','WED','THU','FRI','SAT'];
+  var VALID_LAB=[[0,1],[1,2],[2,3],[4,5],[5,6]];
+  var COLORS=['rgba(59,130,246,.22)','rgba(16,185,129,.22)','rgba(168,85,247,.22)','rgba(245,158,11,.22)','rgba(236,72,153,.22)','rgba(20,184,166,.22)','rgba(239,68,68,.22)'];
+  var cmap={};subjects.forEach(function(s,i){cmap[s.nm]=COLORS[i%COLORS.length];});
+  var secN=Math.max(['A','B','C'].indexOf(sec),0),yrIdx=yrN-1;
+  var tt=[];
+  for(var di=0;di<6;di++){
+    var ls=VALID_LAB[(di*3+yrIdx*7+secN*11)%VALID_LAB.length];
+    var labIdx=labs.length>0?(di*2+yrIdx*5+secN*3)%labs.length:-1;
+    var row=new Array(7).fill(null);
+    if(labIdx>=0){row[ls[0]]={t:'lab',nm:labs[labIdx].nm};row[ls[1]]={t:'lc'};}
+    var si=(di*(yrIdx+1)*2+secN*5)%subjects.length;
+    for(var p=0;p<7;p++){if(!row[p]){row[p]={t:'th',nm:subjects[si%subjects.length].nm};si++;}}
+    tt.push(row);
+  }
+  var h='<div class="tt-wrap"><table class="tt"><thead><tr style="background:#0a1628"><th style="width:34px">Day</th>';
+  for(var p=0;p<7;p++)h+='<th>P'+(p+1)+'<br><span style="font-size:.55rem">'+TIMES[p]+'</span>'+(p===2?'☕':p===4?'🍽️':'')+'</th>';
+  h+='</tr></thead><tbody>';
+  tt.forEach(function(row,di){
+    h+='<tr><td class="day-c">'+DAYS[di]+'</td>';
+    for(var p=0;p<7;p++){
+      var cell=row[p];if(!cell||cell.t==='lc')continue;
+      var cs=cell.t==='lab'?2:1;
+      h+='<td colspan="'+cs+'">';
+      if(cell.t==='lab')h+='<div class="lab-c">🧪 '+cell.nm+'</div>';
+      else h+='<div class="th-c">'+cell.nm.substring(0,6)+'</div>';
+      h+='</td>';
+    }
+    h+='</tr>';
+  });
+  h+='</tbody></table></div>';
+  el.innerHTML=h;
+}
+
+function renderExams(){
+  var el=g('exam-list');if(!el)return;
+  if(!D.exams.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:40px;font-size:.82rem">No exam timetables posted yet.</div>';
+    return;
+  }
+  el.innerHTML='';
+  D.exams.forEach(function(e){
+    var card=document.createElement('div');
+    card.style.cssText='background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;margin-bottom:14px;';
+    var hdr=document.createElement('div');
+    hdr.style.cssText='background:linear-gradient(135deg,#1e3a8a,#2563eb);padding:12px 14px;';
+    hdr.innerHTML='<div style="font-size:.9rem;font-weight:800;color:#fff">'+(e.label||e.sem_name||'Exam Timetable')+'</div>'
+      +'<div style="font-size:.7rem;color:#93c5fd;margin-top:3px">'+(e.sem_name&&e.sem_name!==e.label?e.sem_name+' · ':'')+( e.semester?'Sem '+e.semester+' · ':'')+(e.year?e.year+' · ':'')+( e.dept||curStu.dept)+'</div>';
+    card.appendChild(hdr);
+    if(e.image){
+      var imgWrap=document.createElement('div');
+      imgWrap.style.cssText='padding:12px;';
+      var img=document.createElement('img');
+      img.src=e.image;img.alt='Exam Timetable';
+      img.style.cssText='width:100%;border-radius:10px;display:block;cursor:pointer;';
+      img.onclick=(function(src,lbl){return function(){sShowTT(src,lbl);};})(e.image,e.label||'Timetable');
+      imgWrap.appendChild(img);
+      var tip=document.createElement('div');
+      tip.style.cssText='font-size:.65rem;color:#64748b;text-align:center;margin-top:6px;';
+      tip.textContent='Tap image to view full & download';
+      imgWrap.appendChild(tip);
+      card.appendChild(imgWrap);
+    } else {
+      var noimg=document.createElement('div');
+      noimg.style.cssText='padding:20px;text-align:center;color:rgba(255,255,255,.3);font-size:.8rem;';
+      noimg.textContent='No image uploaded';
+      card.appendChild(noimg);
+    }
+    el.appendChild(card);
+  });
+}
+function sShowTT(src,lbl){
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+  var title=document.createElement('div');
+  title.style.cssText='font-size:.85rem;font-weight:700;color:#fff;margin-bottom:12px;';
+  title.textContent=lbl;
+  var img=document.createElement('img');
+  img.src=src;img.style.cssText='max-width:100%;max-height:75vh;border-radius:12px;object-fit:contain;';
+  var btnRow=document.createElement('div');
+  btnRow.style.cssText='display:flex;gap:10px;margin-top:14px;';
+  var dlBtn=document.createElement('button');
+  dlBtn.style.cssText='background:#2563eb;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;';
+  dlBtn.textContent='⬇️ Download';
+  dlBtn.onclick=function(){var a=document.createElement('a');a.href=src;a.download=lbl+'.jpg';document.body.appendChild(a);a.click();document.body.removeChild(a);};
+  var clBtn=document.createElement('button');
+  clBtn.style.cssText='background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;';
+  clBtn.textContent='✕ Close';
+  clBtn.onclick=function(){ov.remove();};
+  btnRow.appendChild(dlBtn);btnRow.appendChild(clBtn);
+  ov.appendChild(title);ov.appendChild(img);ov.appendChild(btnRow);
+  document.body.appendChild(ov);
+}function renderAssignments(){
+  var el=g('asn-list');if(!el)return;
+  if(!D.assignments.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">📁 No assignments posted yet.</div>';return;
+  }
+  var subs=D.submissions||[];
+  el.innerHTML=D.assignments.map(function(a){
+    var sub=subs.find(function(s){return s.assignment_id==a.id||parseInt(s.assignment_id)===parseInt(a.id);});
+    var isSubmitted=!!sub;
+    var borderCol=isSubmitted?'rgba(34,197,94,.3)':'rgba(245,158,11,.3)';
+    var chipHtml=isSubmitted
+      ?'<span class="chip chip-sub">✅ Submitted</span>'+(sub.grade?'<span class="chip chip-grade">📊 '+sub.grade+'</span>':'')
+      :'<span class="chip chip-due">⏳ Due: '+(a.due_date||'—')+'</span>';
+    var uploadSection='';
+    if(!isSubmitted){
+      uploadSection='<div class="upload-box" onclick="document.getElementById(\'asn-file-'+a.id+'\').click()" id="upload-box-'+a.id+'">'
+        +'<div class="upload-box-icon">📎</div>'
+        +'<div class="upload-box-txt">Tap to upload file</div>'
+        +'<div class="upload-note">PDF or Image (max 5MB)</div>'
+        +'<input type="file" id="asn-file-'+a.id+'" accept=".pdf,image/*" style="display:none" onchange="fileSelected('+a.id+',this)"/>'
+        +'</div>'
+        +'<div id="asn-file-name-'+a.id+'" style="font-size:.72rem;color:rgba(255,255,255,.4);margin-bottom:8px;display:none"></div>'
+        +'<button class="sbtn" id="asn-sub-btn-'+a.id+'" onclick="submitAssignment('+a.id+')" style="display:none">📤 Submit Assignment</button>';
+    }else{
+      uploadSection='<div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:10px 14px;font-size:.75rem;color:#22c55e">'
+        +'<div style="font-weight:700;margin-bottom:4px">✅ Submitted Successfully</div>'
+        +(sub.file_name?'<div style="color:#94a3b8;font-size:.7rem">📎 '+sub.file_name+'</div>':'')
+        +(sub.mark!=null?'<div style="margin-top:6px;font-size:.82rem">📊 Mark: <b style="color:#4ade80;font-size:.95rem">'+sub.mark+'</b> / 10</div>':'<div style="color:#94a3b8;font-size:.7rem;margin-top:4px">⏳ Mark not given yet</div>')
+        +(sub.feedback?'<div style="color:#fbbf24;font-size:.72rem;margin-top:4px">💬 '+sub.feedback+'</div>':'')
+        +'</div>';
+    }
+    return '<div class="asn-card" style="border-color:'+borderCol+'">'
+      +'<div class="asn-ttl">'+a.title+'</div>'
+      +'<div class="asn-meta">📖 '+(a.subject||a.dept||'')+(a.year?' · '+a.year:'')+' '+chipHtml+'</div>'
+      +(a.description||a.desc?'<div class="asn-desc">'+(a.description||a.desc)+'</div>':'')
+      +uploadSection
+      +'</div>';
+  }).join('');
+}
+
+// File selected for upload
+var fileDataCache={};
+function fileSelected(asnId,input){
+  if(!input.files||!input.files[0])return;
+  var file=input.files[0];
+  if(file.size>5*1024*1024){toast('File too large (max 5MB)','error');return;}
+  var nameEl=g('asn-file-name-'+asnId);
+  var btnEl=g('asn-sub-btn-'+asnId);
+  if(nameEl){nameEl.textContent='📎 '+file.name;nameEl.style.display='block';}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    fileDataCache[asnId]={name:file.name,data:e.target.result};
+    if(btnEl)btnEl.style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitAssignment(asnId){
+  if(!curStu)return;
+  var cached=fileDataCache[asnId];
+  if(!cached){toast('Please select a file first','error');return;}
+  var btn=g('asn-sub-btn-'+asnId);
+  if(btn){btn.textContent='Submitting...';btn.disabled=true;}
+  var res=await api('POST','/api/submissions',{
+    assignment_id:asnId,
+    student_id:curStu.id,
+    student_name:curStu.nm||curStu.name||'',
+    file_name:cached.name,
+    file_data:cached.data
+  });
+  if(res&&res.ok){
+    toast('Assignment submitted! ✅','success');
+    await loadAssignments();
+    renderAssignments();
+    updateStats();
+  }else{
+    toast('Error: '+(res.msg||'Submit failed'),'error');
+    if(btn){btn.textContent='📤 Submit Assignment';btn.disabled=false;}
+  }
+}
+
+function renderLeaveStatus(){
+  var el=g('slv-status-list');if(!el)return;
+  if(!D.leaves||!D.leaves.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px;font-size:.82rem">No leave applications yet.</div>';return;
+  }
+  el.innerHTML=D.leaves.map(function(lv){
+    var sc=lv.status==='Approved'?'s-appr':lv.status==='Rejected'?'s-reje':'s-pend';
+    var ic=lv.status==='Approved'?'✅':lv.status==='Rejected'?'❌':'⏳';
+    var borderCol=lv.status==='Approved'?'rgba(34,197,94,.2)':lv.status==='Rejected'?'rgba(239,68,68,.2)':'rgba(245,158,11,.15)';
+    return '<div class="ls-card" style="border-color:'+borderCol+'">'
+      +'<div class="ls-info"><div class="ls-name">'+lv.leave_type+'</div>'
+      +'<div class="ls-meta">📅 '+lv.from_date+' → '+lv.to_date+' · '+(lv.days||1)+' day(s)</div></div>'
+      +'<span class="spill '+sc+'">'+ic+' '+lv.status+'</span>'
+      +'</div>';
+  }).join('');
+}
+
+function renderNotes(){
+  var el=g('notes-list');if(!el)return;
+  if(!D.notes||!D.notes.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">📝 No notes posted yet.</div>';return;
+  }
+  el.innerHTML='';
+  D.notes.forEach(function(n){
+    var row=document.createElement('div');
+    row.className='note-card';
+    var info=document.createElement('div');
+    info.style.cssText='flex:1;min-width:0';
+    info.innerHTML='<div class="note-ttl">'+n.title+'</div>'
+      +'<div class="note-meta">'+(n.faculty_nm||n.faculty_name||'Faculty')+' · '+(n.subject||n.dept||'')+' · '+(n.posted_on?String(n.posted_on).substring(0,10):(n.created_at?String(n.created_at).substring(0,10):''))+'</div>';
+    row.appendChild(info);
+    if(n.file_data){
+      var btn=document.createElement('button');
+      btn.className='dl-btn';
+      btn.innerHTML='⬇️ Download';
+      btn.onclick=(function(fd,fn){return function(){
+        var a=document.createElement('a');
+        a.href=fd;
+        a.download=fn||'note';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        toast('Downloading...','success');
+      };})(n.file_data, n.file_name||n.title||'note');
+      row.appendChild(btn);
+    } else if(n.file_name){
+      var nofile=document.createElement('span');
+      nofile.style.cssText='font-size:.68rem;color:#64748b;white-space:nowrap;';
+      nofile.textContent=n.file_name;
+      row.appendChild(nofile);
+    }
+    el.appendChild(row);
+  });
+}
+
+function renderBus(){
+  var el=g('bus-list');if(!el)return;
+  if(!D.bus.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">No bus routes added yet.</div>';return;
+  }
+  el.innerHTML='';
+  D.bus.forEach(function(b){
+    var card=document.createElement('div');
+    card.className='bus-card';
+    var lbl=document.createElement('div');
+    lbl.className='bus-label';
+    lbl.textContent='🚌 '+(b.lb||b.label||'Route');
+    card.appendChild(lbl);
+    function addBusRow(timeOrImg, title, icon){
+      if(!timeOrImg)return;
+      var wrap=document.createElement('div');
+      wrap.style.cssText='margin-bottom:10px;';
+      var hd=document.createElement('div');
+      hd.style.cssText='font-size:.72rem;color:#94a3b8;margin-bottom:6px;';
+      hd.textContent=icon+' '+title;
+      wrap.appendChild(hd);
+      if(timeOrImg.indexOf('data:image')===0){
+        var img=document.createElement('img');
+        img.src=timeOrImg;img.alt=title;
+        img.style.cssText='width:100%;border-radius:10px;display:block;cursor:pointer;';
+        img.onclick=(function(src){return function(){
+          var ov=document.createElement('div');
+          ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+          var im=document.createElement('img');im.src=src;
+          im.style.cssText='max-width:100%;max-height:80vh;border-radius:10px;';
+          var cl=document.createElement('button');
+          cl.textContent='Close';
+          cl.style.cssText='margin-top:14px;background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit;';
+          cl.onclick=function(){ov.remove();};
+          ov.appendChild(im);ov.appendChild(cl);document.body.appendChild(ov);
+        };})(timeOrImg);
+        wrap.appendChild(img);
+      } else {
+        var row=document.createElement('div');
+        row.className='bus-row';
+        row.innerHTML='<span></span><span class="bus-time">'+timeOrImg+'</span>';
+        wrap.appendChild(row);
+      }
+      card.appendChild(wrap);
+    }
+    addBusRow(b.inn||b.inbound||'','Morning (Inbound)','[M]');
+    addBusRow(b.out||b.outbound||'','Evening (Outbound)','[E]');
+    if(b.dt||b.date_str){
+      var dr=document.createElement('div');
+      dr.className='bus-row';
+      dr.innerHTML='<span>Date</span><span class="bus-time">'+(b.dt||b.date_str)+'</span>';
+      card.appendChild(dr);
+    }
+    el.appendChild(card);
+  });
+}
+function renderNotifications(){
+  var el=g('notif-list');if(!el)return;
+  if(!D.notifications||!D.notifications.length){
+    el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">🔔 No notifications yet.</div>';return;
+  }
+  var typeIcon={'📢':'📢','⚠️':'⚠️','🏆':'🏆','ℹ️':'ℹ️'};
+  el.innerHTML='';
+  D.notifications.slice().reverse().forEach(function(n){
+    var msg=n.message||n.msg||'';
+    var typ=n.type||'📢';
+    var dt=n.created_at?String(n.created_at).substring(0,16):'';
+    var col=typ==='⚠️'?'#f59e0b':typ==='🏆'?'#eab308':typ==='📢'?'#4a9eff':'#22c55e';
+    var bg=typ==='⚠️'?'rgba(245,158,11,.08)':typ==='🏆'?'rgba(234,179,8,.08)':typ==='📢'?'rgba(74,158,255,.08)':'rgba(34,197,94,.08)';
+    var div=document.createElement('div');
+    div.style.cssText='background:'+bg+';border:1px solid '+col.replace(')',', .25)').replace('rgb','rgba')+';border-left:3px solid '+col+';border-radius:10px;padding:12px 14px;margin-bottom:8px;';
+    div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">'
+      +'<div style="font-size:.85rem;color:#e2e8f0;font-weight:600;line-height:1.4">'+typ+' '+msg+'</div>'
+      +'</div>'
+      +(dt?'<div style="font-size:.65rem;color:#64748b;margin-top:5px">'+dt+'</div>':'');
+    el.appendChild(div);
+  });
+}
+// ── LEAVE APPLY ──────────────────────────────────────────────────────
+function sLeavePreview(){
+  var f=g('slv-from'),to=g('slv-to');
+  var prev=g('slv-preview');if(!prev)return;
+  if(!f||!to||!f.value||!to.value){prev.style.display='none';return;}
+  var days=Math.ceil((new Date(to.value)-new Date(f.value))/(86400000))+1;
+  if(days<1){prev.style.display='none';return;}
+  var dur=g('slvp-dur');
+  if(dur)dur.textContent=f.value+' → '+to.value+' ('+days+' day'+(days>1?'s':'')+')';
+  prev.style.display='block';
+}
+
+async function sApplyLeave(){
+  if(!curStu)return;
+  var t=g('slv-type').value,f=g('slv-from').value,to=g('slv-to').value,r=g('slv-reason').value.trim();
+  if(!f||!to||!r){toast('Please fill all fields','error');return;}
+  var days=Math.ceil((new Date(to)-new Date(f))/(86400000))+1;
+  var res=await api('POST','/api/student_leaves',{
+    student_id:curStu.id,
+    student_name:curStu.nm||curStu.name||'',
+    student_reg:curStu.reg||curStu.reg_no||'',
+    student_dept:curStu.dept||'',
+    student_year:curStu.yr||'',
+    student_section:curStu.sec||'',
+    leave_type:t,from_date:f,to_date:to,days:days,reason:r
+  });
+  if(!res||!res.ok){toast('Error: '+(res.msg||'Submit failed'),'error');return;}
+  g('slv-from').value='';g('slv-to').value='';g('slv-reason').value='';
+  g('slv-preview').style.display='none';
+  toast('Leave submitted! ✅','success');
+  await loadLeaveStatus();
+  renderLeaveStatus();
+}
+
+async function sChangePwd(){
+  var old=g('cpw-old').value.trim();
+  var un=g('cpw-un').value.trim();
+  var np=g('cpw-new').value.trim();
+  var cnf=g('cpw-cnf').value.trim();
+  if(!old){toast('Enter current password','error');return;}
+  if(np&&np!==cnf){toast('Passwords do not match!','error');return;}
+  var res=await api('POST','/api/student/change-password',{old_password:old,new_username:un,new_password:np});
+  if(res&&res.ok){
+    toast('Credentials updated! Please login again.','success');
+    g('cpw-old').value='';g('cpw-un').value='';g('cpw-new').value='';g('cpw-cnf').value='';
+    setTimeout(function(){window.location.href='/';},2000);
+  } else {
+    toast(res.msg||'Error updating!','error');
+  }
+}
+
+async function loadAndRenderCirculars(){
+  if(!curStu)return;
+  var el=g('circular-list');if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">Loading...</div>';
+  var res=await api('GET','/api/circulars?dept='+encodeURIComponent(curStu.dept));
+  if(!Array.isArray(res)||!res.length){el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">No circulars posted yet.</div>';return;}
+  el.innerHTML='';
+  res.forEach(function(c){
+    var div=document.createElement('div');
+    div.style.cssText='background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;';
+    var info=document.createElement('div');info.style.cssText='flex:1;';
+    info.innerHTML='<div style="font-size:.88rem;font-weight:700;color:#fff">'+c.title+'</div>'
+      +'<div style="font-size:.7rem;color:#64748b;margin-top:3px">'+(c.dept==='All'?'All Departments':c.dept)+' · '+(c.created_at?c.created_at.substring(0,10):'')+'</div>';
+    div.appendChild(info);
+    if(c.file_name){
+      var btn=document.createElement('button');
+      btn.style.cssText='background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);color:#60a5fa;border-radius:8px;padding:7px 12px;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;';
+      btn.textContent='⬇️ Download';
+      btn.onclick=(function(cid,fn){return function(){sDlCircular(cid,fn);};})(c.id,c.file_name);
+      div.appendChild(btn);
+    }
+    el.appendChild(div);
+  });
+}
+async function sDlCircular(cid, fname){
+  var res=await api('GET','/api/circulars/'+cid);
+  if(res&&res.file_data){
+    var a=document.createElement('a');a.href=res.file_data;a.download=fname;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  }
+}
+
+function sCalcMarks(){
+  var sub=g('calc-sub').value;
+  if(!sub)return;
+  var subMarks=D.marks.filter(function(m){return m.subject===sub;});
+  var cit1=subMarks.find(function(m){return m.exam_type==='CIT1'||m.exam_type==='CIT 1';});
+  var cit2=subMarks.find(function(m){return m.exam_type==='CIT2'||m.exam_type==='CIT 2';});
+  var cit3=subMarks.find(function(m){return m.exam_type==='CIT3'||m.exam_type==='CIT 3';});
+  var vals=[cit1?cit1.mark:null,cit2?cit2.mark:null,cit3?cit3.mark:null].filter(function(v){return v!=null;});
+  var res=g('calc-result');
+  if(!vals.length){if(res)res.innerHTML='<div style="color:#64748b;font-size:.82rem">No CIT marks found for '+sub+'</div>';return;}
+  vals.sort(function(a,b){return b-a;});
+  var best2=vals.slice(0,2);
+  var avg=best2.reduce(function(a,b){return a+b;},0)/best2.length;
+  var pct=Math.round(avg/50*100);
+  var grade=pct>=90?'O':pct>=80?'A+':pct>=70?'A':pct>=60?'B+':pct>=50?'B':pct>=40?'C':'F';
+  var col=pct>=75?'#22c55e':pct>=50?'#f59e0b':'#ef4444';
+  if(res)res.innerHTML='<div style="background:#111827;border-radius:10px;padding:14px">'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">'
+    +(cit1?'<div style="background:#0a1628;border-radius:8px;padding:8px;text-align:center"><div style="font-size:1.2rem;font-weight:800;color:#4a9eff">'+cit1.mark+'</div><div style="font-size:.62rem;color:#64748b">CIT 1/50</div></div>':'')
+    +(cit2?'<div style="background:#0a1628;border-radius:8px;padding:8px;text-align:center"><div style="font-size:1.2rem;font-weight:800;color:#4a9eff">'+cit2.mark+'</div><div style="font-size:.62rem;color:#64748b">CIT 2/50</div></div>':'')
+    +(cit3?'<div style="background:#0a1628;border-radius:8px;padding:8px;text-align:center"><div style="font-size:1.2rem;font-weight:800;color:#4a9eff">'+cit3.mark+'</div><div style="font-size:.62rem;color:#64748b">CIT 3/50</div></div>':'')
+    +'</div>'
+    +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.78rem;color:#64748b">Best 2 Avg</span><span style="font-weight:700;color:#fff">'+avg.toFixed(1)+' / 50</span></div>'
+    +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:.78rem;color:#64748b">Internal %</span><span style="font-weight:700;color:'+col+'">'+pct+'%</span></div>'
+    +'<div style="display:flex;justify-content:space-between"><span style="font-size:.78rem;color:#64748b">Grade</span><span style="font-weight:800;font-size:1.1rem;color:'+col+'">'+grade+'</span></div>'
+    +'</div>';
+}
+
+
+function sGoCalc(){
+  sGo('spg-calc',null);
+  // Populate subject dropdown
+  var sel=g('calc-sub');if(!sel)return;
+  var subs=[...new Set((D.marks||[]).map(function(m){return m.subject;}))];
+  sel.innerHTML='<option value="">— Select Subject —</option>'
+    +subs.map(function(s){return '<option>'+s+'</option>';}).join('');
+  if(subs.length===1){sel.value=subs[0];sCalcMarks();}
+}
+
+
+
+function printTimetable(){
+  var ttEl=document.getElementById('tt-grid');
+  if(!ttEl){toast('Load timetable first!','error');return;}
+  var win=window.open('','_blank');
+  win.document.write('<html><head><title>Timetable - '+curStu.dept+'</title>');
+  win.document.write('<style>body{font-family:Arial,sans-serif;padding:20px;color:#000;}');
+  win.document.write('h2{font-size:16px;margin-bottom:4px;}p{font-size:12px;color:#666;margin-bottom:16px;}');
+  win.document.write('table{width:100%;border-collapse:collapse;font-size:11px;}');
+  win.document.write('th,td{border:1px solid #ddd;padding:6px 8px;text-align:center;}');
+  win.document.write('th{background:#0f2044;color:#fff;}');
+  win.document.write('td:first-child{text-align:left;font-weight:bold;background:#f8fafc;}');
+  win.document.write('</style></head><body>');
+  win.document.write('<h2>'+curStu.dept+' — '+curStu.yr+' Sec '+curStu.sec+' — Timetable</h2>');
+  win.document.write('<p>Printed on '+new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+'</p>');
+  // Build table from timetable data
+  var DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  var PERIODS=['P1 8:00-8:50','P2 8:50-9:40','P3 9:50-10:40','P4 10:40-11:30','P5 11:30-12:20','P6 1:00-1:50','P7 1:50-2:40'];
+  var yrN={'1st Year':1,'2nd Year':2,'3rd Year':3,'4th Year':4}[curStu.yr]||2;
+  var key=curStu.dept+'|'+yrN+'|'+curStu.sec;
+  var cfg=D.timetable[key]||{subjects:[]};
+  var subs=cfg.subjects||[];
+  win.document.write('<table><tr><th>Day</th>');
+  PERIODS.forEach(function(p){win.document.write('<th>'+p+'</th>');});
+  win.document.write('</tr>');
+  DAYS.forEach(function(day,di){
+    win.document.write('<tr><td>'+day+'</td>');
+    subs.forEach(function(s,pi){
+      if(pi<7) win.document.write('<td>'+(s.days&&s.days[di]?s.days[di]:(subs[pi]?subs[pi].nm:''))+'</td>');
+    });
+    for(var p=subs.length;p<7;p++)win.document.write('<td>-</td>');
+    win.document.write('</tr>');
+  });
+  win.document.write('</table></body></html>');
+  win.document.close();
+  win.print();
+}
+
+function stuSearch(q){
+  var res=document.getElementById('stu-search-res');
+  if(!q||q.length<2){res.style.display='none';return;}
+  var results=[];
+  // Search in notes
+  (D.notes||[]).forEach(function(n){
+    if((n.title||'').toLowerCase().includes(q.toLowerCase()))
+      results.push({icon:'📄',title:n.title,sub:'Notes',action:function(){sGo('spg-notes',null);}});
+  });
+  // Search in assignments
+  (D.assignments||[]).forEach(function(a){
+    if((a.title||'').toLowerCase().includes(q.toLowerCase()))
+      results.push({icon:'📁',title:a.title,sub:'Assignment · '+a.subject,action:function(){sGo('spg-assign',null);}});
+  });
+  // Search in marks subjects
+  var subs=[...new Set((D.marks||[]).map(function(m){return m.subject;}))];
+  subs.forEach(function(s){
+    if(s.toLowerCase().includes(q.toLowerCase()))
+      results.push({icon:'📊',title:s,sub:'Marks',action:function(){sGo('spg-marks',null);}});
+  });
+  if(!results.length){res.style.display='none';return;}
+  res.innerHTML='';
+  results.slice(0,6).forEach(function(r){
+    var div=document.createElement('div');
+    div.style.cssText='padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px;';
+    div.innerHTML='<span style="font-size:1.1rem">'+r.icon+'</span><div><div style="font-size:.82rem;font-weight:600;color:#e2e8f0">'+r.title+'</div><div style="font-size:.68rem;color:#64748b">'+r.sub+'</div></div>';
+    div.onmouseenter=function(){this.style.background='rgba(255,255,255,.06)';};
+    div.onmouseleave=function(){this.style.background='';};
+    div.onclick=function(){r.action();res.style.display='none';document.getElementById('stu-search').value='';};
+    res.appendChild(div);
+  });
+  res.style.display='block';
+}
+// Close search on outside click
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#stu-search')&&!e.target.closest('#stu-search-res')){
+    var res=document.getElementById('stu-search-res');
+    if(res)res.style.display='none';
+  }
+});
+
+function sApplyTheme(){
+  var isDark=localStorage.getItem('ucsp_theme')!=='light';
+  var btn=document.getElementById('stheme-btn');
+  if(isDark){document.body.classList.remove('light-theme');if(btn)btn.textContent='☀️';}
+  else{document.body.classList.add('light-theme');if(btn)btn.textContent='🌙';}
+}
+function sToggleTheme(){
+  var isDark=localStorage.getItem('ucsp_theme')!=='light';
+  localStorage.setItem('ucsp_theme',isDark?'light':'dark');
+  sApplyTheme();
+}
+sApplyTheme();
+</script>
+</body>
+</html>
+<!-- ═══ CHANGE PASSWORD ═══ -->
+<div class="spage" id="spg-chgpw">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">🔐 Change Credentials</span></div>
+  <div class="scard">
+    <div class="card-ttl">Change Username / Password</div>
+    <label class="flbl">Current Password</label>
+    <input type="password" class="finp" id="cpw-old" placeholder="Enter current password"/>
+    <label class="flbl">New Username (optional)</label>
+    <input class="finp" id="cpw-un" placeholder="Leave blank to keep current"/>
+    <label class="flbl">New Password (optional)</label>
+    <input type="password" class="finp" id="cpw-new" placeholder="Leave blank to keep current"/>
+    <label class="flbl">Confirm New Password</label>
+    <input type="password" class="finp" id="cpw-cnf" placeholder="Re-enter new password"/>
+    <button class="sbtn" onclick="sChangePwd()">🔐 Update Credentials</button>
+  </div>
+</div>
+<!-- ═══ CIRCULARS ═══ -->
+<div class="spage" id="spg-circular">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">📜 Circulars</span></div>
+  <div id="circular-list"><div style="color:rgba(255,255,255,.3);text-align:center;padding:30px;font-size:.82rem">Loading...</div></div>
+</div>
+
+
+<!-- ═══ MARK CALCULATOR ═══ -->
+<div class="spage" id="spg-calc">
+  <div class="back-bar"><button class="back-btn" onclick="sGo('spg-home',null)">← Back</button><span class="page-ttl">🧮 Internal Mark Calculator</span></div>
+  <div class="scard">
+    <div class="card-ttl">Calculate Internal Marks</div>
+    <label class="flbl">Subject</label>
+    <select class="finp" id="calc-sub" onchange="sCalcMarks()">
+      <option value="">— Select Subject —</option>
+    </select>
+    <div id="calc-result" style="margin-top:12px"></div>
+  </div>
+</div>
+
+

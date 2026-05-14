@@ -1,0 +1,74 @@
+{% extends 'admin/base.html' %}
+{% block title %}Admin Dashboard – UCSP{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block m_dash %}active{% endblock %}
+
+{% block content %}
+<div class="welcome-banner">
+  <div>
+    <h4 class="mb-1">Welcome back, {{ session.get('name','Admin') }}! 👋</h4>
+    <p class="mb-0 text-white-50">Manage your college platform from here.</p>
+  </div>
+  <div class="text-end">
+    <small class="text-white-50">UCSP Admin Panel</small>
+  </div>
+</div>
+
+<!-- STATS CARDS -->
+<div class="stats-grid">
+  <a href="{{ url_for('view_faculty') }}" class="stat-card stat-blue">
+    <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+    <div class="stat-num">{{ stats['faculty'] }}</div>
+    <div class="stat-label">Faculty</div>
+  </a>
+  <a href="{{ url_for('admin_placed') }}" class="stat-card stat-green">
+    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+    <div class="stat-num">{{ stats['placed_students'] }}</div>
+    <div class="stat-label">Placed Students</div>
+  </a>
+  <a href="{{ url_for('admin_rank') }}" class="stat-card stat-gold">
+    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+    <div class="stat-num">{{ stats['rank_holders'] }}</div>
+    <div class="stat-label">Rank Holders</div>
+  </a>
+  <a href="{{ url_for('admin_events') }}" class="stat-card stat-purple">
+    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+    <div class="stat-num">{{ stats['events'] }}</div>
+    <div class="stat-label">Events</div>
+  </a>
+  <a href="{{ url_for('admin_bus') }}" class="stat-card stat-orange">
+    <div class="stat-icon"><i class="fas fa-bus"></i></div>
+    <div class="stat-num">{{ stats['bus_routes'] }}</div>
+    <div class="stat-label">Bus Routes</div>
+  </a>
+</div>
+
+<!-- QUICK ACTIONS -->
+<div class="section-title mt-4 mb-3">Quick Actions</div>
+<div class="quick-grid">
+  <a href="{{ url_for('add_faculty') }}" class="quick-card">
+    <i class="fas fa-user-plus fa-2x mb-2"></i>
+    <div>Add Faculty</div>
+  </a>
+  <a href="{{ url_for('admin_bus') }}" class="quick-card">
+    <i class="fas fa-bus fa-2x mb-2"></i>
+    <div>Add Bus Route</div>
+  </a>
+  <a href="{{ url_for('admin_events') }}" class="quick-card">
+    <i class="fas fa-calendar-plus fa-2x mb-2"></i>
+    <div>Add Event</div>
+  </a>
+  <a href="{{ url_for('admin_placed') }}" class="quick-card">
+    <i class="fas fa-briefcase fa-2x mb-2"></i>
+    <div>Add Placement</div>
+  </a>
+  <a href="{{ url_for('admin_rank') }}" class="quick-card">
+    <i class="fas fa-trophy fa-2x mb-2"></i>
+    <div>Add Rank Holder</div>
+  </a>
+  <a href="{{ url_for('view_faculty') }}" class="quick-card">
+    <i class="fas fa-users fa-2x mb-2"></i>
+    <div>View Faculty</div>
+  </a>
+</div>
+{% endblock %}

@@ -1,0 +1,2923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Faculty Dashboard – UCSP</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body,html{font-family:'DM Sans',sans-serif;background:#f0f4f8;color:#1a2332;}
+.page{display:none;width:100%;min-height:100vh;}.page.show{display:block;}.page.pg-active{display:block!important;}.fac-page.fp-active{display:block!important;}
+#pg-faculty{background:#f0f4f8!important;color:#1a2332!important;}
+.fac-page{display:none;width:100%;min-height:100vh;background:#f0f4f8;}
+.fshow{display:block;}
+.fnav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:60px;background:#0f2044;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.2);}
+.fnav-left{display:flex;align-items:center;gap:12px;}
+.fnav-logo{width:40px;height:40px;background:rgba(255,255,255,.12);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.fnav-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;line-height:1.1;}
+.fnav-sub{font-size:.65rem;color:rgba(255,255,255,.45);}
+.fnav-right{display:flex;align-items:center;gap:8px;}
+.fnav-badge{background:rgba(255,255,255,.12);color:#fff;border-radius:6px;padding:4px 12px;font-size:.72rem;font-weight:700;}
+.fnav-badge-role{background:rgba(99,179,237,.22);color:#90cdf4;}
+.fbtn-lo{background:#e53e3e;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;}
+.fstat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:20px 20px 0;}
+.fstat-row2{display:none;}
+.fstat{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:18px 12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:.2s;}
+.fstat:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1);}
+.fstat-n{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;line-height:1;}
+.fstat-l{font-size:.62rem;font-weight:700;color:#94a3b8;margin-top:6px;letter-spacing:.06em;text-transform:uppercase;}
+.fn-blue{color:#2b6cb0;}.fn-green{color:#276749;}.fn-orange{color:#c05621;}.fn-purple{color:#553c9a;}.fn-teal{color:#234e52;}
+.fstaff-box{margin:16px 20px 0;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 2px 6px rgba(0,0,0,.04);}
+.fstaff-lbl{font-size:.73rem;font-weight:600;color:#64748b;white-space:nowrap;}
+.fchips{display:flex;gap:8px;flex-wrap:wrap;}
+.fchip{background:#ebf4ff;border:1px solid #bee3f8;border-radius:20px;padding:4px 13px;font-size:.72rem;color:#2b6cb0;font-weight:600;display:flex;align-items:center;gap:5px;}
+.factions-label{padding:16px 20px 8px;font-size:.65rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.12em;}
+.faction-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;padding:0 20px 24px;align-items:start;}
+.fact{border-radius:16px;padding:24px 14px 18px;text-align:center;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;background:#fff;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.05);position:relative;overflow:hidden;font-family:inherit;}
+.fact::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.fact:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.1);}
+.fact:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:rgba(37,99,235,.3);}.fact:active{transform:scale(.97);}
+.fact-ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:1.4rem;}
+.fact::after{content:"";position:absolute;inset:0;border-radius:16px;background:rgba(255,255,255,0);transition:background .15s;}
+.fact:active::after{background:rgba(255,255,255,.15);}
+.fact-nm{font-size:.85rem;font-weight:800;color:#1a2332;display:block;}
+.fact-sub{font-size:.63rem;color:#94a3b8;margin-top:3px;display:block;}
+.fact-teal::before{background:#0d9488;}.fact-teal .fact-ic{background:#f0fdfa;color:#0d9488;}
+.fact-blue::before{background:#2563eb;}.fact-blue .fact-ic{background:#eff6ff;color:#2563eb;}
+.fact-brown::before{background:#d97706;}.fact-brown .fact-ic{background:#fffbeb;color:#d97706;}
+.fact-purple::before{background:#7c3aed;}.fact-purple .fact-ic{background:#f5f3ff;color:#7c3aed;}
+.fact-red::before{background:#e11d48;}.fact-red .fact-ic{background:#fff1f2;color:#e11d48;}
+.fact-lblue::before{background:#0284c7;}.fact-lblue .fact-ic{background:#f0f9ff;color:#0284c7;}
+.fact-dgreen::before{background:#059669;}.fact-dgreen .fact-ic{background:#ecfdf5;color:#059669;}
+.fact-cyan::before{background:#0891b2;}.fact-cyan .fact-ic{background:#ecfeff;color:#0891b2;}
+.finner{padding:16px;background:#f0f4f8;min-height:calc(100vh - 60px);max-width:900px;margin:0 auto;}
+.fpage-bar{display:flex;align-items:center;gap:12px;padding:12px 18px;background:#0f2044;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15);}
+.fpage-ttl{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;color:#fff;}
+.fpage-dept{font-size:.72rem;background:rgba(255,255,255,.15);color:#fff;border-radius:6px;padding:3px 10px;font-weight:700;margin-left:auto;}
+.fback-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:20px;padding:6px 16px;font-size:.76rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;transition:.2s;}
+.fback-btn:hover{background:rgba(255,255,255,.25);}
+.flbl{font-size:.72rem;font-weight:700;color:#64748b;display:block;margin-bottom:5px;}
+.finp{width:100%;background:#fff;border:1.5px solid #e2e8f0;color:#1a2332;border-radius:10px;padding:10px 13px;font-size:.88rem;font-family:inherit;outline:none;transition:.2s;}
+.finp:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;}
+.fbtn-main{display:block;width:100%;padding:13px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:800;cursor:pointer;font-family:inherit;margin-top:4px;transition:.2s;box-shadow:0 4px 14px rgba(37,99,235,.3);}
+.fbtn-main:hover{transform:translateY(-2px);}
+.flabel{display:block;font-size:.74rem;font-weight:700;color:#64748b;margin-bottom:5px;}
+.finput{width:100%;background:#fff;border:1.5px solid #e2e8f0;color:#1a2332;border-radius:10px;padding:10px 13px;font-size:.88rem;font-family:inherit;outline:none;transition:.2s;margin-bottom:12px;}
+.finput:focus{border-color:#2563eb;}
+.fselect{appearance:none;}
+.sec-ttl{font-size:.72rem;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+.toast{padding:12px 20px;border-radius:10px;font-size:.84rem;font-weight:700;color:#fff;animation:toastIn .3s ease;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.toast.success{background:#059669;}.toast.error{background:#e11d48;}.toast.info{background:#2563eb;}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+@media(max-width:600px){.fstat-row{grid-template-columns:repeat(3,1fr);}.faction-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ── INNER PAGE FORM CARDS ── */
+.fform-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.fform-card h3{font-size:.72rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;}
+.fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fgrid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.fgrid1{display:grid;grid-template-columns:1fr;gap:14px;}
+.fform-group{margin-bottom:14px;}
+.fform-group:last-child{margin-bottom:0;}
+/* Table styles */
+.ftable{width:100%;border-collapse:collapse;font-size:.82rem;}
+.ftable th{background:#f8fafc;color:#64748b;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;padding:10px 12px;text-align:left;border-bottom:1px solid #e2e8f0;}
+.ftable td{padding:10px 12px;border-bottom:1px solid #f1f5f9;color:#1a2332;vertical-align:middle;}
+.ftable tr:hover td{background:#f8fafc;}
+/* Tabs */
+.ftabs{display:flex;gap:4px;background:#f1f5f9;border-radius:10px;padding:4px;margin-bottom:16px;}
+.ftab{flex:1;padding:8px;text-align:center;font-size:.78rem;font-weight:700;color:#64748b;border:none;background:transparent;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s;}
+.ftab.active{background:#fff;color:#2563eb;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+/* Tag chips */
+.ftag{display:inline-flex;align-items:center;gap:4px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:600;margin:2px;}
+/* Search input */
+.fsearch{width:100%;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:9px 12px 9px 36px;font-size:.85rem;font-family:inherit;outline:none;color:#1a2332;}
+.fsearch-wrap{position:relative;margin-bottom:14px;}
+.fsearch-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:.85rem;}
+/* Attendance cells */
+.att-p{background:#dcfce7;color:#166534;border-radius:6px;padding:3px 8px;font-size:.72rem;font-weight:700;}
+.att-a{background:#fee2e2;color:#991b1b;border-radius:6px;padding:3px 8px;font-size:.72rem;font-weight:700;}
+/* Badge */
+.fbadge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:700;}
+.fbadge-green{background:#dcfce7;color:#166534;}
+.fbadge-red{background:#fee2e2;color:#991b1b;}
+.fbadge-blue{background:#dbeafe;color:#1e40af;}
+.fbadge-gray{background:#f1f5f9;color:#64748b;}
+
+/* ── INNER PAGE FORM CARDS ── */
+.fform-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.fform-card h3,.fform-title{font-size:.72rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;}
+.fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fgrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.ftable{width:100%;border-collapse:collapse;font-size:.82rem;}
+.ftable th{background:#f8fafc;color:#64748b;font-weight:700;font-size:.68rem;text-transform:uppercase;padding:10px 12px;text-align:left;border-bottom:1px solid #e2e8f0;}
+.ftable td{padding:10px 12px;border-bottom:1px solid #f1f5f9;color:#1a2332;vertical-align:middle;}
+.ftable tr:hover td{background:#f8fafc;}
+.ftabs{display:flex;gap:4px;background:#f1f5f9;border-radius:10px;padding:4px;margin-bottom:16px;}
+.ftab{flex:1;padding:8px;text-align:center;font-size:.78rem;font-weight:700;color:#64748b;border:none;background:transparent;border-radius:8px;cursor:pointer;font-family:inherit;transition:.2s;}
+.ftab.active{background:#fff;color:#2563eb;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.fbadge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:700;}
+.fbadge-green{background:#dcfce7;color:#166534;}.fbadge-red{background:#fee2e2;color:#991b1b;}
+.fbadge-blue{background:#dbeafe;color:#1e40af;}.fbadge-gray{background:#f1f5f9;color:#64748b;}
+.att-p{background:#dcfce7;color:#166534;border-radius:6px;padding:3px 8px;font-size:.72rem;font-weight:700;}
+.att-a{background:#fee2e2;color:#991b1b;border-radius:6px;padding:3px 8px;font-size:.72rem;font-weight:700;}
+
+.fls-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.fls-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.05);}
+.fls-n{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;line-height:1;}
+.fls-l{font-size:.62rem;font-weight:700;color:#94a3b8;margin-top:5px;text-transform:uppercase;letter-spacing:.05em;}
+.fchip span{color:#1e40af !important;font-size:.65rem;font-weight:700;}
+.fstaff-no{font-size:.75rem;color:#94a3b8;}
+</style>
+</head>
+<body>
+<div id="pg-faculty" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;overflow-y:auto;z-index:1000;background:#f0f4f8;color:#1a2332;">
+
+<!-- MAIN DASHBOARD PAGE -->
+<div class="fac-page" id="fp-main">
+  <div class="fnav">
+    <div class="fnav-left">
+      <div class="fnav-logo">🎓</div>
+      <div>
+        <div class="fnav-title"><span id="fn-deptname">Faculty</span> Dashboard</div>
+        <div class="fnav-sub" id="fn-namesub">Faculty</div>
+      </div>
+    </div>
+    <div class="fnav-right">
+      <span class="fnav-badge" id="fn-dept">DEPT</span>
+      <span class="fnav-badge fnav-badge-role" id="fn-role">ROLE</span>
+      <button type="button" class="fbtn-lo" onclick="facLogout()"><i class="fas fa-sign-out-alt"></i>Logout</button>
+    </div>
+  </div>
+  <!-- STATS -->
+  <div class="fstat-row">
+    <div class="fstat"><div class="fstat-n fn-blue" id="fs-stu">0</div><div class="fstat-l">Students</div></div>
+    <div class="fstat"><div class="fstat-n fn-green" id="fs-att">—%</div><div class="fstat-l">Avg Att.</div></div>
+    <div class="fstat"><div class="fstat-n fn-blue" id="fs-asn">0</div><div class="fstat-l">Assignments</div></div>
+    <div class="fstat"><div class="fstat-n fn-purple" id="fs-ev">0</div><div class="fstat-l">Events</div></div>
+    <div class="fstat"><div class="fstat-n fn-orange" id="fs-lv">0</div><div class="fstat-l">Pending Leave</div></div>
+  </div>
+
+  <!-- STAFF CHIPS -->
+  <div class="fstaff-box">
+    <div class="fstaff-lbl">Dept: <span id="fs-deptfull">—</span> &nbsp;|&nbsp; Staff:</div>
+    <div class="fchips" id="fstaff-chips"></div>
+  </div>
+  <!-- ACTION GRID -->
+  <div style="margin:0 20px 14px;position:relative">
+  <input id="fac-search" oninput="facSearch(this.value)" placeholder="🔍 Search students by name or reg no..." style="width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);color:#fff;border-radius:12px;padding:10px 16px;font-size:.84rem;font-family:inherit;outline:none;box-sizing:border-box"/>
+  <div id="fac-search-res" style="display:none;position:absolute;top:100%;left:0;right:0;background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:12px;margin-top:4px;z-index:99;max-height:250px;overflow-y:auto"></div>
+</div>
+
+<div class="factions-label">Quick Actions</div>
+  <div class="faction-grid">
+    <div class="fact fact-teal" onclick="fGo('addstu')"><div class="fact-ic"><i class="fas fa-user-plus"></i></div><span class="fact-nm">Add Student</span></div>
+    <div class="fact fact-blue" onclick="fGo('viewstu')"><div class="fact-ic"><i class="fas fa-users"></i></div><span class="fact-nm">View Students</span></div>
+    <div class="fact fact-teal" onclick="fGo('attend')"><div class="fact-ic"><i class="fas fa-check-square"></i></div><span class="fact-nm">Attendance</span></div>
+    <div class="fact fact-brown" onclick="fGo('marks')"><div class="fact-ic"><i class="fas fa-chart-bar"></i></div><span class="fact-nm">Marks</span><span class="fact-sub">CIT 1·2·3·SEM</span></div>
+    <div class="fact fact-purple" onclick="fGo('notes')"><div class="fact-ic"><i class="fas fa-file-alt"></i></div><span class="fact-nm">Notes</span></div>
+    <div class="fact fact-red" onclick="fGo('applyleave')"><div class="fact-ic"><i class="fas fa-umbrella-beach"></i></div><span class="fact-nm">Apply Leave</span></div>
+    <div class="fact" style="background:linear-gradient(135deg,#7c3aed,#a855f7)" onclick="fGo('stu_leave')"><div class="fact-ic"><i class="fas fa-user-clock"></i></div><span class="fact-nm">Student Leaves</span><span class="fact-sub">Approve / Reject</span></div>
+    <div class="fact fact-dgreen" onclick="fGo('events')"><div class="fact-ic"><i class="fas fa-calendar-alt"></i></div><span class="fact-nm">View Events</span></div>
+    <div class="fact fact-purple" onclick="fGo('assign')"><div class="fact-ic"><i class="fas fa-book-open"></i></div><span class="fact-nm">Assign &amp; Evaluate</span></div>
+    <div class="fact fact-cyan" onclick="fGo('timetable')"><div class="fact-ic"><i class="fas fa-calendar-check"></i></div><span class="fact-nm">Time Table</span></div>
+    <div class="fact" style="background:linear-gradient(135deg,#7d5a00,#c89a00)" onclick="fGo('frankholders')"><div class="fact-ic"><i class="fas fa-trophy"></i></div><span class="fact-nm">Rank Holders</span><span class="fact-sub">My Dept</span></div>
+    <div class="fact" style="background:linear-gradient(135deg,#0a4d2e,#16a34a)" onclick="fGo('fplaced')"><div class="fact-ic"><i class="fas fa-briefcase"></i></div><span class="fact-nm">Placed Students</span><span class="fact-sub">My Dept</span></div>
+    <div class="fact fact-red" onclick="fGo('defaulters')"><div class="fact-ic"><i class="fas fa-exclamation-triangle"></i></div><span class="fact-nm">Defaulters</span><span class="fact-sub">Below 75%</span></div>
+    <div class="fact fact-blue" onclick="fGo('performance')"><div class="fact-ic"><i class="fas fa-chart-line"></i></div><span class="fact-nm">Performance</span><span class="fact-sub">Marks graph</span></div>
+    <div class="fact fact-lblue" onclick="fGo('leavestatus')"><div class="fact-ic"><i class="fas fa-clipboard-list"></i></div><span class="fact-nm">Leave Status</span></div>
+    <div class="fact fact-cyan" onclick="fGo('fcirculars')"><div class="fact-ic"><i class="fas fa-file-contract"></i></div><span class="fact-nm">Circulars</span></div>
+    <div class="fact fact-purple" onclick="fGo('subjects')"><div class="fact-ic"><i class="fas fa-book"></i></div><span class="fact-nm">Subjects</span><span class="fact-sub">Year &amp; Section</span></div>
+  </div></div>
+
+<!--div>
+
+<!-- SUBJECTS PAGE -->
+<div class="fac-page" id="fp-subjects">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">📖 Subject Management</div>
+    <div class="fpage-dept" id="fpd-subjects">DEPT</div>
+  </div>
+  <div class="finner">
+    <!-- Year + Section filter -->
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <label class="flbl">Year</label>
+        <select class="finp" id="fsub-yr" onchange="fRnSubjects()" style="margin-bottom:0">
+          <option value="1st Year">1st Year</option>
+          <option value="2nd Year" selected>2nd Year</option>
+          <option value="3rd Year">3rd Year</option>
+          <option value="4th Year">4th Year</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <label class="flbl">Section</label>
+        <select class="finp" id="fsub-sec" onchange="fRnSubjects()" style="margin-bottom:0">
+          <option value="A">A</option>
+          <option value="B">B</option>
+          
+        </select>
+      </div>
+    </div>
+    <!-- Add subject form -->
+    <div class="fform-card" style="margin-bottom:14px">
+      <div class="fform-ttl">➕ Add Subject</div>
+      <div class="frow2">
+        <div>
+          <label class="flbl">Subject Name *</label>
+          <input class="finp" id="fsub-nm" placeholder="e.g. Data Structures"/>
+        </div>
+        <div>
+          <label class="flbl">Subject Code *</label>
+          <input class="finp" id="fsub-code" placeholder="e.g. CS301"/>
+        </div>
+      </div>
+      <div>
+        <label class="flbl">Type</label>
+        <select class="finp" id="fsub-type">
+          <option value="Theory">Theory</option>
+          <option value="Lab">Lab</option>
+          <option value="Elective">Elective</option>
+        </select>
+      </div>
+      <button type="button" class="fbtn-main" onclick="fAddSubject()">➕ Add Subject</button>
+    </div>
+    <!-- Subject list -->
+    <div id="fsub-list"></div>
+  </div>
+</div>
+
+<!-- ADD STUDENT PAGE -->
+<div class="fac-page" id="fp-addstu">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">➕ Add Student</div>
+    <div class="fpage-dept" id="fpd-addstu">ECE</div>
+  </div>
+  <div class="finner">
+    <div class="fform-card">
+      <div class="fform-ttl">➕ Student Details</div>
+      <label class="flbl">Photo</label>
+      <div id="fas-photo-ph" onclick="document.getElementById('fas-photo-f').click()" style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.07);border:2px dashed rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px;font-size:1.8rem">👤</div>
+      <img id="fas-photo-prev" style="width:80px;height:80px;border-radius:50%;object-fit:cover;display:none;margin-bottom:10px"/>
+      <input type="file" id="fas-photo-f" accept="image/*" style="display:none" onchange="prevImg(this,'fas-photo-prev','fas-photo-ph','fas-photo-data')"/>
+      <input type="hidden" id="fas-photo-data"/>
+      <label class="flbl">Full Name</label>
+      <input class="finp" id="fas-nm" placeholder="Student name"/>
+      <label class="flbl">Register No</label>
+      <input class="finp" id="fas-rg" placeholder="e.g. MCA001"/>
+      <label class="flbl">Email</label>
+      <input class="finp" id="fas-em" placeholder="student@college.edu"/>
+      <label class="flbl">Phone</label>
+      <input class="finp" id="fas-ph" placeholder="9876543210" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)"/>
+      <div class="frow2">
+        <div>
+          <label class="flbl">Year</label>
+          <select class="finp" id="fas-yr"><option value="">— Year —</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+        </div>
+        <div>
+          <label class="flbl">Section</label>
+          <select class="finp" id="fas-sec"><option>A</option><option>B</option></select>
+        </div>
+
+      </div>
+      <label class="flbl">Department</label>
+      <input class="finp" id="fas-dept" readonly style="opacity:.6"/>
+      <label class="flbl">Username</label>
+      <input class="finp" id="fas-un" placeholder="reg number as username"/>
+      <label class="flbl">Password</label>
+      <input class="finp" id="fas-pw" placeholder="student123"/>
+      <button type="button" class="fbtn-main" onclick="fAddStu()">✓ Add Student</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW STUDENTS PAGE -->
+<div class="fac-page" id="fp-viewstu">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">👥 View Students</div>
+    <div class="fpage-dept" id="fpd-viewstu">ECE</div>
+  </div>
+  <div class="finner">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input class="finp" id="fstu-q" placeholder="🔍 Search by name / reg no..." oninput="fRnStu()" style="flex:1"/>
+      <select class="finp" id="fstu-yr" onchange="fRnStu()" style="width:120px"><option value="">All Years</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+    </div>
+    <div id="fstu-count" style="font-size:.75rem;color:rgba(255,255,255,.4);margin-bottom:10px"></div>
+    <div id="fstu-list"></div>
+  </div>
+</div>
+
+<!-- ATTENDANCE PAGE -->
+<div class="fac-page" id="fp-attend">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">✅ Mark Attendance</div>
+    <div class="fpage-dept" id="fpd-attend">ECE</div>
+  </div>
+  <div class="finner">
+    <div class="fform-card" style="margin-bottom:14px">
+      <div class="frow2">
+        <div>
+          <label class="flbl">Subject</label>
+          <select class="finp" id="fatt-sub"></select>
+        </div>
+        <div>
+          <label class="flbl">Date</label>
+          <input class="finp" type="date" id="fatt-date" style="color-scheme:dark"/>
+        </div>
+        <div>
+          <label class="flbl">Period</label>
+          <select class="finp" id="fatt-period">
+            <option value="">— Select Period —</option>
+            <option value="1">P1 (8:00–8:50)</option>
+            <option value="2">P2 (8:50–9:40)</option>
+            <option value="3">P3 (9:50–10:40)</option>
+            <option value="4">P4 (10:40–11:30)</option>
+            <option value="5">P5 (11:30–12:20)</option>
+            <option value="6">P6 (1:00–1:50)</option>
+            <option value="7">P7 (1:50–2:40)</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <label class="flbl">Year & Section</label>
+        <div style="display:flex;gap:8px">
+          <select class="finp" id="fatt-yr" onchange="fLoadSubjectsDrop('fatt-sub');fAttLoad()"><option value="">All</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+          <select class="finp" id="fatt-sec" onchange="fLoadSubjectsDrop('fatt-sub');fAttLoad()"><option value="">All Sec</option><option>A</option><option>B</option></select>
+        </div>
+      </div>
+      <button type="button" class="fbtn-main" style="margin-top:10px" onclick="fAttLoad()">📋 Load Students</button>
+    </div>
+    <div id="fatt-table"></div>
+    <button type="button" class="fbtn-main" id="fatt-save-btn" style="display:none;margin-top:12px;width:100%" onclick="fAttSave()">💾 Save Attendance</button>
+  </div>
+</div>
+<!-- MARKS PAGE -->
+<div class="fac-page" id="fp-marks">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">📊 Student Marks</div>
+    <div class="fpage-dept" id="fpd-marks">ECE</div>
+  </div>
+  <div class="finner">
+    <div class="fform-card" style="margin-bottom:14px">
+      <div class="frow2">
+        <div>
+          <label class="flbl">Exam Type</label>
+          <select class="finp" id="fmrk-exam">
+            <option value="CIT1">CIT 1</option>
+            <option value="CIT2">CIT 2</option>
+            <option value="CIT3">CIT 3</option>
+            <option value="SEM">Semester</option>
+          </select>
+        </div>
+        <div>
+          <label class="flbl">Subject</label>
+          <select class="finp" id="fmrk-sub"></select>
+        </div>
+      </div>
+      <div class="frow2" style="margin-top:8px">
+        <div>
+          <label class="flbl">Year</label>
+          <select class="finp" id="fmrk-yr" onchange="fLoadSubjectsDrop('fmrk-sub');fMrkLoad()"><option value="">All</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+        </div>
+        <div>
+          <label class="flbl">Section</label>
+          <select class="finp" id="fmrk-sec" onchange="fLoadSubjectsDrop('fmrk-sub');fMrkLoad()"><option value="">All</option><option>A</option><option>B</option></select>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <label class="flbl">Max Mark</label>
+        <input class="finp" id="fmrk-max" type="number" value="100" min="1" max="200"/>
+      </div>
+      <button type="button" class="fbtn-main" style="margin-top:10px" onclick="fMrkLoad()">📋 Load Students</button>
+    </div>
+    <div id="fmrk-table"></div>
+    <button type="button" class="fbtn-main" id="fmrk-save-btn" style="display:none;margin-top:12px;width:100%" onclick="fMrkSave()">💾 Save Marks</button>
+  </div>
+</div>
+<!-- NOTES PAGE -->
+<div class="fac-page" id="fp-notes">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">📝 Notes / Circulars</div>
+    <div class="fpage-dept" id="fpd-notes">ECE</div>
+  </div>
+  <div class="finner">
+    <div class="fform-card" style="margin-bottom:14px">
+      <div class="fform-ttl">📝 Post Note / Circular</div>
+      <label class="flbl">Title</label>
+      <input class="finp" id="fnt-ttl" placeholder="e.g. Unit 2 Notes — Circuit Theory"/>
+      <div class="frow2">
+        <div>
+          <label class="flbl">Year</label>
+          <select class="finp" id="fnt-yr">
+            <option value="All">All Years</option>
+            <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option>
+          </select>
+        </div>
+        <div>
+          <label class="flbl">Section</label>
+          <select class="finp" id="fnt-sec">
+            <option value="All">All Sections</option>
+            <option>A</option><option>B</option>
+          </select>
+        </div>
+      </div>
+      <label class="flbl">Description</label>
+      <textarea class="finp" id="fnt-msg" style="height:70px;resize:vertical" placeholder="Brief description..."></textarea>
+      <label class="flbl" style="margin-bottom:6px">Attach PDF / File <span style="color:rgba(255,255,255,.3);font-weight:400;text-transform:none;font-size:.68rem">(students can download)</span></label>
+      <div id="fnt-dropzone" onclick="document.getElementById('fnt-file').click()" style="border:2px dashed rgba(255,255,255,.18);border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;background:#0a1628;transition:border-color .2s;margin-bottom:12px">
+        <div id="fnt-drop-ph">
+          <div style="font-size:2.2rem;margin-bottom:8px">📎</div>
+          <div style="font-size:.85rem;font-weight:700;color:rgba(255,255,255,.55)">Tap to attach a file</div>
+          <div style="font-size:.71rem;color:rgba(255,255,255,.25);margin-top:4px">PDF, DOC, DOCX, JPG, PNG</div>
+        </div>
+        <div id="fnt-drop-sel" style="display:none">
+          <div id="fnt-file-icon" style="font-size:2.2rem;margin-bottom:6px">📄</div>
+          <div id="fnt-file-nm" style="font-size:.88rem;font-weight:700;color:#2ecc71;word-break:break-all"></div>
+          <div id="fnt-file-sz" style="font-size:.72rem;color:rgba(255,255,255,.35);margin-top:3px"></div>
+          <button type="button" onclick="event.stopPropagation();fNoteFileClear()" style="margin-top:9px;background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.3);color:#e74c3c;border-radius:8px;padding:5px 14px;font-size:.75rem;cursor:pointer">✕ Remove File</button>
+        </div>
+      </div>
+      <input type="file" id="fnt-file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" style="display:none" onchange="fNoteFileSelect(this)">
+      <button type="button" class="fbtn-main" onclick="fAddNote()">📢 Post Note</button>
+    </div>
+    <div id="fnt-list"></div>
+  </div>
+</div>
+
+<!-- APPLY LEAVE PAGE -->
+<div class="fac-page" id="fp-applyleave">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">🏖️ Apply Leave</div>
+  </div>
+  <div class="finner">
+    <div class="fform-card" style="margin-bottom:14px">
+      <label class="flbl">Leave Type</label>
+      <select class="finp" id="flv-type" onchange="fLeavePreview()">
+        <option>Casual Leave</option><option>Medical Leave</option>
+        <option>Emergency Leave</option><option>Duty Leave</option><option>Maternity Leave</option>
+      </select>
+      <div class="frow2">
+        <div><label class="flbl">From Date</label><input class="finp" id="flv-from" type="date" oninput="fLeavePreview()"/></div>
+        <div><label class="flbl">To Date</label><input class="finp" id="flv-to" type="date" oninput="fLeavePreview()"/></div>
+      </div>
+      <label class="flbl">Reason</label>
+      <textarea class="finp" id="flv-reason" style="height:80px;resize:vertical" placeholder="Reason for leave..." oninput="fLeavePreview()"></textarea>
+      <!-- PREVIEW -->
+      <div id="flv-preview" style="display:none;background:#0a1628;border:1px solid rgba(59,130,246,.25);border-radius:12px;padding:14px;margin-bottom:14px">
+        <div style="font-size:.7rem;font-weight:800;color:#3b82f6;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">📋 Leave Preview</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;font-size:.8rem"><span style="color:rgba(255,255,255,.45)">Faculty</span><span id="flvp-nm" style="font-weight:700;color:#fff"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem"><span style="color:rgba(255,255,255,.45)">Leave Type</span><span id="flvp-type" style="font-weight:600;color:#f59e0b"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem"><span style="color:rgba(255,255,255,.45)">Duration</span><span id="flvp-dur" style="font-weight:600;color:#60a5fa"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem"><span style="color:rgba(255,255,255,.45)">Reason</span><span id="flvp-reason" style="font-weight:500;color:rgba(255,255,255,.7);max-width:60%;text-align:right"></span></div>
+          <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-top:4px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07)"><span style="color:rgba(255,255,255,.45)">Status</span><span style="font-weight:800;color:#f59e0b">⏳ Pending</span></div>
+        </div>
+      </div>
+      <button type="button" class="fbtn-main" onclick="fApplyLeave()">✓ Submit Application</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEAVE STATUS PAGE -->
+<div class="fac-page" id="fp-leavestatus">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">📋 Leave Status</div>
+  </div>
+  <div class="finner">
+    <div class="fls-stats">
+      <div class="fls-card"><div class="fls-n fn-green" id="fls-appr">0</div><div class="fls-l">Approved</div></div>
+      <div class="fls-card"><div class="fls-n fn-orange" id="fls-pend">0</div><div class="fls-l">Pending</div></div>
+      <div class="fls-card"><div class="fls-n" style="color:#ef4444" id="fls-rej">0</div><div class="fls-l">Rejected</div></div>
+    </div>
+    <div id="flv-status-list" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<div class="fac-page" id="fp-assign">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">📚 Assign &amp; Evaluate</div>
+    <div class="fpage-dept" id="fpd-assign">ECE</div>
+  </div>
+  <div class="finner">
+    <!-- TABS -->
+    <div style="display:flex;gap:0;background:#0d1929;border-radius:12px;padding:4px;margin-bottom:14px">
+      <button type="button" id="asn-tab-post" onclick="asnTab('post')" style="flex:1;padding:8px;border-radius:9px;border:none;background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff;font-family:inherit;font-weight:700;font-size:.82rem;cursor:pointer">📤 Post Assignment</button>
+      <button type="button" id="asn-tab-eval" onclick="asnTab('eval')" style="flex:1;padding:8px;border-radius:9px;border:none;background:transparent;color:rgba(255,255,255,.45);font-family:inherit;font-weight:700;font-size:.82rem;cursor:pointer">✅ Evaluate</button>
+    </div>
+    <!-- POST TAB -->
+    <div id="asn-post-panel">
+      <div class="fform-card" style="margin-bottom:14px">
+        <label class="flbl">Assignment Title</label>
+        <input class="finp" id="fasn-ttl" placeholder="e.g. Data Structures - Lab 3"/>
+        <div class="frow2">
+          <div>
+            <label class="flbl">Year</label>
+            <select class="finp" id="fasn-yr" onchange="fLoadSubjectsDrop('fasn-sub')">
+              <option value="All">All Years</option>
+              <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option>
+            </select>
+          </div>
+          <div>
+            <label class="flbl">Section</label>
+            <select class="finp" id="fasn-sec" onchange="fLoadSubjectsDrop('fasn-sub')">
+              <option value="All">All Sections</option>
+              <option>A</option><option>B</option>
+            </select>
+          </div>
+        </div>
+        <label class="flbl">Subject</label>
+        <select class="finp" id="fasn-sub"></select>
+        <label class="flbl">Due Date</label>
+        <input class="finp" id="fasn-due" type="date"/>
+        <label class="flbl">Description / Instructions</label>
+        <textarea class="finp" id="fasn-desc" style="height:80px;resize:vertical" placeholder="Write instructions here..."></textarea>
+        <button type="button" class="fbtn-main" onclick="fPostAssign()">📤 Post Assignment</button>
+      </div>
+      <div id="fasn-list"></div>
+    </div>
+    <!-- EVALUATE TAB -->
+    <div id="asn-eval-panel" style="display:none">
+      <div class="fform-card" style="margin-bottom:14px">
+        <label class="flbl">Select Assignment</label>
+        <select class="finp" id="fasn-eval-pick" onchange="fLoadSubmissions()"></select>
+      </div>
+      <div id="fasn-eval-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMETABLE PAGE -->
+<!-- TIMETABLE PAGE -->
+<div class="fac-page" id="fp-timetable" style="background:#0d1b2a;">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">📅 Time Table</div>
+    <div class="fpage-dept" id="fpd-tt">ECE</div>
+  </div>
+  <div class="finner" style="background:#0d1b2a;color:#fff;">
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <label class="flbl">Year</label>
+        <select class="finp" id="ftt-yr" onchange="fBuildTT();ttcLoad()" style="margin-bottom:0">
+          <option value="1">1st Year</option><option value="2" selected>2nd Year</option>
+          <option value="3">3rd Year</option><option value="4">4th Year</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <label class="flbl">Section</label>
+        <select class="finp" id="ftt-sec" onchange="fBuildTT();ttcLoad()" style="margin-bottom:0">
+          <option>A</option><option>B</option>
+        </select>
+      </div>
+    </div>
+    <!-- Config box -->
+    <div style="background:#0d1929;border:1px solid rgba(255,255,255,.08);border-radius:14px;margin-bottom:14px;overflow:hidden">
+      <div onclick="ttcToggle()" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer">
+        <span style="font-size:.82rem;font-weight:700;color:#fff">⚙️ Configure Subjects &amp; Staff</span>
+        <span id="ttc-arrow" style="color:rgba(255,255,255,.4);font-size:.8rem">▼</span>
+      </div>
+      <div id="ttc-config-box" style="display:none;padding:0 16px 16px">
+        <div id="ttc-subj-rows"></div>
+        <button type="button" onclick="ttcAddRow('sub')" style="background:rgba(59,130,246,.12);border:1px dashed rgba(59,130,246,.35);color:#60a5fa;border-radius:8px;padding:6px 14px;font-size:.76rem;width:100%;cursor:pointer;font-family:inherit;margin-bottom:10px">＋ Add Theory Subject</button>
+        <div style="font-size:.72rem;font-weight:800;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Lab Subjects</div>
+        <div id="ttc-lab-rows"></div>
+        <button type="button" onclick="ttcAddRow('lab')" style="background:rgba(168,85,247,.12);border:1px dashed rgba(168,85,247,.35);color:#c084fc;border-radius:8px;padding:6px 14px;font-size:.76rem;width:100%;cursor:pointer;font-family:inherit;margin-bottom:12px">＋ Add Lab Subject</button>
+        <button type="button" class="fbtn-main" onclick="ttcSave()">💾 Save &amp; Generate</button>
+      </div>
+    </div>
+    <!-- Period legend -->
+    <div style="background:#162035;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:.7rem;font-weight:800;color:rgba(255,255,255,.4);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">Period Schedule — 50 mins each</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:5px 16px" id="ftt-legend"></div>
+    </div>
+    <!-- Timetable grid -->
+    <div id="ftt-grid" style="overflow-x:auto;background:#0a1628;border-radius:12px;border:1px solid rgba(255,255,255,.08)"></div>
+  </div>
+</div>
+
+<div class="fac-page" id="fp-frankholders">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">🏆 Rank Holders</div>
+    <div class="fpage-dept" id="fpd-frankholders">ECE</div>
+  </div>
+  <div class="finner">
+    <div id="frk-list"></div>
+  </div>
+</div>
+
+<!-- PLACED STUDENTS (FACULTY VIEW) -->
+<div class="fac-page" id="fp-fplaced">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">💼 Placed Students</div>
+    <div class="fpage-dept" id="fpd-fplaced">ECE</div>
+  </div>
+  <div class="finner">
+    <div id="fpl-list"></div>
+  </div>
+</div>
+
+
+
+<div class="fac-page" id="fp-events" style="display:none">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">&#8249; Dashboard</button>
+    <div class="fpage-ttl">🎉 Events &amp; Circulars</div>
+  </div>
+  <div class="finner">
+    <div id="fp-events-list"></div>
+  </div>
+</div>
+
+<div class="fac-page" id="fp-examtt" style="display:none">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">‹ Dashboard</button>
+    <div class="fpage-ttl">📅 Exam Timetables</div>
+  </div>
+  <div class="finner">
+    <div style="background:#0d1929;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="grid-column:1/3;display:flex;justify-content:center;margin-bottom:4px">
+          <div style="text-align:center">
+            <label class="flbl" style="display:block;margin-bottom:8px">Timetable Image</label>
+            <div onclick="document.getElementById('fett-img-f').click()" id="fett-img-ph" style="width:110px;height:110px;border-radius:12px;border:2px dashed rgba(168,85,247,.35);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;background:#1a1a2e">
+              <img id="fett-img-prev" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:10px">
+              <div id="fett-img-ph-txt" style="text-align:center;color:rgba(255,255,255,.35)"><i class="fas fa-image" style="font-size:1.3rem;display:block;margin-bottom:4px;color:rgba(168,85,247,.5)"></i><span style="font-size:.65rem">Upload</span></div>
+            </div>
+            <input type="file" id="fett-img-f" accept="image/*" style="display:none" onchange="fettImgRead(this)">
+            <input type="hidden" id="fett-img-data">
+          </div>
+        </div>
+        <div><label class="flbl">Label *</label><input class="finp" id="fett-label" placeholder="MCA Sem 3 Timetable"/></div>
+        <div><label class="flbl">Department</label>
+          <select class="finp" id="fett-dept">
+            <option value="">All Departments</option>
+            <option>Computer Science &amp; Engineering</option>
+            <option>Electronics &amp; Communication</option>
+            <option>Information Technology</option>
+            <option>MCA</option><option>Mechanical Engineering</option>
+            <option>MBA</option><option>Civil Engineering</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button type="button" class="fbtn-main" onclick="fAddETT()"><i class="fas fa-plus" style="margin-right:6px"></i>Add Timetable</button>
+      </div>
+    </div>
+    <div style="font-size:.75rem;font-weight:800;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">📋 Added Timetables</div>
+    <div id="fett-list"><div style="color:rgba(255,255,255,.35);text-align:center;padding:20px;font-size:.82rem">No timetables yet</div></div>
+  </div>
+</div>
+
+<!-- STUDENT LEAVE APPROVAL PAGE -->
+<div class="fac-page" id="fp-stu_leave" style="display:none">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">&#8249; Dashboard</button>
+    <div class="fpage-ttl">&#128203; Student Leave Requests</div>
+  </div>
+  <div class="finner">
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+      <div class="fls-card"><div class="fls-n fn-orange" id="slv-pend-count">0</div><div class="fls-l">Pending</div></div>
+      <div class="fls-card"><div class="fls-n fn-green" id="slv-appr-count">0</div><div class="fls-l">Approved</div></div>
+      <div class="fls-card"><div class="fls-n" style="color:#ef4444" id="slv-rej-count">0</div><div class="fls-l">Rejected</div></div>
+    </div>
+    <!-- Filter -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <select class="finp" id="slv-filter-status" onchange="fRnStuLeaves()" style="max-width:160px;margin-bottom:0">
+        <option value="">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+      <select class="finp" id="slv-filter-year" onchange="fRnStuLeaves()" style="max-width:140px;margin-bottom:0">
+        <option value="">All Years</option>
+        <option>1st Year</option><option>2nd Year</option>
+        <option>3rd Year</option><option>4th Year</option>
+      </select>
+    </div>
+    <div id="fstu-leave-list"></div>
+  </div>
+</div>
+
+<!-- DEFAULTERS PAGE -->
+<div class="fac-page" id="fp-defaulters" style="display:none">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">&#8249; Dashboard</button>
+    <div class="fpage-ttl">&#9888; Attendance Defaulters</div>
+  </div>
+  <div class="finner">
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <select class="finp" id="def-sub" onchange="fRnDefaulters()" style="max-width:180px;margin-bottom:0">
+        <option value="">All Subjects</option>
+      </select>
+      <select class="finp" id="def-yr" onchange="fRnDefaulters()" style="max-width:140px;margin-bottom:0">
+        <option value="">All Years</option>
+        <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option>
+      </select>
+      <select class="finp" id="def-thresh" onchange="fRnDefaulters()" style="max-width:140px;margin-bottom:0">
+        <option value="75">Below 75%</option>
+        <option value="65">Below 65%</option>
+        <option value="50">Below 50%</option>
+      </select>
+    </div>
+    <div id="def-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px"></div>
+    <div id="def-list"></div>
+  </div>
+</div>
+
+<!-- PERFORMANCE PAGE -->
+<div class="fac-page" id="fp-performance" style="display:none">
+  <div class="fpage-bar">
+    <button type="button" class="fback-btn" onclick="fGo('main')">&#8249; Dashboard</button>
+    <div class="fpage-ttl">&#128200; Student Performance</div>
+  </div>
+  <div class="finner">
+    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <select class="finp" id="perf-yr" onchange="fRnPerformance()" style="max-width:140px;margin-bottom:0">
+        <option value="">All Years</option>
+        <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option>
+      </select>
+      <select class="finp" id="perf-sec" onchange="fRnPerformance()" style="max-width:100px;margin-bottom:0">
+        <option value="">All Sec</option><option>A</option><option>B</option>
+      </select>
+    </div>
+    <div id="perf-list"></div>
+  </div>
+</div>
+
+<!-- CIRCULARS VIEW PAGE -->
+<div class="fac-page" id="fp-fcirculars" style="display:none">
+  <div class="fpage-bar"><button type="button" class="fback-btn" onclick="fGo('main')">&#8249; Dashboard</button><div class="fpage-ttl">&#128220; Circulars</div></div>
+  <div class="finner"><div id="fac-circ-list"></div></div>
+</div></div><!-- end pg-faculty -->
+
+<script>
+var D={faculty:[],students:[],bus:[],events:[],placed:[],rank:[],updates:[],notes:[]};
+var curFac=null;
+var DEPT_SUBJECTS={};
+var BG2=['#1e3a5f','#1a3a2a','#3a1a2a','#2a1a3a'];
+var curStu=null;
+
+// curFac will be loaded from server session in DOMContentLoaded
+
+function g(id){return document.getElementById(id);}
+function prevImg(input,prevId,phId,dataId){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var prev=g(prevId),ph=g(phId),data=g(dataId);
+    if(prev){prev.src=e.target.result;prev.style.display='block';}
+    if(ph)ph.style.display='none';
+    if(data)data.value=e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function toast(msg,type){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:.85rem;font-weight:600;z-index:99999;color:#fff;background:'+(type==='error'?'#e74c3c':'#27ae60')+';';
+  t.textContent=msg;document.body.appendChild(t);
+  setTimeout(function(){t.remove();},3000);
+}
+async function api(method,url,body){
+  try{
+    var opts={method:method,headers:{'Content-Type':'application/json'}};
+    if(body)opts.body=JSON.stringify(body);
+    var res=await fetch(url,opts);
+    if(!res.ok&&res.status>=500)return {ok:false,msg:'Server error'};
+    return await res.json();
+  }catch(ex){console.error('api:',ex);return {ok:false,msg:String(ex)};}
+}
+function facLogout(){
+  try{sessionStorage.removeItem('ucsp_fac_page');sessionStorage.removeItem('ucsp_session');}catch(ex){}
+  curFac=null;
+  try{sessionStorage.removeItem('ucsp_fac_page');}catch(e){}
+  fetch('/api/faculty/logout',{method:'POST'}).finally(function(){window.location.href='/';});
+}
+function fGo(page){
+  document.querySelectorAll('.fac-page').forEach(function(p){
+    p.style.display='none';
+    p.classList.remove('fshow');
+  });
+  var el=document.getElementById('fp-'+page);
+  if(el){el.style.display='block';window.scrollTo(0,0);}
+  try{sessionStorage.setItem('ucsp_fac_page',page);}catch(ex){}
+  if(page==='addstu')fSetDeptField();
+  if(page==='viewstu')fRnStu();
+  if(page==='leavestatus'){fRnLeave();flvTab('my');}
+  if(page==='stu_leave'){fRnStuLeaves();}
+  if(page==='defaulters'){fRnDefaulters();}
+  if(page==='performance'){fRnPerformance();}
+  if(page==='fcirculars'){fRnFacCirculars();}
+  if(page==='notes')fRnNotes();
+  if(page==='assign'){fRnAssign();asnTab('post');fLoadSubjectsDrop('fasn-sub');}
+  if(page==='timetable'){ttcLoad();fBuildTT();}
+  if(page==='subjects')fGo_subjects_init();
+  if(page==='attend')fLoadSubjectsDrop('fatt-sub');
+  if(page==='marks')fLoadSubjectsDrop('fmrk-sub');
+  if(page==='frankholders')fRnRankF();
+  if(page==='fplaced')fRnPlacedF();
+  if(page==='main')fUpdStats();
+  if(page==='events'){fRnEvF();}
+}
+async function loadData(){
+  try{
+    var data=await api('GET','/api/data');
+    D.faculty=(data.faculty||[]).map(function(f){return Object.assign({},f,{nm:f.nm||f.name||'',un:f.un||f.username||'',pw:f.pw||f.password||''});});
+    D.students=(data.students||[]).map(function(s){return Object.assign({},s,{nm:s.nm||s.name||'',un:s.un||s.username||'',reg:s.reg||s.reg_no||'',yr:s.yr||s.year||'',sec:s.sec||s.section||''});});
+    D.bus=(data.bus||[]).map(function(b){return Object.assign({},b,{lb:b.lb||b.label||'',dt:b.dt||b.date_str||'',inn:b.inn||b.inbound||'',out:b.out||b.outbound||''});});
+    D.events=(data.events||[]).map(function(e){return Object.assign({},e,{nm:e.nm||e.name||'',dt:e.dt||e.date||''});});
+    D.placed=(data.placed||[]).map(function(p){var pctc=p.ctc||p.package||'';return Object.assign({},p,{nm:p.nm||p.name||'',co:p.co||p.company||'',ctc:String(pctc||''),yr:p.yr||p.year||''});});
+    D.rank=(data.rank||[]).map(function(r){return Object.assign({},r,{nm:r.nm||r.name||'',rno:r.rno||r.rank_no||0,rk:r.rk||r.rank_no||r.rno||'',reg:r.reg||r.reg_no||'',yr:r.yr||r.year||'',dept:r.dept||''});});
+    D.updates=(data.updates||[]).map(function(u){return Object.assign({},u,{msg:u.msg||u.message||''});});
+  }catch(e){console.error('loadData:',e);}
+}
+function initFacDash(){
+  var dash=document.getElementById('fp-main');
+  if(dash){dash.style.opacity='0';setTimeout(function(){dash.style.transition='opacity .4s ease';dash.style.opacity='1';},50);}
+  if(!curFac)return;
+  var f=curFac;
+  var dmap={'Computer Science & Engineering':'CSE','Electronics & Communication':'ECE','Information Technology':'IT','MCA':'MCA','Mechanical Engineering':'MECH','MBA':'MBA','Civil Engineering':'CIVIL'};
+  var dc=dmap[f.dept]||f.dept.substring(0,3).toUpperCase();
+  var safeSet=function(id,v){var el=g(id);if(el)el.textContent=v;};
+  var ns=g('fn-namesub');if(ns&&curFac)ns.textContent=(curFac.nm||curFac.name||'')+' · '+(curFac.role||'Faculty');
+  safeSet('fn-deptname',dc);safeSet('fn-dept',dc);safeSet('fn-role',f.role||'Faculty');
+  var fs=g('fs-deptfull');if(fs)fs.textContent=f.dept;
+  ['fpd-addstu','fpd-viewstu','fpd-attend','fpd-marks','fpd-notes','fpd-assign','fpd-tt','fpd-frankholders','fpd-fplaced','fpd-subjects'].forEach(function(id){safeSet(id,dc);});
+  var chips='';
+  D.faculty.filter(function(x){return (x.dept||'')===f.dept;}).forEach(function(s){var role=s.role||'Faculty';var roleIcon=role==='HOD'?'👑':role==='Professor'?'🎓':'👤';chips+='<div class="fchip">'+roleIcon+' '+(s.nm||s.name||'')+' <span style="font-size:.65rem;color:#4a90d9;margin-left:3px;font-weight:700">· '+role+'</span></div>';});
+  if(!chips)chips='<span class="fstaff-no">No staff yet</span>';
+  var sc=g('fstaff-chips');if(sc)sc.innerHTML=chips;
+  var dateEl=g('fatt-date');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
+  try{fBuildCal();}catch(ex){}
+  try{fPopulateStuDrop();}catch(ex){}
+  setTimeout(function(){try{fUpdStats();}catch(ex){}},200);
+}
+
+var D={admins:[],faculty:[],students:[],bus:[],events:[],placed:[],rank:[],updates:[],ttConfig:{}};
+
+function pg(id){document.querySelectorAll('.page').forEach(function(p){p.style.display='none';});var e=document.getElementById(id);if(e){e.style.display='block';window.scrollTo(0,0);}console.log('pg:',id,e?'found':'NOT FOUND');}
+function goHome(){pg('pg-home');updStats();try{sessionStorage.setItem('ucsp_session',JSON.stringify({role:'home'}));}catch(ex){}}
+function goPub(t){try{sessionStorage.setItem('ucsp_session',JSON.stringify({role:'public',page:t}));}catch(ex){}
+  if(t==='placed'){rnPPl();pg('pg-placed');}
+  else if(t==='rank'){rnPRk();pg('pg-rank');}
+  else if(t==='bus'){rnPBs();pg('pg-bus');}
+  else if(t==='events'){rnPEv();pg('pg-events');}
+}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape')document.querySelectorAll('.modal-ov.open').forEach(function(m){m.classList.remove('open');});
+  if(e.key==='Enter'){
+    var modal=document.querySelector('.modal-ov.open');
+    if(modal){
+      e.preventDefault();
+      var btn=modal.querySelector('.msubmit');
+      if(btn)btn.click();
+    }
+  }
+});
+function fillA(u,p){document.getElementById('au').value=u;document.getElementById('ap').value=p;}
+function fillF(u,p,d){document.getElementById('fu').value=u;document.getElementById('fp').value=p;var fd=document.getElementById('fd');for(var i=0;i<fd.options.length;i++){if(fd.options[i].value===d||fd.options[i].text.replace(/&amp;/g,'&')===d){fd.selectedIndex=i;break;}}}
+function fillS(u,p,d){document.getElementById('su').value=u;document.getElementById('sp').value=p;var sd=document.getElementById('sd');for(var i=0;i<sd.options.length;i++){if(sd.options[i].text.replace(/&amp;/g,'&')===d){sd.selectedIndex=i;break;}}}
+
+var curFac=null;
+var DEPT_SUBJECTS={};
+var DEPT_STAFF={};
+// facLogout defined above
+// function fGo(defined above
+function fRnEvents(){
+  var el=g('fp-events-list');if(!el)return;
+  if(!D.events||!D.events.length){
+    el.innerHTML='<div style="text-align:center;color:#94a3b8;padding:30px">No events yet</div>';return;
+  }
+  var h='';
+  D.events.forEach(function(ev){
+    var nm=ev.nm||ev.name||'';
+    var dt=ev.dt||ev.date||'';
+    var dept=ev.dept||'All Departments';
+    var colors=['#2563eb','#7c3aed','#059669','#d97706','#e11d48'];
+    var c=colors[Math.abs(nm.charCodeAt(0))%colors.length];
+    h+='<div style="background:#fff;border:1px solid #e2e8f0;border-left:4px solid '+c+';border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 4px rgba(0,0,0,.05)">';
+    h+='<div style="width:42px;height:42px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">&#127881;</div>';
+    h+='<div style="flex:1"><div style="font-size:.88rem;font-weight:800;color:#1a2332;margin-bottom:3px">'+nm+'</div>';
+    h+='<div style="display:flex;gap:10px;font-size:.72rem;color:#64748b">';
+    if(dt)h+='<span><i class="fas fa-calendar-alt" style="margin-right:4px;color:#2563eb"></i>'+dt+'</span>';
+    h+='<span><i class="fas fa-building" style="margin-right:4px;color:#7c3aed"></i>'+dept+'</span>';
+    h+='</div></div></div>';
+  });
+  el.innerHTML=h;
+}
+async function fUpdStats(){
+  if(!curFac)return;
+  var ds=D.students.filter(function(s){return (s.dept||s.department||'')===curFac.dept;});
+  document.getElementById('fs-stu').textContent=ds.length;
+  document.getElementById('fs-ev').textContent=D.events.length;
+  try{
+    var attRes=await api('GET','/api/attendance/avg?dept='+encodeURIComponent(curFac.dept));
+    if(attRes&&attRes.ok!==false){
+      document.getElementById('fs-att').textContent=(attRes.avg||0)+'%';
+    }else{document.getElementById('fs-att').textContent='N/A';}
+  }catch(ex){document.getElementById('fs-att').textContent='N/A';}
+  try{
+    var attRes=await api('GET','/api/attendance?dept='+encodeURIComponent(curFac.dept));
+    if(Array.isArray(attRes)&&attRes.length){
+      var tot=attRes.length,pres=attRes.filter(function(a){return a.status==='Present'||a.status==='P';}).length;
+      document.getElementById('fs-att').textContent=Math.round(pres/tot*100)+'%';
+    }else{document.getElementById('fs-att').textContent='N/A';}
+  }catch(ex){document.getElementById('fs-att').textContent='N/A';}
+  // Avg attendance from DB
+  try{
+    var attRes=await api('GET','/api/attendance?dept='+encodeURIComponent(curFac.dept));
+    if(Array.isArray(attRes)&&attRes.length){
+      var total=attRes.length,present=attRes.filter(function(a){return a.status==='Present'||a.status==='P';}).length;
+      var pct=total>0?Math.round(present/total*100):0;
+      document.getElementById('fs-att').textContent=pct+'%';
+    }else{document.getElementById('fs-att').textContent='N/A';}
+  }catch(ex){document.getElementById('fs-att').textContent='N/A';}
+  // Assignments from DB
+  var asns=await api('GET','/api/assignments?dept='+encodeURIComponent(curFac.dept));
+  document.getElementById('fs-asn').textContent=Array.isArray(asns)?asns.length:0;
+  // Leaves from DB
+  var lvs=await api('GET','/api/leaves?faculty_id='+curFac.id);
+  document.getElementById('fs-lv').textContent=Array.isArray(lvs)?lvs.filter(function(l){return l.status==='Pending';}).length:0;
+}
+function fPopulateStuDrop(){
+  if(!curFac)return;
+  var ds=D.students.filter(function(s){return s.dept===curFac.dept;});
+  var el=document.getElementById('fatt-stu');
+  if(el)el.innerHTML='<option value="">— Select —</option>'+ds.map(function(s){return '<option>'+s.nm+' ('+s.reg+')</option>';}).join('');
+}
+function fRnEvF(){
+  var el=g('fp-events-list');if(!el)return;
+  if(!D.events||!D.events.length){
+    el.innerHTML='<div style="text-align:center;color:#94a3b8;padding:30px;font-size:.85rem">No events yet</div>';return;
+  }
+  var h='';
+  D.events.forEach(function(ev){
+    var nm=ev.nm||ev.name||'';var dt=ev.dt||ev.date||'';var dept=ev.dept||'All';
+    h+='<div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.04);display:flex;align-items:center;gap:14px">'
+      +'<div style="width:44px;height:44px;background:#eff6ff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">🎉</div>'
+      +'<div style="flex:1">'
+      +'<div style="font-size:.88rem;font-weight:800;color:#1a2332">'+nm+'</div>'
+      +'<div style="font-size:.73rem;color:#64748b;margin-top:3px"><i class="fas fa-calendar" style="margin-right:5px;color:#94a3b8"></i>'+dt+'<span style="margin-left:12px"><i class="fas fa-building" style="margin-right:4px;color:#94a3b8"></i>'+dept+'</span></div>'
+      +'</div></div>';
+  });
+  el.innerHTML=h;
+}
+async function fAddStu(){
+  if(!curFac)return;
+  var nm=g('fas-nm').value.trim(),rg=g('fas-rg').value.trim(),yr=g('fas-yr').value,un=g('fas-un').value.trim(),pw=g('fas-pw').value.trim();
+  if(!nm||!rg||!yr||!un||!pw){alert('Fill required fields!');return;}
+  var photo=g('fas-photo-data')?g('fas-photo-data').value:'';
+  var res=await api('POST','/api/students',{name:nm,reg_no:rg,year:yr,username:un,password:pw,dept:curFac.dept,phone:g('fas-ph').value.trim(),email:g('fas-em').value.trim(),section:g('fas-sec').value,photo:photo});
+  if(!res||!res.ok){toast(res&&res.msg||'Error adding student!','error');return;}
+  // Add to local D
+  D.students.push({id:res.id,name:nm,reg_no:rg,year:yr,username:un,password:pw,dept:curFac.dept,phone:g('fas-ph').value.trim(),email:g('fas-em').value.trim(),section:g('fas-sec').value,photo:photo});
+  ['fas-nm','fas-rg','fas-em','fas-un','fas-pw','fas-ph'].forEach(function(i){g(i).value='';});g('fas-yr').value='';
+  fPopulateStuDrop();fUpdStats();toast('Student added! ✅','success');fGo('viewstu');
+}
+function fRnStu(){
+  if(!curFac)return;
+  var q=(g('fstu-q')||{value:''}).value.toLowerCase();
+  var yr=(g('fstu-yr')||{value:''}).value;
+  var list=D.students.filter(function(s){
+    return (s.dept===curFac.dept||s.department===curFac.dept)&&
+      (!q||(s.nm||s.name||'').toLowerCase().includes(q)||(s.reg||s.reg_no||'').toLowerCase().includes(q))&&
+      (!yr||(s.yr||s.year||'')=== yr);
+  });
+  var el=g('fstu-list');
+  var cnt=g('fstu-count');
+  if(cnt)cnt.textContent=list.length+' student'+(list.length!==1?'s':'');
+  if(!list.length){el.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.3);padding:30px;font-size:.85rem">No students found.</div>';return;}
+  el.innerHTML=list.map(function(s){
+    var photo=s.photo||s.ph_url||'';
+    var nm=s.nm||s.name||'';
+    var reg=s.reg||s.reg_no||'';
+    var yr2=s.yr||s.year||'';
+    var sec=s.sec||s.section||'';
+    var dept=s.dept||s.department||'';
+    var em=s.email||s.em||'';
+    var ph=s.phone||s.ph||'';
+    var un=s.un||s.username||'';
+    var pw=s.pw||s.password||'';
+    var avatar=photo?'<img src="'+photo+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.15)"/>'
+      :'<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1e3a5f,#2563eb);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">'+nm.charAt(0).toUpperCase()+'</div>';
+    return '<div style="background:#0d1929;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px;margin-bottom:10px">'
+      +'<div style="display:flex;gap:12px;align-items:flex-start">'
+      +avatar
+      +'<div style="flex:1;min-width:0">'
+      +'<div style="font-size:.92rem;font-weight:700;color:#fff;margin-bottom:2px">'+nm+'</div>'
+      +'<div style="font-size:.75rem;color:#60a5fa;margin-bottom:6px">📋 '+reg+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">'
+      +'<span style="background:rgba(99,102,241,.15);color:#a5b4fc;border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600">'+yr2+'</span>'
+      +(sec?'<span style="background:rgba(16,185,129,.12);color:#6ee7b7;border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600">Sec '+sec+'</span>':'')
+      +'<span style="background:rgba(245,158,11,.12);color:#fcd34d;border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600">'+dept+'</span>'
+      +'</div>'
+      +(em?'<div style="font-size:.73rem;color:rgba(255,255,255,.45);margin-bottom:2px">✉️ '+em+'</div>':'')
+      +(ph?'<div style="font-size:.73rem;color:rgba(255,255,255,.45);margin-bottom:2px">📞 '+ph+'</div>':'')
+      +'<div style="font-size:.73rem;color:rgba(255,255,255,.35);margin-top:4px;background:rgba(255,255,255,.04);border-radius:7px;padding:5px 8px">'
+      +'👤 <b style="color:rgba(255,255,255,.55)">'+un+'</b> &nbsp; 🔑 <b style="color:rgba(255,255,255,.55)">'+pw+'</b>'
+      +'</div>'
+      +'<div style="display:flex;justify-content:flex-end;margin-top:8px">'
+      +'<button type="button" onclick="fOpenEditStu('+s.id+')" style="background:rgba(74,158,255,.1);border:1px solid rgba(74,158,255,.25);color:#4a9eff;border-radius:8px;padding:5px 12px;font-size:.73rem;font-weight:700;cursor:pointer;margin-right:6px">✏️ Edit</button>'
+      +'<button type="button" onclick="fDelStu('+s.id+')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.22);color:#ef4444;border-radius:8px;padding:5px 14px;font-size:.73rem;font-weight:700;cursor:pointer">🗑️ Delete</button>'
+      +'</div>'
+      +'</div></div></div>';
+  }).join('');
+}
+async function fDelStu(id){
+  if(!confirm('Delete this student? This cannot be undone.'))return;
+  var res=await api('DELETE','/api/students/'+id);
+  if(!res||!res.ok){toast('Error deleting!','error');return;}
+  // remove from local D
+  D.students=D.students.filter(function(s){return s.id!==id;});
+  fRnStu();fUpdStats();fPopulateStuDrop();
+  toast('Student deleted!','success');
+}
+
+function fBuildCal(){
+  var now=new Date(),m=now.getMonth(),y=now.getFullYear();
+  var mn=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  var el=document.getElementById('fcal-month');if(el)el.textContent=mn[m]+' '+y+' CALENDAR';
+  var days=new Date(y,m+1,0).getDate(),h='';
+  for(var i=1;i<=days;i++)h+='<div class="fcal-day" id="fcal-'+i+'" onclick="fTogCal('+i+')">'+i+'</div>';
+  var ce=document.getElementById('fatt-cal');if(ce)ce.innerHTML=h;
+}
+function markAtt(v){
+  var el=document.getElementById('fatt-stu');
+  if(!el||!el.value){alert('Select a student!');return;}
+  toast(v==='P'?'Marked Present ✅':'Marked Absent ❌',v==='P'?'success':'error');
+}
+function fTogCal(d){var el=document.getElementById('fcal-'+d);if(!el)return;if(el.classList.contains('present')){el.classList.remove('present');el.classList.add('absent');}else if(el.classList.contains('absent')){el.classList.remove('absent');}else{el.classList.add('present');}}
+function fLoadMarks(){
+  if(!curFac)return;
+  var ds=D.students.filter(function(s){return s.dept===curFac.dept;});
+  var mx=parseInt(g('fmrk-max').value)||100,type=g('fmrk-type').value,sub=g('fmrk-sub').value;
+  if(!ds.length){g('fmrk-area').innerHTML='<div style="color:rgba(255,255,255,.4);padding:20px;text-align:center">No students yet.</div>';return;}
+  var h='<div class="fform-card"><div class="fform-ttl">'+type+' — '+sub+' (Max: '+mx+')</div><div style="overflow-x:auto"><table class="fmarks-table"><thead><tr><th>Reg No</th><th>Name</th><th>Marks/'+mx+'</th><th>Grade</th></tr></thead><tbody>';
+  ds.forEach(function(s,i){h+='<tr><td>'+s.reg+'</td><td>'+s.nm+'</td><td><input class="fmarks-inp" type="number" min="0" max="'+mx+'" id="fmk'+i+'" placeholder="—" oninput="fUpGr('+i+','+mx+')"/></td><td id="fmg'+i+'" style="font-weight:700;color:#e67e22">—</td></tr>';});
+  h+='</tbody></table></div><button type="button" class="fbtn-main" style="margin-top:12px" onclick="toast(\'Marks saved!\',\'success\')">💾 Save Marks</button></div>';
+  g('fmrk-area').innerHTML=h;
+}
+function fUpGr(i,mx){var v=parseInt(document.getElementById('fmk'+i).value),p=v/mx*100,gr='F',c='#e74c3c';if(p>=90){gr='O';c='#2ecc71';}else if(p>=80){gr='A+';c='#27ae60';}else if(p>=70){gr='A';c='#2ecc71';}else if(p>=60){gr='B+';c='#f39c12';}else if(p>=50){gr='B';c='#e67e22';}else if(p>=40){gr='C';c='#e67e22';}var el=document.getElementById('fmg'+i);if(el){el.textContent=isNaN(v)?'—':gr;el.style.color=c;}}
+function fNoteFileSelect(inp){
+  var file=inp.files[0];if(!file)return;
+  if(file.size>10*1024*1024){alert('Max 10MB!');inp.value='';return;}
+  var ext=file.name.split('.').pop().toLowerCase();
+  var icon={'pdf':'📕','doc':'📘','docx':'📘','jpg':'🖼️','jpeg':'🖼️','png':'🖼️'}[ext]||'📄';
+  var sz=file.size>1048576?(file.size/1048576).toFixed(1)+' MB':(file.size/1024).toFixed(0)+' KB';
+  var reader=new FileReader();
+  reader.onload=function(e){
+    window._fntFile={data:e.target.result,name:file.name,type:file.type,size:sz,icon:icon};
+    document.getElementById('fnt-drop-ph').style.display='none';
+    var sel=document.getElementById('fnt-drop-sel');sel.style.display='block';
+    document.getElementById('fnt-file-icon').textContent=icon;
+    document.getElementById('fnt-file-nm').textContent=file.name;
+    document.getElementById('fnt-file-sz').textContent=sz;
+  };
+  reader.readAsDataURL(file);
+}
+function fNoteFileClear(){
+  window._fntFile=null;
+  document.getElementById('fnt-file').value='';
+  document.getElementById('fnt-drop-ph').style.display='block';
+  document.getElementById('fnt-drop-sel').style.display='none';
+}
+async function fAddNote(){
+  if(!curFac)return;
+  var t=g('fnt-ttl').value.trim(),msg=g('fnt-msg').value.trim(),
+      yr=g('fnt-yr').value,sec=g('fnt-sec').value;
+  if(!t){alert('Enter title!');return;}
+  var fileData='',fileNm='',fileMime='';
+  if(window._fntFile&&window._fntFile.data){
+    fileData=window._fntFile.data;
+    fileNm=window._fntFile.name||'';
+    fileMime=window._fntFile.type||'';
+  }
+  var res=await api('POST','/api/notes',{faculty_id:curFac.id,faculty_nm:curFac.nm,dept:curFac.dept,title:t,description:msg,year_group:yr,section:sec,file_name:fileNm,file_data:fileData,file_mime:fileMime});
+  if(!res||!res.ok){toast('Error posting note!','error');return;}
+  window._fntFile=null;
+  g('fnt-ttl').value='';g('fnt-msg').value='';fNoteFileClear();fRnNotes();
+  toast('Note posted! 📝','success');
+}
+
+async function fRnNotes(){
+  if(!curFac)return;
+  var el=g('fnt-list');if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.3);padding:20px;text-align:center">Loading...</div>';
+  api('GET','/api/notes?dept='+encodeURIComponent(curFac.dept)).then(function(rows){
+    D.notes=Array.isArray(rows)?rows:[];
+    if(!D.notes.length){el.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.3);padding:30px">No notes yet</div>';return;}
+    var h='';
+    D.notes.forEach(function(n){
+      var hasFile=!!(n.file_data||n.file_name);
+      h+='<div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 4px rgba(0,0,0,.05)">';
+      h+='<div style="width:38px;height:38px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">📝</div>';
+      h+='<div style="flex:1;min-width:0">';
+      h+='<div style="font-size:.88rem;font-weight:700;color:#1a2332">'+n.title+'</div>';
+      h+='<div style="font-size:.7rem;color:#64748b;margin-top:2px">'+(n.subject||n.dept||'')+(n.year_group&&n.year_group!='All'?' &middot; '+n.year_group:'')+(n.section&&n.section!='All'?' &middot; Sec '+n.section:'')+'</div>';
+      h+='</div>';
+      if(hasFile){
+        h+='<button onclick="fDownloadNote('+n.id+')" style="background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px"><i class="fas fa-download"></i> Download</button>';
+      }
+      h+='<button onclick="fDelNote('+n.id+')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#ef4444;border-radius:8px;padding:7px 10px;font-size:.78rem;cursor:pointer"><i class="fas fa-trash"></i></button>';
+      h+='</div>';
+    });
+    el.innerHTML=h;
+  });
+}async function fDownloadNote(id){
+  var note=D.notes&&D.notes.find(function(n){return n.id===id||n.id==id;});
+  if(note&&note.file_data){
+    var a=document.createElement('a');
+    a.href=note.file_data;
+    a.download=note.file_name||'note';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    return;
+  }
+  // Fallback: fetch from API
+  api('GET','/api/notes/'+id+'/file').then(function(res){
+    if(!res||!res.file_data){toast('No file attached!','error');return;}
+    var a=document.createElement('a');
+    a.href=res.file_data;
+    a.download=res.file_name||'note';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  });
+}
+async function fDelNote(id){
+  if(!confirm('Delete note?'))return;
+  await api('DELETE','/api/notes/'+id);fRnNotes();toast('Deleted!','success');
+}
+async function stuOpenNotes(){
+  if(!curStu)return;
+  var el=document.getElementById('stu-notes-list');
+  if(!el){document.getElementById('stu-notes-ov').style.display='block';return;}
+  el.innerHTML='<div style="text-align:center;padding:40px;color:rgba(255,255,255,.3)">Loading...</div>';
+  document.getElementById('stu-notes-ov').style.display='block';
+  var rows=await api('GET','/api/notes?dept='+encodeURIComponent(curStu.dept));
+  if(!Array.isArray(rows)||!rows.length){el.innerHTML='<div style="text-align:center;padding:50px;color:rgba(255,255,255,.3)"><div style="font-size:3rem;margin-bottom:10px">📭</div>No notes yet.</div>';return;}
+  el.innerHTML=rows.map(function(n){
+    var fileBtn=n.file_name?('<button type="button" onclick="stuDlNote('+n.id+')" style="background:linear-gradient(135deg,#0d7a5a,#16a085);border:none;color:#fff;border-radius:8px;padding:8px 14px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:sans-serif">⬇ Download</button>'):'';
+    return '<div style="background:#162035;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px;margin-bottom:10px;font-family:inherit"><div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:4px">'+n.title+'</div>'+(n.description?'<div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:6px">'+n.description+'</div>':'')+(fileBtn?'<div style="margin-top:10px">'+fileBtn+'</div>':'')+'<div style="font-size:.68rem;color:rgba(255,255,255,.3);margin-top:8px;display:flex;justify-content:space-between"><span>👤 '+n.faculty_name+'</span><span>'+n.posted_on+'</span></div></div>';
+  }).join('');
+}
+async function stuDlNote(id){
+  var res=await api('GET','/api/notes/'+id+'/file');
+  if(!res||!res.file_data){toast('No file!','error');return;}
+  var a=document.createElement('a');a.href=res.file_data;a.download=res.file_name||'note';a.click();
+}
+
+function fLeavePreview(){
+  var t=g('flv-type'),f=g('flv-from'),to=g('flv-to'),r=g('flv-reason');
+  var prev=g('flv-preview');if(!prev)return;
+  if(!f||!to||!f.value||!to.value){prev.style.display='none';return;}
+  var days=Math.ceil((new Date(to.value)-new Date(f.value))/(86400000))+1;
+  if(days<1){prev.style.display='none';return;}
+  var safeSet=function(id,v){var el=g(id);if(el)el.textContent=v;};
+  safeSet('flvp-nm',curFac?curFac.nm:'');
+  safeSet('flvp-type',t?t.value:'');
+  safeSet('flvp-dur',f.value+' → '+to.value+' ('+days+' day'+(days>1?'s':'')+')');
+  safeSet('flvp-reason',r?r.value:'');
+  prev.style.display='block';
+}
+async function fApplyLeave(){
+  if(!curFac)return;
+  var t=g('flv-type').value,f=g('flv-from').value,to=g('flv-to').value,r=g('flv-reason').value.trim();
+  if(!f||!to||!r){alert('Fill all fields!');return;}
+  var days=Math.ceil((new Date(to)-new Date(f))/(86400000))+1;
+  var res=await api('POST','/api/leaves',{faculty_id:curFac.id,faculty_nm:curFac.nm,faculty_dept:curFac.dept,leave_type:t,from_date:f,to_date:to,days:days,reason:r});
+  if(!res.ok){toast('Error: '+(res.msg||'Submit failed'),'error');console.error('Leave error:',res);return;}
+  g('flv-from').value='';g('flv-to').value='';g('flv-reason').value='';
+  if(g('flv-preview'))g('flv-preview').style.display='none';
+  toast('Leave submitted! ✅','success');
+  fGo('leavestatus');
+  // Immediately update pending count in dashboard
+  await fUpdLeaveStats();
+}
+
+// Student leave requests - faculty view
+async function fRnStuLeaves(){
+  if(!curFac)return;
+  var el=g('fstu-leave-list');if(!el)return;
+  el.innerHTML='<div style="color:#94a3b8;text-align:center;padding:20px">Loading...</div>';
+  var rows=await api('GET','/api/student_leaves?dept='+encodeURIComponent(curFac.dept));
+  if(!Array.isArray(rows)){el.innerHTML='<div style="color:#94a3b8;text-align:center;padding:20px">No requests found</div>';return;}
+  var pc=g('slv-pend-count'),ac=g('slv-appr-count'),rc=g('slv-rej-count');
+  if(pc)pc.textContent=rows.filter(function(r){return r.status==='Pending';}).length;
+  if(ac)ac.textContent=rows.filter(function(r){return r.status==='Approved';}).length;
+  if(rc)rc.textContent=rows.filter(function(r){return r.status==='Rejected';}).length;
+  var fs=(g('slv-filter-status')||{value:''}).value;
+  var fy=(g('slv-filter-year')||{value:''}).value;
+  var filtered=rows.filter(function(r){return(!fs||r.status===fs)&&(!fy||r.student_year===fy);});
+  if(!filtered.length){el.innerHTML='<div style="color:#94a3b8;text-align:center;padding:30px">No leave requests</div>';return;}
+  el.innerHTML='';
+  filtered.forEach(function(lv){
+    var sc=lv.status==='Approved'?'#059669':lv.status==='Rejected'?'#e11d48':'#d97706';
+    var sbg=lv.status==='Approved'?'#dcfce7':lv.status==='Rejected'?'#fee2e2':'#fef3c7';
+    var stc=lv.status==='Approved'?'#166534':lv.status==='Rejected'?'#991b1b':'#92400e';
+    var div=document.createElement('div');
+    div.style.cssText='background:#fff;border:1px solid #e2e8f0;border-left:4px solid '+sc+';border-radius:12px;padding:14px 16px;margin-bottom:10px;';
+    var inner='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+    inner+='<div style="display:flex;align-items:center;gap:10px">';
+    inner+='<div style="width:38px;height:38px;background:#eff6ff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">&#127946;</div>';
+    inner+='<div><div style="font-size:.88rem;font-weight:700;color:#1a2332">'+(lv.student_name||'Student')+'</div>';
+    inner+='<div style="font-size:.72rem;color:#64748b">'+(lv.student_reg||'')+(lv.student_year?' &middot; '+lv.student_year:'')+(lv.student_section?' &middot; Sec '+lv.student_section:'')+'</div></div></div>';
+    inner+='<span style="background:'+sbg+';color:'+stc+';border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:700">'+lv.status+'</span></div>';
+    inner+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px">';
+    inner+='<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div style="font-size:.65rem;color:#64748b;text-transform:uppercase">Leave Type</div><div style="font-size:.82rem;font-weight:700;color:#1a2332;margin-top:2px">'+(lv.leave_type||'—')+'</div></div>';
+    inner+='<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div style="font-size:.65rem;color:#64748b;text-transform:uppercase">Duration</div><div style="font-size:.82rem;font-weight:700;color:#1a2332;margin-top:2px">'+(lv.from_date||'')+(lv.days?' &middot; '+(lv.days)+' day(s)':'')+'</div></div>';
+    inner+='<div style="background:#f8fafc;border-radius:8px;padding:8px 10px"><div style="font-size:.65rem;color:#64748b;text-transform:uppercase">Reason</div><div style="font-size:.82rem;color:#1a2332;margin-top:2px">'+(lv.reason||'—')+'</div></div>';
+    inner+='</div>';
+    div.innerHTML=inner;
+    if(lv.status==='Pending'){
+      var canApprove=curFac&&(curFac.role==='HOD'||curFac.role==='Professor');
+      var btnRow=document.createElement('div');
+      btnRow.style.cssText='display:flex;gap:8px';
+      if(canApprove){
+        var appBtn=document.createElement('button');
+        appBtn.style.cssText='flex:1;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:8px;padding:8px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit';
+        appBtn.innerHTML='<i class="fas fa-check" style="margin-right:6px"></i>Approve';
+        appBtn.onclick=(function(id){return function(){fStuLeaveAction(id,'Approved');};})(lv.id);
+        var rejBtn=document.createElement('button');
+        rejBtn.style.cssText='flex:1;background:linear-gradient(135deg,#e11d48,#f43f5e);color:#fff;border:none;border-radius:8px;padding:8px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:inherit';
+        rejBtn.innerHTML='<i class="fas fa-times" style="margin-right:6px"></i>Reject';
+        rejBtn.onclick=(function(id){return function(){fStuLeaveAction(id,'Rejected');};})(lv.id);
+        btnRow.appendChild(appBtn);btnRow.appendChild(rejBtn);
+      } else {
+        var viewOnly=document.createElement('div');
+        viewOnly.style.cssText='background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:8px 12px;font-size:.8rem;color:#854d0e;font-weight:600;text-align:center;width:100%';
+        viewOnly.innerHTML='<i class="fas fa-eye" style="margin-right:6px"></i>Only HOD / Professor can Approve or Reject';
+        btnRow.appendChild(viewOnly);
+      }
+      div.appendChild(btnRow);
+    }
+    el.appendChild(div);
+  });
+}
+async function fStuLeaveAction(id,status){
+  var res=await api('PUT','/api/student_leaves/'+id,{status:status});
+  if(res&&res.ok){toast(status+' \u2705','success');fRnStuLeaves();}
+  else toast('Error!','error');
+}function flvTab(tab){
+  var myP=g('flv-my-panel'),stuP=g('flv-stu-panel');
+  var myT=g('flv-tab-my'),stuT=g('flv-tab-stu');
+  var activeStyle='background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff';
+  var inactiveStyle='background:transparent;color:rgba(255,255,255,.45)';
+  if(tab==='my'){
+    if(myP)myP.style.display='block';if(stuP)stuP.style.display='none';
+    if(myT)myT.style.cssText+=activeStyle;if(stuT)stuT.style.cssText+=inactiveStyle;
+  }else{
+    if(myP)myP.style.display='none';if(stuP)stuP.style.display='block';
+    if(stuT)stuT.style.cssText+=activeStyle;if(myT)myT.style.cssText+=inactiveStyle;
+    fRnStuLeaves();
+  }
+}
+function flvTab(tab){
+  var myP=g('flv-my-panel'),stuP=g('flv-stu-panel');
+  var myBg='linear-gradient(135deg,#1d4ed8,#3b82f6)';
+  if(tab==='my'){
+    if(myP)myP.style.display='block';if(stuP)stuP.style.display='none';
+    var mt=g('flv-tab-my');if(mt){mt.style.background=myBg;mt.style.color='#fff';}
+    var st=g('flv-tab-stu');if(st){st.style.background='transparent';st.style.color='rgba(255,255,255,.45)';}
+  }else{
+    if(myP)myP.style.display='none';if(stuP)stuP.style.display='block';
+    var st=g('flv-tab-stu');if(st){st.style.background=myBg;st.style.color='#fff';}
+    var mt=g('flv-tab-my');if(mt){mt.style.background='transparent';mt.style.color='rgba(255,255,255,.45)';}
+    fRnStuLeaves();
+  }
+}
+async function fUpdLeaveStats(){
+  if(!curFac)return;
+  var rows=await api('GET','/api/leaves?faculty_id='+curFac.id);
+  if(!Array.isArray(rows))return;
+  var pend=rows.filter(function(l){return l.status==='Pending';}).length;
+  var el=g('fs-lv');if(el)el.textContent=pend;
+}
+function asnTab(tab){
+  var post=g('asn-post-panel'),eval2=g('asn-eval-panel'),tb1=g('asn-tab-post'),tb2=g('asn-tab-eval');
+  if(!post||!eval2)return;
+  if(tab==='post'){post.style.display='block';eval2.style.display='none';tb1.style.background='linear-gradient(135deg,#1d4ed8,#3b82f6)';tb1.style.color='#fff';tb2.style.background='transparent';tb2.style.color='rgba(255,255,255,.45)';}
+  else{post.style.display='none';eval2.style.display='block';tb2.style.background='linear-gradient(135deg,#065f46,#10b981)';tb2.style.color='#fff';tb1.style.background='transparent';tb1.style.color='rgba(255,255,255,.45)';fRnEvalPick();}
+}
+async function fPostAssign(){
+  if(!curFac)return;
+  var t=g('fasn-ttl').value.trim(),s=g('fasn-sub').value,d=g('fasn-due').value,yr=g('fasn-yr').value,sec=g('fasn-sec').value;
+  var desc=g('fasn-desc')?g('fasn-desc').value.trim():'';
+  if(!t||!d){alert('Fill Title and Due Date!');return;}
+  var res=await api('POST','/api/assignments',{faculty_id:curFac.id,faculty_nm:curFac.nm,dept:curFac.dept,title:t,subject:s,due_date:d,year_group:yr,section:sec,description:g('fasn-desc').value.trim()});
+  if(!res||!res.ok){toast('Error!','error');return;}
+  g('fasn-ttl').value='';g('fasn-due').value='';g('fasn-desc').value='';
+  fRnAssign();toast('Assignment posted! 📤','success');
+}
+async function fRnAssign(){
+  if(!curFac)return;
+  var el=g('fasn-list');if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px">Loading...</div>';
+  var rows=await api('GET','/api/assignments?dept='+encodeURIComponent(curFac.dept));
+  if(!Array.isArray(rows)||!rows.length){el.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.3);padding:30px">No assignments yet.</div>';return;}
+  el.innerHTML=rows.map(function(a){
+    var badge=(a.year_group&&a.year_group!=='All'?a.year_group+' ':'All Years ')+(a.section&&a.section!=='All'?'Sec '+a.section:'All Sec');
+    return '<div style="background:#0d1929;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:6px"><div style="font-size:.88rem;font-weight:700;color:#fff">'+a.title+'</div>'
+      +'<span style="background:rgba(99,102,241,.15);color:#a5b4fc;border-radius:20px;padding:2px 10px;font-size:.68rem;font-weight:700;white-space:nowrap">'+badge+'</span></div>'
+      +'<div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-bottom:6px">📚 '+a.subject+' &nbsp;|&nbsp; ⏰ Due: '+a.due_date+'</div>'
+      +(a.description?'<div style="font-size:.74rem;color:rgba(255,255,255,.35);margin-bottom:8px">'+a.description+'</div>':'')
+      +(a.faculty_id===curFac.id?'<div style="display:flex;justify-content:flex-end"><button type="button" onclick="fDelAssign('+a.id+')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#ef4444;border-radius:7px;padding:4px 12px;font-size:.72rem;cursor:pointer">🗑️ Delete</button></div>':'')
+      +'</div>';
+  }).join('');
+}
+async function fDelAssign(id){
+  if(!confirm('Delete?'))return;
+  await api('DELETE','/api/assignments/'+id);fRnAssign();toast('Deleted!','success');
+}
+async function fRnEvalPick(){
+  var sel=g('fasn-eval-pick');if(!sel||!curFac)return;
+  var rows=await api('GET','/api/assignments?dept='+encodeURIComponent(curFac.dept));
+  if(!Array.isArray(rows)||!rows.length){sel.innerHTML='<option>No assignments yet</option>';return;}
+  sel.innerHTML=rows.map(function(a){return '<option value="'+a.id+'">'+a.title+' ('+a.subject+') — Due: '+a.due_date+'</option>';}).join('');
+  fLoadSubmissions();
+}
+async function fLoadSubmissions(){
+  var sel=g('fasn-eval-pick');if(!sel||!curFac)return;
+  var aid=parseInt(sel.value);if(!aid)return;
+  var el=g('fasn-eval-list');if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px">Loading...</div>';
+  var rows=await api('GET','/api/assignments?dept='+encodeURIComponent(curFac.dept));
+  var asn=rows&&rows.find?rows.find(function(a){return a.id===aid;}):null;
+  if(!asn){el.innerHTML='';return;}
+  var subs=await api('GET','/api/submissions?assignment_id='+aid);
+  if(!Array.isArray(subs))subs=[];
+  var stuList=D.students.filter(function(s){var sd=s.dept||s.department||'';return sd===curFac.dept&&(!asn.year_group||asn.year_group==='All'||s.year===asn.year_group)&&(!asn.section||asn.section==='All'||s.section===asn.section);});
+  if(!stuList.length){el.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.3);padding:20px">No students in this group.</div>';return;}
+  el.innerHTML='';
+  // Summary bar
+  var total=stuList.length, submitted=subs.length;
+  var bar=document.createElement('div');
+  bar.style.cssText='display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;';
+  bar.innerHTML='<span style="background:#ecfdf5;color:#065f46;border-radius:20px;padding:4px 14px;font-size:.75rem;font-weight:700">✅ Submitted: '+submitted+'</span>'
+    +'<span style="background:#fef3c7;color:#92400e;border-radius:20px;padding:4px 14px;font-size:.75rem;font-weight:700">⏳ Pending: '+(total-submitted)+'</span>'
+    +'<span style="background:#eff6ff;color:#1e40af;border-radius:20px;padding:4px 14px;font-size:.75rem;font-weight:700">👥 Total: '+total+'</span>';
+  el.appendChild(bar);
+
+  stuList.forEach(function(s){
+    var sub=subs.find(function(x){return x.student_id===s.id||x.student_id==s.id;});
+    var card=document.createElement('div');
+    card.style.cssText='background:#0d1929;border:1px solid '+(sub?'rgba(34,197,94,.25)':'rgba(255,255,255,.07)')+';border-radius:12px;padding:12px 14px;margin-bottom:8px;';
+
+    // Student info row
+    var topRow=document.createElement('div');
+    topRow.style.cssText='display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;';
+    var stuInfo=document.createElement('div');
+    stuInfo.innerHTML='<div style="font-size:.84rem;font-weight:700;color:#fff">'+(s.name||s.nm||'')+'</div>'
+      +'<div style="font-size:.7rem;color:rgba(255,255,255,.4)">'+(s.reg_no||s.reg||'')+'</div>';
+    topRow.appendChild(stuInfo);
+
+    if(sub){
+      // Status + file name
+      var statusDiv=document.createElement('div');
+      statusDiv.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:wrap;';
+      statusDiv.innerHTML='<span style="color:#22c55e;font-size:.75rem;font-weight:700">✅ Submitted</span>'
+        +(sub.file_name?'<span style="font-size:.68rem;color:#94a3b8;background:#111827;border-radius:6px;padding:2px 8px">📎 '+sub.file_name+'</span>':'');
+      topRow.appendChild(statusDiv);
+      card.appendChild(topRow);
+
+      // Action row: preview + mark
+      var actRow=document.createElement('div');
+      actRow.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px;';
+
+      // 3-page preview button (only if PDF)
+      if(sub.file_data&&sub.file_name){
+        var previewBtn=document.createElement('button');
+        previewBtn.style.cssText='background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;';
+        previewBtn.innerHTML='<i class="fas fa-eye" style="margin-right:5px"></i>View (3 pages)';
+        previewBtn.onclick=(function(fd,fn){return function(){fPreview3Pages(fd,fn);};})(sub.file_data, sub.file_name||'submission');
+        actRow.appendChild(previewBtn);
+      }
+
+      // Mark input
+      var markInp=document.createElement('input');
+      markInp.type='number';markInp.placeholder='Mark';markInp.min=0;markInp.max=10;
+      if(sub.mark!=null)markInp.value=sub.mark;
+      markInp.id='eval_'+s.id;
+      markInp.style.cssText='width:70px;background:#111827;border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:6px;font-size:.78rem;text-align:center;';
+      actRow.appendChild(markInp);
+
+      // Save mark button
+      var saveBtn=document.createElement('button');
+      saveBtn.style.cssText='background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#6ee7b7;border-radius:8px;padding:6px 12px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:inherit;';
+      saveBtn.textContent='Save Mark';
+      saveBtn.onclick=(function(a,sid){return function(){fSaveEval(a,sid);};})(aid,s.id);
+      actRow.appendChild(saveBtn);
+
+      // Grade badge
+      if(sub.grade){
+        var grBadge=document.createElement('span');
+        grBadge.style.cssText='background:#fef3c7;color:#92400e;border-radius:20px;padding:3px 10px;font-size:.7rem;font-weight:700;';
+        grBadge.textContent='Grade: '+sub.grade;
+        actRow.appendChild(grBadge);
+      }
+      card.appendChild(actRow);
+    } else {
+      var notSub=document.createElement('span');
+      notSub.style.cssText='color:rgba(255,255,255,.3);font-size:.75rem;';
+      notSub.textContent='⏳ Not submitted yet';
+      topRow.appendChild(notSub);
+      card.appendChild(topRow);
+    }
+    el.appendChild(card);
+  });
+}
+
+function fPreview3Pages(fileData, fileName){
+  // Create modal
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9999;display:flex;flex-direction:column;overflow:hidden;';
+
+  // Header
+  var hdr=document.createElement('div');
+  hdr.style.cssText='background:#0f2044;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;';
+  hdr.innerHTML='<div style="font-size:.88rem;font-weight:700;color:#fff">📄 '+fileName+' <span style="font-size:.7rem;color:#94a3b8;font-weight:400;margin-left:8px">(First 3 pages only — Anti-Malpractice)</span></div>';
+  var cl=document.createElement('button');
+  cl.textContent='✕ Close';
+  cl.style.cssText='background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;';
+  cl.onclick=function(){ov.remove();};
+  hdr.appendChild(cl);
+  ov.appendChild(hdr);
+
+  // Anti-malpractice notice
+  var notice=document.createElement('div');
+  notice.style.cssText='background:rgba(245,158,11,.1);border-bottom:1px solid rgba(245,158,11,.2);padding:8px 16px;font-size:.72rem;color:#f59e0b;text-align:center;flex-shrink:0;';
+  notice.innerHTML='⚠️ Only first 3 pages are visible to faculty. Full download is restricted to prevent malpractice copying.';
+  ov.appendChild(notice);
+
+  // Content area
+  var content=document.createElement('div');
+  content.style.cssText='flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px;';
+
+  var ext=(fileName.split('.').pop()||'').toLowerCase();
+
+  if(ext==='pdf'&&fileData.indexOf('data:application/pdf')===0){
+    // Use PDF.js via iframe with page limit
+    content.innerHTML='<div style="color:#94a3b8;font-size:.8rem;text-align:center;padding:20px">Loading PDF preview (3 pages)...</div>';
+    ov.appendChild(content);
+    document.body.appendChild(ov);
+    // Use object embed - browser will show all pages but we overlay after page 3
+    var obj=document.createElement('iframe');
+    obj.src=fileData+'#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
+    obj.style.cssText='width:100%;max-width:800px;height:1050px;border:none;border-radius:10px;background:#fff;';
+    content.innerHTML='';
+    content.appendChild(obj);
+    // Add overlay after page 3 (approx 1050px = 3 pages × 350px)
+    var blockDiv=document.createElement('div');
+    blockDiv.style.cssText='width:100%;max-width:800px;background:linear-gradient(to bottom,rgba(10,22,40,.3),rgba(10,22,40,.98));border-radius:0 0 10px 10px;padding:30px;text-align:center;margin-top:-100px;position:relative;z-index:10;';
+    blockDiv.innerHTML='<div style="font-size:1.5rem;margin-bottom:8px">🔒</div>'
+      +'<div style="font-size:.88rem;font-weight:700;color:#fff;margin-bottom:4px">Pages beyond 3 are restricted</div>'
+      +'<div style="font-size:.72rem;color:#64748b">Anti-Malpractice Protection · Faculty can review first 3 pages only</div>';
+    content.appendChild(blockDiv);
+  } else {
+    // Image file - show directly
+    var img=document.createElement('img');
+    img.src=fileData;
+    img.style.cssText='max-width:100%;border-radius:10px;max-height:80vh;object-fit:contain;';
+    img.alt=fileName;
+    content.appendChild(img);
+    var imgNote=document.createElement('div');
+    imgNote.style.cssText='font-size:.72rem;color:#64748b;text-align:center;';
+    imgNote.textContent='Image submission — full view shown';
+    content.appendChild(imgNote);
+  }
+
+  ov.appendChild(content);
+  document.body.appendChild(ov);
+}async function fSaveEval(aid,sid){
+  var el=g('eval_'+sid);if(!el)return;
+  var mark=parseInt(el.value);if(isNaN(mark)){toast('Enter valid mark!','error');return;}
+  await api('PUT','/api/submissions/'+aid+'/'+sid,{mark:mark,student_name:''});
+  toast('Mark saved! ✅','success');
+}
+
+async function fRnLeave(){
+  if(!curFac)return;
+  var el=g('flv-status-list');
+  if(!el)return;
+  el.innerHTML='<div style="color:#94a3b8;text-align:center;padding:20px;font-size:.84rem">Loading...</div>';
+  var rows=await api('GET','/api/leaves?faculty_id='+curFac.id);
+  // Update Approved/Pending/Rejected counts
+  if(Array.isArray(rows)){
+    var appr=rows.filter(function(l){return l.status==='Approved';}).length;
+    var pend=rows.filter(function(l){return l.status==='Pending';}).length;
+    var rej=rows.filter(function(l){return l.status==='Rejected';}).length;
+    var ea=g('fls-appr'),ep=g('fls-pend'),er=g('fls-rej');
+    if(ea)ea.textContent=appr;
+    if(ep)ep.textContent=pend;
+    if(er)er.textContent=rej;
+    var fs=g('fs-lv');if(fs)fs.textContent=pend;
+  }
+  if(!rows||!rows.length){el.innerHTML='<div style="color:rgba(255,255,255,.4);text-align:center;padding:20px;font-size:.85rem">No leave applications yet.</div>';return;}
+  var h='';
+  rows.forEach(function(lv){
+    var sc=lv.status==='Approved'?'#059669':lv.status==='Rejected'?'#e11d48':'#d97706';
+    var sbg=lv.status==='Approved'?'#dcfce7':lv.status==='Rejected'?'#fee2e2':'#fef3c7';
+    var stc=lv.status==='Approved'?'#166534':lv.status==='Rejected'?'#991b1b':'#92400e';
+    var ic=lv.status==='Approved'?'fa-check-circle':lv.status==='Rejected'?'fa-times-circle':'fa-clock';
+    h+='<div style="background:#fff;border:1px solid #e2e8f0;border-left:4px solid '+sc+';border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.04)">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+      +'<div style="font-size:.85rem;font-weight:800;color:#1a2332">'+lv.leave_type+'</div>'
+      +'<span style="background:'+sbg+';color:'+stc+';border-radius:20px;padding:3px 12px;font-size:.7rem;font-weight:700">'+lv.status+'</span>'
+      +'</div>'
+      +'<div style="font-size:.75rem;color:#64748b">'+(lv.from_date||'')+' → '+(lv.to_date||'')+'  &bull;  '+(lv.days||1)+' day(s)</div>'
+      +(lv.reason?'<div style="font-size:.73rem;color:#94a3b8;margin-top:5px">"'+lv.reason+'"</div>':'')
+      +'</div>';
+  });
+  el.innerHTML=h;
+}
+// Rank holders — dept filtered
+function fRnRankF(){
+  if(!curFac)return;
+  var dept=curFac.dept;
+  var list=D.rank.filter(function(r){return r.dept===dept;});
+  var el=document.getElementById('frk-list');
+  if(!list.length){el.innerHTML='<div style="text-align:center;padding:50px;color:rgba(255,255,255,.4);font-family:\'DM Sans\',sans-serif"><div style="font-size:3rem;margin-bottom:10px">🏆</div>No rank holders added yet for '+dept+'.</div>';return;}
+  el.innerHTML=list.map(function(r,i){
+    var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'🏅';
+    var av=r.photo?'<img src="'+r.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':'<span style="font-size:1.5rem">'+medal+'</span>';
+    return '<div style="background:#162035;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:13px;font-family:\'DM Sans\',sans-serif">'
+      +'<div style="width:52px;height:52px;border-radius:50%;background:#0a1628;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">'+av+'</div>'
+      +'<div style="flex:1">'
+        +'<div style="font-size:.95rem;font-weight:700;color:#fff">'+r.nm+'</div>'
+        +'<div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-top:3px">'+(r.dept||r.dept||'')+' &nbsp;·&nbsp; '+r.yr+'</div>'
+        +'<div style="font-size:.75rem;color:rgba(255,255,255,.45)">CGPA: <span style="color:#f0c040;font-weight:700">'+r.cgpa+'</span></div>'
+      +'</div>'
+      +'<div style="text-align:center;flex-shrink:0">'
+        +'<div style="font-family:\'Syne\',sans-serif;font-size:1.6rem;font-weight:800;color:#f0c040">'+(r.rno||r.rank_no||'')+'</div>'
+        +'<div style="font-size:.62rem;color:rgba(255,255,255,.35);text-transform:uppercase">Rank</div>'
+      +'</div></div>';
+  }).join('');
+}
+// Placed students — dept filtered
+function fRnPlacedF(){
+  if(!curFac)return;
+  var dept=curFac.dept;
+  var list=D.placed.filter(function(p){return p.dept===dept;});
+  var el=document.getElementById('fpl-list');
+  if(!list.length){el.innerHTML='<div style="text-align:center;padding:50px;color:rgba(255,255,255,.4);font-family:\'DM Sans\',sans-serif"><div style="font-size:3rem;margin-bottom:10px">💼</div>No placed students added yet for '+dept+'.</div>';return;}
+  el.innerHTML=list.map(function(p){
+    var av=p.photo?'<img src="'+p.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%">':'💼';
+    return '<div style="background:#162035;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:13px;font-family:\'DM Sans\',sans-serif">'
+      +'<div style="width:52px;height:52px;border-radius:50%;background:#0a1628;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;font-size:1.4rem">'+av+'</div>'
+      +'<div style="flex:1">'
+        +'<div style="font-size:.95rem;font-weight:700;color:#fff">'+p.nm+'</div>'
+        +'<div style="font-size:.75rem;color:rgba(255,255,255,.45);margin-top:2px">'+p.reg+' &nbsp;·&nbsp; '+(p.batch||p.yr||'')+'</div>'
+        +'<div style="font-size:.75rem;color:rgba(255,255,255,.45)">Package: <span style="color:#2ecc71;font-weight:700">'+p.ctc+' LPA</span></div>'
+      +'</div>'
+      +'<div style="background:rgba(26,164,106,.12);border:1px solid rgba(46,204,113,.25);border-radius:10px;padding:7px 12px;text-align:center;flex-shrink:0">'
+        +'<div style="font-size:.78rem;font-weight:800;color:#2ecc71;white-space:nowrap">'+p.co+'</div>'
+        +'<div style="font-size:.62rem;color:rgba(255,255,255,.35);margin-top:2px">Company</div>'
+      +'</div></div>';
+  }).join('');
+}
+var curStu=null;
+
+var pnls=['dash','addfac','viewfac','bus','events','placed','rank','updates','leaves'];
+var pttl={dash:'📊 Dashboard',addfac:'➕ Add Faculty',viewfac:'👥 View Faculty',bus:'🚌 Bus Routes',events:'📅 Events & Circulars',placed:'💼 Placed Students',rank:'🏆 Rank Holders',updates:'📢 Updates / Ticker',leaves:'📋 Leave Requests'};
+function aPanel(n){
+  pnls.forEach(function(p){
+    var pn=document.getElementById('panel-'+p),sl=document.getElementById('sl-'+p);
+    if(pn)pn.classList.toggle('show',p===n);if(sl)sl.classList.toggle('active',p===n);
+  });
+  document.getElementById('aPT').textContent=pttl[n]||n;
+  if(n==='viewfac')rnFac();if(n==='leaves')rnLeaves();if(n==='bus')rnBs();if(n==='events')rnEv();if(n==='placed')rnPl();if(n==='rank')rnRk();if(n==='updates')rnUpd();
+}
+function tgSB(){
+  var sb=document.getElementById('admSB');
+  var main=document.getElementById('admMain');
+  var ov=document.getElementById('admOv');
+  if(window.innerWidth<=768){
+    var isOpen=sb.classList.contains('mob-open');
+    sb.classList.toggle('mob-open',!isOpen);
+    ov.classList.toggle('show',!isOpen);
+  } else {
+    sb.classList.toggle('col');
+    main.classList.toggle('exp');
+  }
+}
+function closeSB(){
+  var sb=document.getElementById('admSB');
+  var ov=document.getElementById('admOv');
+  sb.classList.remove('mob-open');
+  ov.classList.remove('show');
+}
+
+function updStats(){
+  // Safe set - only update elements that exist in faculty.html
+  function safeSet(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  safeSet('sc-f',D.faculty.length);safeSet('sc-pl',D.placed.length);
+  safeSet('sc-rk',D.rank.length);safeSet('sc-ev',D.events.length);
+  safeSet('sc-bs',D.bus.length);
+  try{updTicker();}catch(ex){}
+}
+function updTicker(){
+  var bar=document.getElementById('top-ticker-bar');
+  var te=document.getElementById('top-ticker-txt');
+  if(!D.updates||!D.updates.length){if(bar)bar.style.display='none';return;}
+  var txt=D.updates.map(function(u){return u.type+' '+u.msg;}).join(' &nbsp;&nbsp;|&nbsp;&nbsp; ');
+  var full=txt+' &nbsp;&nbsp;|&nbsp;&nbsp; '+txt;
+  if(te){te.innerHTML=full;te.style.animation='none';void te.offsetWidth;te.style.animation='';}
+  if(bar)bar.style.display='flex';
+}
+function rnUpd(){
+  var el=g('upd-list');if(!el)return;
+  var uc=g('updc');if(uc)uc.textContent=D.updates.length;
+  if(!D.updates.length){el.innerHTML='<div style="color:rgba(255,255,255,.4);padding:24px;text-align:center;font-size:.8rem"><i class="fas fa-bullhorn fa-2x" style="display:block;margin-bottom:8px;opacity:.3"></i>No updates yet.<br><span style="font-size:.72rem">Default text will show on home page.</span></div>';return;}
+  el.innerHTML=D.updates.map(function(u){
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;margin-bottom:8px;font-family:\'DM Sans\',sans-serif">'
+      +'<span style="font-size:1.2rem;flex-shrink:0">'+u.type+'</span>'
+      +'<div style="flex:1;font-size:.8rem;color:#fff;font-weight:600;line-height:1.4">'+u.msg+'</div>'
+      +'<button type="button" onclick="delUpd('+u.id+')" style="background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.25);color:#e74c3c;border-radius:7px;padding:5px 10px;font-size:.72rem;cursor:pointer;flex-shrink:0">🗑️</button>'
+      +'</div>';
+  }).join('');
+}
+var BG2=['linear-gradient(135deg,#1e3a8a,#2563eb)','linear-gradient(135deg,#065f46,#059669)','linear-gradient(135deg,#4c1d95,#7c3aed)','linear-gradient(135deg,#78350f,#d97706)','linear-gradient(135deg,#7f1d1d,#dc2626)'];
+function rnHomePlaced(){
+  var row=document.getElementById('home-placed-row'),emp=document.getElementById('home-placed-empty');
+  if(!row)return;
+  var top=D.placed.slice(-4).reverse();
+  if(!top.length){row.innerHTML='';emp.style.display='block';return;}
+  emp.style.display='none';
+  var h='';
+  top.forEach(function(p,i){
+    var co=p.co||p.company||'';co=co.length>12?co.substring(0,12)+'…':co;
+    var nm=(p.nm||p.name||'').split(' ').slice(0,2).join(' ')||'Student';
+    var ctc=p.ctc||p.package||'';
+    var av=p.photo
+      ?'<img src="'+p.photo+'" style="width:90px;height:90px;border-radius:50%;object-fit:cover;display:block;border:3px solid rgba(255,255,255,.2);box-shadow:0 6px 20px rgba(0,0,0,.5)">'
+      :'<div class="pav" style="background:'+BG2[i%BG2.length]+'"><i class="fas fa-user"></i></div>';
+    h+='<div class="ppl">'
+      +'<div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 10px;flex-shrink:0">'+av+'</div>'
+      +'<div class="pnm">'+nm+'</div>'
+      +'<div class="ptag"><span class="pdot pdb"></span>'+co+'</div>'
+      +(ctc?'<div style="font-size:.65rem;color:#2ecc71;font-weight:700;margin-top:4px">'+ctc+' LPA</div>':'')
+      +'</div>';
+  });
+  row.innerHTML=h;
+}
+function rnHomeRank(){
+  var row=document.getElementById('home-rank-row'),emp=document.getElementById('home-rank-empty');
+  if(!row)return;
+  var top=D.rank.slice().sort(function(a,b){return a.rno-b.rno;}).slice(0,4);
+  if(!top.length){row.innerHTML='';emp.style.display='block';return;}
+  emp.style.display='none';
+  var medals=['🥇','🥈','🥉'];
+  var h='';
+  top.forEach(function(r,i){
+    var m=r.rno<=3?medals[r.rno-1]:'#'+r.rno;
+    var dept=(r.dept||'').split(' ')[0]||'Dept';
+    var nm=(r.nm||r.name||'').split(' ').slice(0,2).join(' ')||'Student';
+    var av=r.photo
+      ?'<img src="'+r.photo+'" style="width:90px;height:90px;border-radius:50%;object-fit:cover;display:block;border:3px solid rgba(255,193,7,.3);box-shadow:0 6px 20px rgba(0,0,0,.5)">'
+      :'<div class="pav" style="background:'+BG2[i%BG2.length]+'"><i class="fas fa-user"></i></div>';
+    h+='<div class="ppl">'
+      +'<div style="position:relative;width:90px;margin:0 auto 10px">'
+        +'<div style="width:90px;height:90px;border-radius:50%;overflow:hidden">'+av+'</div>'
+        +'<div style="position:absolute;bottom:-2px;right:-2px;font-size:1.3rem;line-height:1">'+m+'</div>'
+      +'</div>'
+      +'<div class="pnm">'+nm+'</div>'
+      +'<div class="ptag"><span class="pdot pdg"></span>'+dept+'</div>'
+      +'<div style="font-size:.65rem;color:#f0c040;font-weight:700;margin-top:4px">CGPA '+r.cgpa+'</div>'
+      +'</div>';
+  });
+  row.innerHTML=h;
+}
+function toast(msg,type){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;top:16px;right:16px;z-index:9999;background:'+(type==='success'?'#166534':'#7f1d1d')+';color:'+(type==='success'?'#bbf7d0':'#fecaca')+';border:1px solid '+(type==='success'?'#15803d':'#dc2626')+';padding:11px 18px;border-radius:10px;font-size:.82rem;font-weight:600;font-family:DM Sans,sans-serif;max-width:270px;';
+  t.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle':'times-circle')+' me-2"></i>'+msg;
+  document.body.appendChild(t);setTimeout(function(){t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(function(){if(t.parentNode)t.remove();},400);},3000);
+}
+
+function g(id){return document.getElementById(id);}
+
+/* ── FILE → BASE64 PREVIEW ── */
+function readImg(input,prevId,phId,dataId){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var prev=g(prevId),ph=g(phId),dat=g(dataId);
+    dat.value=e.target.result;
+    prev.src=e.target.result;
+    prev.style.display='block';
+    ph.style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+
+function rnFac(){
+  var q=(g('fac-srch')||{value:''}).value.toLowerCase();
+  var fl=D.faculty.filter(function(f){return !q||f.nm.toLowerCase().indexOf(q)>=0||f.un.toLowerCase().indexOf(q)>=0;});
+  var h='';
+  if(!fl.length){h='<div class="empty"><i class="fas fa-users fa-3x" style="margin-bottom:10px"></i><p>No faculty found.</p></div>';}
+  fl.forEach(function(f){
+    var avHtml=f.photo
+      ?'<img src="'+f.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">'
+      :'<i class="fas fa-user-tie"></i>';
+    h+='<div class="fac-card"><div class="fac-top"><div class="fac-av" style="background:#1a1a1a;overflow:hidden;">'+avHtml+'</div><span class="fac-rb">'+f.role+'</span></div>'
+      +'<div class="fac-info"><div class="fac-nm">'+f.nm+'</div><div class="fac-dp"><i class="fas fa-building me-1"></i>'+f.dept+'</div>'
+      +(f.ph?'<div class="fac-dp" style="margin-top:2px"><i class="fas fa-phone me-1"></i>'+f.ph+'</div>':'')
+      +'<div class="fac-un"><i class="fas fa-user me-1"></i>'+f.un+'</div>'
+      +'<div style="margin-top:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;display:flex;gap:14px;flex-wrap:wrap">'
+      +'<div style="font-size:.7rem"><span style="color:rgba(255,255,255,.35);font-weight:600">Username: </span><span style="color:#a78bfa;font-weight:700">'+f.un+'</span></div>'
+      +'<div style="font-size:.7rem"><span style="color:rgba(255,255,255,.35);font-weight:600">Password: </span><span style="color:#4ade80;font-weight:700">'+f.pw+'</span></div>'
+      +'</div>'
+      +'</div>'
+      +'<div class="fac-foot"><button type="button" class="btn-d" onclick="delFac('+f.id+')"><i class="fas fa-trash me-1"></i>Delete</button></div></div>';
+  });
+  g('fac-list').innerHTML=h;
+}
+
+function rnBs(){
+  g('bc').textContent=D.bus.length;var h='';
+  if(!D.bus.length){g('bus-list').innerHTML='<div class="empty"><i class="fas fa-bus fa-3x" style="margin-bottom:10px"></i><p>No routes yet.</p></div>';return;}
+  D.bus.forEach(function(b){
+    h+='<div class="li"><div class="li-ic"><i class="fas fa-bus"></i></div><div class="li-info"><div class="li-nm">'+b.lb+'</div>'
+      +(b.dt?'<div class="li-mt">📅 '+b.dt+'</div>':'')
+      +'</div><button type="button" class="btn-d" onclick="delBs('+b.id+')"><i class="fas fa-trash"></i></button></div>';
+  });
+  g('bus-list').innerHTML=h;
+}
+
+function rnEv(){
+  g('evc').textContent=D.events.length;var h='';
+  if(!D.events.length){h='<div class="empty"><i class="fas fa-calendar-alt fa-3x" style="margin-bottom:10px"></i><p>No events yet.</p></div>';}
+  D.events.forEach(function(e){
+    var av=e.photo?'<img src="'+e.photo+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid rgba(255,255,255,.1)">'
+      :'<div class="li-ic" style="background:rgba(255,255,255,0.08);color:#ccc"><i class="fas fa-calendar-alt"></i></div>';
+    h+='<div class="li">'+av+'<div class="li-info"><div class="li-nm">'+e.nm+'</div><div class="li-mt">'+e.dt+' | '+e.dept+'</div></div>'
+      +'<button type="button" class="btn-d" onclick="delEv('+e.id+')"><i class="fas fa-trash"></i></button></div>';
+  });
+  g('ev-list').innerHTML=h;
+}
+
+function rnPl(){
+  g('plc').textContent=D.placed.length;var h='';
+  if(!D.placed.length){h='<div class="empty"><i class="fas fa-briefcase fa-3x" style="margin-bottom:10px"></i><p>No records yet.</p></div>';}
+  D.placed.forEach(function(p,i){
+    var av=p.photo?'<img src="'+p.photo+'" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.15);flex-shrink:0">'
+      :'<div class="li-ic" style="background:'+BG[i%BG.length]+'"><i class="fas fa-user"></i></div>';
+    h+='<div class="li">'+av+'<div class="li-info"><div class="li-nm">'+p.nm+'</div><div class="li-mt">'+p.co+(p.ctc?' · '+p.ctc:'')+'</div></div>'
+      +'<span class="li-bg">'+p.dept.split(' ')[0]+'</span>'
+      +'<button type="button" class="btn-d" style="margin-left:7px" onclick="delPl('+p.id+')"><i class="fas fa-trash"></i></button></div>';
+  });
+  g('pl-list').innerHTML=h;
+}
+
+function rnRk(){
+  var s=D.rank.slice().sort(function(a,b){return a.rno-b.rno;});
+  g('rkc').textContent=D.rank.length;var h='';
+  if(!s.length){h='<div class="empty"><i class="fas fa-trophy fa-3x" style="margin-bottom:10px"></i><p>No records yet.</p></div>';}
+  s.forEach(function(r,i){
+    var m=r.rno===1?'🥇':r.rno===2?'🥈':r.rno===3?'🥉':'#'+r.rno;
+    var av=r.photo?'<img src="'+r.photo+'" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.15);flex-shrink:0">'
+      :'<div class="li-ic" style="background:rgba(180,83,9,.2);color:#fcd34d;font-size:1.1rem">'+m+'</div>';
+    h+='<div class="li">'+av+'<div class="li-info"><div class="li-nm">'+r.nm+'</div><div class="li-mt">CGPA: '+r.cgpa+' | '+r.dept+' | '+r.yr+'</div></div>'
+      +'<button type="button" class="btn-d" onclick="delRk('+r.id+')"><i class="fas fa-trash"></i></button></div>';
+  });
+  g('rk-list').innerHTML=h;
+}
+
+var BG=['linear-gradient(135deg,#1e3a8a,#2563eb)','linear-gradient(135deg,#065f46,#059669)','linear-gradient(135deg,#4c1d95,#7c3aed)','linear-gradient(135deg,#78350f,#d97706)','linear-gradient(135deg,#7f1d1d,#dc2626)'];
+function bgC(i){return BG[i%BG.length];}
+
+function rnPPl(){
+  var el=g('pub-placed');
+  if(!D.placed.length){el.innerHTML='<div class="pub-empty"><i class="fas fa-briefcase fa-3x" style="margin-bottom:12px"></i><p>No placements added yet.</p></div>';return;}
+  var h='';
+  D.placed.forEach(function(p,i){
+    var av=p.photo?'<img src="'+p.photo+'" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.15);margin:0 auto 10px;display:block">'
+      :'<div class="ppav" style="background:'+bgC(i)+'"><i class="fas fa-user"></i></div>';
+    var pnm=p.nm||p.name||'';var pco=p.co||p.company||'';var pctc=p.ctc||p.package||'';
+    h+='<div class="ppcard">'+av+'<div class="ppnm">'+pnm+'</div><div class="ppco"><i class="fas fa-building" style="margin-right:4px"></i>'+pco+'</div>'
+      +'<div class="ppdept">'+p.dept+'</div>'+(pctc?'<div class="ppctc">💰 '+pctc+' LPA</div>':'')+'</div>';
+  });
+  el.innerHTML=h;
+}
+function rnPRk(){
+  var el=g('pub-rank'),s=D.rank.slice().sort(function(a,b){return a.rno-b.rno;});
+  if(!s.length){el.innerHTML='<div class="pub-empty"><i class="fas fa-trophy fa-3x" style="margin-bottom:12px"></i><p>No rank holders yet.</p></div>';return;}
+  var h='';
+  s.forEach(function(r,i){
+    var m=r.rno===1?'🥇':r.rno===2?'🥈':r.rno===3?'🥉':'#'+r.rno;
+    var av=r.photo?'<img src="'+r.photo+'" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.15);margin:0 auto 10px;display:block">'
+      :'<div class="ppav" style="background:'+bgC(i)+'"><i class="fas fa-user"></i></div>';
+    h+='<div class="ppcard"><div class="pprnk">'+m+'</div>'+av+'<div class="ppnm">'+r.nm+'</div><div class="ppco">CGPA: <strong>'+r.cgpa+'</strong></div>'
+      +'<div class="ppdept">'+r.dept+'</div><div class="ppctc">'+r.yr+'</div></div>';
+  });
+  el.innerHTML=h;
+}
+/* ── HOME PREVIEW RENDERS ── */
+function rnHomeBusPreview(){
+  var el=g('home-bus-preview');if(!el)return;
+  if(!D.bus.length){el.innerHTML='<div style="color:rgba(255,255,255,.35);font-size:.78rem;text-align:center;padding:18px 0"><i class="fas fa-bus" style="display:block;font-size:1.4rem;margin-bottom:6px;opacity:.4"></i>No bus routes yet</div>';return;}
+  var h='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">';
+  D.bus.slice(0,4).forEach(function(b){
+    var img=b.inn
+      ?'<div style="height:90px;overflow:hidden;border-radius:10px 10px 0 0"><img src="'+b.inn+'" style="width:100%;height:100%;object-fit:cover;display:block"></div>'
+      :'<div style="height:90px;border-radius:10px 10px 0 0;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center"><i class="fas fa-bus fa-2x" style="color:rgba(255,255,255,.15)"></i></div>';
+    h+='<div onclick="openBusDet(\''+b.id+'\')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:10px;overflow:hidden;cursor:pointer">'
+      +img
+      +'<div style="padding:8px">'
+        +'<div style="font-size:.76rem;font-weight:800;color:#fff;font-family:\'Syne\',sans-serif;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+b.lb+'</div>'
+        +'<div style="font-size:.62rem;color:rgba(255,255,255,.4);margin-top:3px">'+(b.dt?'📅 '+b.dt:'🚌 Route')+'</div>'
+      +'</div></div>';
+  });
+  if(D.bus.length>4)h+='<div onclick="goPub(\'bus\')" style="grid-column:span 2;text-align:center;padding:8px 0;font-size:.75rem;color:#22c55e;font-weight:700;cursor:pointer">+ '+(D.bus.length-4)+' more routes →</div>';
+  h+='</div>';
+  el.innerHTML=h;
+}
+function rnHomeEvPreview(){
+  var el=g('home-ev-preview');if(!el)return;
+  if(!D.events.length){el.innerHTML='<div style="color:rgba(255,255,255,.35);font-size:.78rem;text-align:center;padding:18px 0"><i class="fas fa-calendar-alt" style="display:block;font-size:1.4rem;margin-bottom:6px;opacity:.4"></i>No events yet</div>';return;}
+  var h='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">';
+  D.events.slice().reverse().slice(0,2).forEach(function(e){
+    var img=e.photo
+      ?'<div style="height:90px;overflow:hidden;border-radius:10px 10px 0 0;position:relative"><img src="'+e.photo+'" style="width:100%;height:100%;object-fit:cover;display:block"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent)"></div></div>'
+      :'<div style="height:90px;border-radius:10px 10px 0 0;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center"><i class="fas fa-calendar-alt fa-2x" style="color:rgba(255,255,255,.15)"></i></div>';
+    h+='<div onclick="openEvDet(\''+e.id+'\')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:10px;overflow:hidden;cursor:pointer">'
+      +img
+      +'<div style="padding:8px">'
+        +'<div style="font-size:.76rem;font-weight:800;color:#fff;font-family:\'Syne\',sans-serif;line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">'+e.nm+'</div>'
+        +'<div style="font-size:.62rem;color:rgba(255,255,255,.4);margin-top:3px">📅 '+e.dt+'</div>'
+      +'</div></div>';
+  });
+  if(D.events.length>2)h+='<div onclick="goPub(\'events\')" style="grid-column:span 2;text-align:center;padding:8px 0;font-size:.75rem;color:#f43f5e;font-weight:700;cursor:pointer">+ '+(D.events.length-2)+' more events →</div>';
+  h+='</div>';
+  el.innerHTML=h;
+}
+/* ── LIST RENDERS ── */
+function rnPBs(){
+  var el=g('pub-bus');
+  if(!D.bus.length){el.innerHTML='<div class="pub-empty"><i class="fas fa-bus fa-3x" style="margin-bottom:12px"></i><p>No bus routes added yet.</p></div>';return;}
+  var h='';
+  D.bus.forEach(function(b){
+    var thumb=b.inn
+      ?'<img src="'+b.inn+'" style="width:100%;height:190px;object-fit:cover">'
+      :'<div style="height:130px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center"><i class="fas fa-bus fa-3x" style="color:rgba(255,255,255,.15)"></i></div>';
+    h+='<div onclick="openBusDet(\''+b.id+'\')" style="background:#111;border:1px solid rgba(255,255,255,.1);border-radius:16px;overflow:hidden;margin-bottom:14px;cursor:pointer;active-transform:scale(.98)">'
+      +'<div style="position:relative">'+thumb
+        +'<div style="position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to top,rgba(0,0,0,.8),transparent)"></div>'
+        +'<div style="position:absolute;bottom:10px;left:14px;font-family:\'Syne\',sans-serif;font-size:1rem;font-weight:800;color:#fff">🚌 '+b.lb+'</div>'
+      +'</div>'
+      +'<div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between">'
+        +'<div style="font-size:.75rem;color:rgba(255,255,255,.45)">'+(b.dt?'📅 '+b.dt:'')+'</div>'
+        +'<span style="font-size:.72rem;font-weight:700;color:#22c55e;display:flex;align-items:center;gap:4px">View Schedule <i class="fas fa-chevron-right"></i></span>'
+      +'</div></div>';
+  });
+  el.innerHTML=h;
+}
+function rnPEv(){
+  var el=g('pub-events');
+  if(!D.events.length){el.innerHTML='<div class="pub-empty"><i class="fas fa-calendar-alt fa-3x" style="margin-bottom:12px"></i><p>No events posted yet.</p></div>';return;}
+  var h='';
+  D.events.slice().reverse().forEach(function(e){
+    var ph=e.photo
+      ?'<div style="position:relative"><img src="'+e.photo+'" style="width:100%;height:200px;object-fit:cover;display:block"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%)"></div><div style="position:absolute;bottom:10px;left:14px;right:14px"><div style="font-family:\'Syne\',sans-serif;font-size:.95rem;font-weight:800;color:#fff;line-height:1.3">'+e.nm+'</div></div></div>'
+      :'<div style="height:140px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px"><i class="fas fa-calendar-alt fa-3x" style="color:rgba(255,255,255,.12)"></i><div style="font-family:\'Syne\',sans-serif;font-size:.9rem;font-weight:800;color:rgba(255,255,255,.6)">'+e.nm+'</div></div>';
+    h+='<div class="ev-card" onclick="openEvDet(\''+e.id+'\')" style="cursor:pointer;overflow:hidden">'+ph
+      +'<div class="ev-info"><div class="ev-meta" style="margin-bottom:4px"><i class="fas fa-calendar-alt me-1"></i>'+e.dt+'</div>'
+      +'<div class="ev-meta"><i class="fas fa-building me-1"></i>'+e.dept+'</div>'
+      +'<div style="margin-top:8px;font-size:.72rem;font-weight:700;color:#f43f5e;display:flex;align-items:center;gap:4px">Tap to view details <i class="fas fa-arrow-right"></i></div>'
+      +'</div></div>';
+  });
+  el.innerHTML=h;
+}
+/* ── DETAIL OVERLAYS ── */
+function openBusDet(id){
+  var b=D.bus.find(function(x){return String(x.id)===String(id);});
+  if(!b)return;
+  document.getElementById('bus-det-title').textContent='🚌 '+b.lb;
+  var inImg=b.inn
+    ?'<div style="position:relative;height:75vh;background:#000"><img src="'+b.inn+'" style="width:100%;height:100%;object-fit:contain;display:block"></div>'
+    :'<div style="height:75vh;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px"><i class="fas fa-bus fa-4x" style="color:rgba(255,255,255,.1)"></i><div style="color:rgba(255,255,255,.25);font-size:.85rem;font-family:\'DM Sans\',sans-serif">No schedule image uploaded</div></div>';
+  var outImg=b.out
+    ?'<div style="position:relative;height:75vh;background:#000"><img src="'+b.out+'" style="width:100%;height:100%;object-fit:contain;display:block"></div>'
+    :'<div style="height:75vh;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px"><i class="fas fa-bus fa-4x" style="color:rgba(255,255,255,.1)"></i><div style="color:rgba(255,255,255,.25);font-size:.85rem;font-family:\'DM Sans\',sans-serif">No schedule image uploaded</div></div>';
+  var body='<div style="font-family:\'DM Sans\',sans-serif;background:#000">'
+    +'<div style="padding:16px 18px;background:#0d0d0d;border-bottom:1px solid rgba(255,255,255,.07)">'
+      +'<div style="font-family:\'Syne\',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:10px">🚌 '+b.lb+'</div>'
+      +(b.dt?'<div style="font-size:.75rem;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:6px"><i class="fas fa-calendar-alt" style="color:#4a9eff"></i> Effective from '+b.dt+'</div>':'')
+    +'</div>'
+    +'<div style="padding:13px 18px;background:#0d0d0d;border-top:2px solid rgba(74,222,128,.25)">'
+      +'<div style="font-size:.8rem;font-weight:800;color:#4ade80;display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;background:#4ade80;border-radius:50%;display:inline-block"></span>BUS IN — Morning Schedule</div>'
+    +'</div>'
+    +inImg
+    +'<div style="padding:13px 18px;background:#0d0d0d;border-top:2px solid rgba(248,113,113,.25)">'
+      +'<div style="font-size:.8rem;font-weight:800;color:#f87171;display:flex;align-items:center;gap:8px"><span style="width:9px;height:9px;background:#f87171;border-radius:50%;display:inline-block"></span>BUS OUT — Evening Schedule</div>'
+    +'</div>'
+    +outImg
+    +'<div style="height:40px"></div></div>';
+  document.getElementById('bus-det-body').innerHTML=body;
+  document.getElementById('bus-detail-ov').style.display='block';
+  document.getElementById('bus-detail-ov').scrollTop=0;
+}
+function closeBusDet(){document.getElementById('bus-detail-ov').style.display='none';}
+function openEvDet(id){
+  var e=D.events.find(function(x){return String(x.id)===String(id);});
+  if(!e)return;
+  document.getElementById('ev-det-title').textContent=e.nm;
+  var ph=e.photo
+    ?'<div style="position:relative;height:75vh;background:#000">'
+        +'<img src="'+e.photo+'" style="width:100%;height:100%;object-fit:cover;display:block">'
+        +'<div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,transparent 35%,rgba(0,0,0,.6) 70%,rgba(0,0,0,.95) 100%)"></div>'
+        +'<div style="position:absolute;bottom:20px;left:18px;right:18px">'
+          +'<div style="font-family:\'Syne\',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;line-height:1.3;text-shadow:0 2px 12px rgba(0,0,0,.9)">'+e.nm+'</div>'
+          +'<div style="font-size:.78rem;color:rgba(255,255,255,.65);margin-top:7px;display:flex;gap:14px">'
+            +'<span>📅 '+e.dt+'</span><span>🏢 '+e.dept+'</span>'
+          +'</div>'
+        +'</div>'
+      +'</div>'
+    :'<div style="height:75vh;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px">'
+        +'<i class="fas fa-calendar-alt fa-4x" style="color:rgba(255,255,255,.1)"></i>'
+        +'<div style="font-family:\'Syne\',sans-serif;font-size:1rem;font-weight:800;color:rgba(255,255,255,.4)">'+e.nm+'</div>'
+      +'</div>';
+  var body='<div style="font-family:\'DM Sans\',sans-serif;background:#000">'
+    +ph
+    +'<div style="padding:22px 18px">'
+      +(e.photo?'':'<div style="font-family:\'Syne\',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:18px">'+e.nm+'</div>')
+      +'<div style="display:flex;flex-direction:column;gap:14px">'
+        +'<div style="display:flex;align-items:center;gap:13px">'
+          +'<div style="width:40px;height:40px;border-radius:11px;background:rgba(244,63,94,.15);border:1px solid rgba(244,63,94,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-calendar-alt" style="color:#f43f5e;font-size:.9rem"></i></div>'
+          +'<div><div style="font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em">Date</div><div style="font-size:.92rem;font-weight:700;color:#fff;margin-top:3px">'+e.dt+'</div></div>'
+        +'</div>'
+        +'<div style="display:flex;align-items:center;gap:13px">'
+          +'<div style="width:40px;height:40px;border-radius:11px;background:rgba(74,158,255,.15);border:1px solid rgba(74,158,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-building" style="color:#4a9eff;font-size:.9rem"></i></div>'
+          +'<div><div style="font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em">Department</div><div style="font-size:.92rem;font-weight:700;color:#fff;margin-top:3px">'+e.dept+'</div></div>'
+        +'</div>'
+        +(e.desc?'<div style="display:flex;align-items:flex-start;gap:13px">'
+          +'<div style="width:40px;height:40px;border-radius:11px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="fas fa-align-left" style="color:#a78bfa;font-size:.9rem"></i></div>'
+          +'<div><div style="font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em">About</div><div style="font-size:.88rem;color:rgba(255,255,255,.75);margin-top:3px;line-height:1.7">'+e.desc+'</div></div>'
+        +'</div>':'')
+      +'</div>'
+    +'</div>'
+    +'<div style="height:40px"></div></div>';
+  document.getElementById('ev-det-body').innerHTML=body;
+  document.getElementById('ev-detail-ov').style.display='block';
+  document.getElementById('ev-detail-ov').scrollTop=0;
+}
+function closeEvDet(){document.getElementById('ev-detail-ov').style.display='none';}
+
+// ── TIMETABLE CONFIG ─────────────────────────────────────────────
+
+function ttcKey(){
+  var dept=g('ttc-dept').value, yr=g('ttc-yr').value;
+  return dept+'|'+yr;
+}
+
+function ttcGetFacStaff(dept){
+  return D.faculty.filter(function(f){return f.dept===dept;}).map(function(f){return f.nm||f.name||'';});
+}
+function ttcAddRow(type,nm,staff,code){
+  nm=nm||'';staff=staff||'';code=code||'';
+  var opts=ttcGetFacStaff(curFac?curFac.dept:'').map(function(s){return '<option'+(s===staff?' selected':'')+'>'+s+'</option>';}).join('');
+  var container=g(type==='sub'?'ttc-subj-rows':'ttc-lab-rows');if(!container)return;
+  var div=document.createElement('div');div.style.cssText='display:flex;gap:6px;margin-bottom:8px;align-items:center;flex-wrap:wrap';
+  div.innerHTML='<input class="finp" value="'+nm+'" placeholder="Subject name" style="flex:2;min-width:120px;margin-bottom:0"/>'    +'<input class="finp" value="'+code+'" placeholder="Code e.g. CS301" style="flex:1;min-width:80px;margin-bottom:0"/>'    +'<select class="finp" style="flex:1.5;min-width:100px;margin-bottom:0"><option value="">— Faculty —</option>'+opts+'</select>'    +'<button type="button" onclick="this.parentNode.remove()" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#ef4444;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1.1rem;flex-shrink:0">×</button>';
+  container.appendChild(div);
+}
+function ttcToggle(){
+  var box=g('ttc-config-box'),arrow=g('ttc-arrow');if(!box)return;
+  if(box.style.display==='none'){
+    box.style.display='block';if(arrow)arrow.textContent='▲';
+    ttcLoad();
+  }else{box.style.display='none';if(arrow)arrow.textContent='▼';}
+}
+async function ttcLoad(){
+  if(!curFac)return;
+  await loadTTConfig();
+  var yr=parseInt((g('ftt-yr')||{value:'2'}).value)||2;
+  var sec=(g('ftt-sec')||{value:'A'}).value||'A';
+  var yrLabel=['','1st Year','2nd Year','3rd Year','4th Year'][yr]||'2nd Year';
+  var key=ttKey(curFac.dept,yrLabel,sec);
+  var cfg=D.ttConfig[key]||D.ttConfig[curFac.dept+'|'+yr]||{subjects:[],labs:[]};
+  var sr=g('ttc-subj-rows'),lr=g('ttc-lab-rows');
+  if(sr)sr.innerHTML='';if(lr)lr.innerHTML='';
+  (cfg.subjects||[]).forEach(function(s){ttcAddRow('sub',s.nm,s.staff,s.code);});
+  (cfg.labs||[]).forEach(function(l){ttcAddRow('lab',l.nm,l.staff,l.code);});
+}
+async function ttcSave(){
+  if(!curFac)return;
+  var dept=curFac.dept;
+  var yr=parseInt((g('ftt-yr')||{value:'2'}).value)||2;
+  var sec=(g('ftt-sec')||{value:'A'}).value||'A';
+  var subjects=[],labs=[];
+  var sr=g('ttc-subj-rows');
+  if(sr)Array.from(sr.children).forEach(function(row){
+    var inputs=row.querySelectorAll('input'),sels=row.querySelectorAll('select');
+    var nm=inputs[0]?inputs[0].value.trim():'';
+    var code=inputs[1]?inputs[1].value.trim():'';
+    var staff=sels[0]?sels[0].value:'';
+    if(nm)subjects.push({nm:nm,code:code,staff:staff,type:'Theory'});
+  });
+  var lr=g('ttc-lab-rows');
+  if(lr)Array.from(lr.children).forEach(function(row){
+    var inputs=row.querySelectorAll('input'),sels=row.querySelectorAll('select');
+    var nm=inputs[0]?inputs[0].value.trim():'';
+    var code=inputs[1]?inputs[1].value.trim():'';
+    var staff=sels[0]?sels[0].value:'';
+    if(nm)labs.push({nm:nm,code:code,staff:staff,type:'Lab'});
+  });
+  if(!subjects.length){alert('Add at least 1 theory subject!');return;}
+  var yrLabel=['','1st Year','2nd Year','3rd Year','4th Year'][yr]||'2nd Year';
+  var key=ttKey(dept,yrLabel,sec);
+  D.ttConfig[key]={subjects:subjects,labs:labs};
+  await api('POST','/api/timetable',{dept:dept,year_no:yr,section:sec,config:{subjects:subjects,labs:labs}});
+  var box=g('ttc-config-box'),arrow=g('ttc-arrow');
+  if(box)box.style.display='none';if(arrow)arrow.textContent='▼';
+  fBuildTT();toast('Timetable saved! ✅','success');
+}
+function fBuildTT(){
+  if(!curFac)return;
+  var dept=curFac.dept,yr=parseInt((g('ftt-yr')||{value:'2'}).value)||2,sec=(g('ftt-sec')||{value:'A'}).value||'A';
+  var yrLabel=['','1st Year','2nd Year','3rd Year','4th Year'][yr]||'2nd Year';
+  var key=ttKey(dept,yrLabel,sec);
+  var cfg=D.ttConfig[key]||D.ttConfig[dept+'|'+yr]||{subjects:[],labs:[]};
+  var subjects=cfg.subjects||[],labs=cfg.labs||[];
+  var TIMES=['8:00','8:50','9:50','10:40','11:30','1:00','1:50'],
+      TENDS=['8:50','9:40','10:40','11:30','12:20','1:50','2:40'];
+  var legEl=g('ftt-legend');
+  if(legEl)legEl.innerHTML=TIMES.map(function(t,i){
+    return '<div style="font-size:.68rem;color:rgba(255,255,255,.5)"><b style="color:rgba(255,255,255,.7)">P'+(i+1)+'</b> '+t+'-'+TENDS[i]+(i===2?' <span style="color:#f59e0b">☕</span>':i===3?' <span style="color:#22c55e">🍽️</span>':'')+'</div>';
+  }).join('');
+  var grid=g('ftt-grid');
+  if(!subjects.length){if(grid)grid.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.35);padding:30px;font-size:.84rem">⚙️ Configure subjects above and click Save & Generate</div>';return;}
+
+  var DAYS=['MON','TUE','WED','THU','FRI','SAT'];
+  var COLORS=[
+    {bg:'#1e3a8a',border:'#2563eb',text:'#ffffff'},
+    {bg:'#14532d',border:'#16a34a',text:'#ffffff'},
+    {bg:'#4c1d95',border:'#7c3aed',text:'#ffffff'},
+    {bg:'#7c2d12',border:'#ea580c',text:'#ffffff'},
+    {bg:'#831843',border:'#db2777',text:'#ffffff'},
+    {bg:'#164e63',border:'#0891b2',text:'#ffffff'},
+    {bg:'#713f12',border:'#ca8a04',text:'#ffffff'},
+    {bg:'#881337',border:'#e11d48',text:'#ffffff'},
+    {bg:'#134e4a',border:'#0d9488',text:'#ffffff'},
+    {bg:'#1e293b',border:'#475569',text:'#ffffff'},
+  ];
+  var LAB_COLOR='rgba(234,179,8,.35)';
+
+  // Color map per subject
+  var cmap={};
+  subjects.forEach(function(s,i){cmap[s.nm]=COLORS[i%COLORS.length];});
+
+  /*
+   * REAL COLLEGE TIMETABLE ALGORITHM
+   * ---------------------------------
+   * 7 periods/day × 6 days = 42 slots total
+   * Each lab = 2 consecutive periods
+   * Labs are placed FIRST on specific days, then theory fills remaining
+   *
+   * Lab placement strategy:
+   *   - Each lab gets exactly 2 days/week (for 3 labs × 2 = 6 days ✓)
+   *   - Labs placed in fixed slots per day to avoid overlap
+   *
+   * Theory distribution:
+   *   - After labs placed, remaining slots filled cyclically
+   *   - Each subject appears same number of times (balanced)
+   */
+
+  // Step 1: Decide which lab goes on which day
+  // labSchedule[day] = labIndex or -1
+  var labSchedule = [-1,-1,-1,-1,-1,-1];
+  if(labs.length > 0){
+    // Distribute labs evenly across 6 days
+    // e.g. 3 labs → each lab 2 days: Lab1→MON,THU | Lab2→TUE,FRI | Lab3→WED,SAT
+    for(var di=0;di<6;di++){
+      labSchedule[di] = di % labs.length;
+    }
+  }
+
+  // Step 2: Lab slot position per day (rotate to avoid monotony)
+  // P1-P2=0,1 | P3-P4=2,3 | P6-P7=5,6 (skip lunch P5)
+  var LAB_SLOTS=[[0,1],[2,3],[5,6],[0,1],[2,3],[5,6]];
+
+  // Step 3: Build weekly theory sequence
+  // Each subject appears ceil(totalTheorySlots/numSubjects) times
+  // Build a balanced sequence
+  var totalSlots=42; // 6 days × 7 periods
+  var labSlots=labs.length>0?12:0; // 6 days × 2 periods
+  var theorySlots=totalSlots-labSlots; // e.g. 30
+  // Build balanced theory sequence
+  var theorySeq=[];
+  var repeats=Math.ceil(theorySlots/subjects.length);
+  for(var r=0;r<repeats;r++){
+    subjects.forEach(function(s){theorySeq.push(s);});
+  }
+  // theorySeq is now a long list, use index to fill
+
+  var theoryIdx=0;
+
+  // Step 4: Build timetable row by row
+  var tt=[];
+  for(var di=0;di<6;di++){
+    var row=new Array(7).fill(null);
+
+    // Place lab if scheduled for this day
+    var labIdx=labSchedule[di];
+    if(labIdx>=0 && labs[labIdx]){
+      var ls=LAB_SLOTS[di];
+      row[ls[0]]={t:'lab',nm:labs[labIdx].nm,st:labs[labIdx].staff||''};
+      row[ls[1]]={t:'lc'};
+    }
+
+    // Fill remaining with theory subjects (in balanced order)
+    for(var p=0;p<7;p++){
+      if(!row[p]){
+        var sub=theorySeq[theoryIdx%theorySeq.length];
+        row[p]={t:'th',nm:sub.nm,st:sub.staff||''};
+        theoryIdx++;
+      }
+    }
+    tt.push(row);
+  }
+
+  // Step 5: Render table
+  var h='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.71rem;min-width:520px;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden">';
+  h+='<thead><tr style="background:#0a1628">';
+  h+='<th style="padding:8px 6px;color:rgba(255,255,255,.6);border-bottom:1px solid rgba(255,255,255,.1);width:40px;text-align:center;font-size:.7rem">Day</th>';
+  for(var p=0;p<7;p++){
+    var breakIcon=p===2?'<br/><span style="color:#f59e0b;font-size:.58rem">☕</span>':p===3?'<br/><span style="color:#22c55e;font-size:.58rem">🍽️</span>':'';
+    h+='<th style="padding:6px 4px;text-align:center;color:rgba(255,255,255,.55);border-bottom:1px solid rgba(255,255,255,.1);min-width:72px;border-left:1px solid rgba(255,255,255,.06)">'
+      +'<b style="color:rgba(255,255,255,.8)">P'+(p+1)+'</b>'
+      +'<br/><span style="font-size:.56rem;color:rgba(255,255,255,.3)">'+TIMES[p]+'</span>'+breakIcon+'</th>';
+  }
+  h+='</tr></thead><tbody>';
+
+  tt.forEach(function(row,di){
+    var rowBg=di%2===0?'rgba(255,255,255,.01)':'rgba(0,0,0,.15)';
+    h+='<tr style="border-bottom:1px solid rgba(255,255,255,.05);background:'+rowBg+'">';
+    h+='<td style="padding:6px 4px;font-weight:800;color:rgba(255,255,255,.7);font-size:.7rem;text-align:center;background:#0a1628;border-right:1px solid rgba(255,255,255,.08)">'+DAYS[di]+'</td>';
+    for(var p=0;p<7;p++){
+      var cell=row[p];
+      if(!cell||cell.t==='lc')continue;
+      var cs=cell.t==='lab'?2:1;
+      var bg=cell.t==='lab'?LAB_COLOR:(cmap[cell.nm]||COLORS[0]);
+      var borderLeft=p>0?'border-left:1px solid rgba(255,255,255,.05);':'';
+      h+='<td colspan="'+cs+'" style="padding:6px 4px;text-align:center;background:'+bg+';'+borderLeft+'">';
+      if(cell.t==='lab'){
+        h+='<div style="font-weight:800;color:#fde68a;font-size:.7rem">🧪 '+cell.nm+'</div>';
+        if(cell.st)h+='<div style="color:rgba(255,255,255,.4);font-size:.58rem">'+cell.st+'</div>';
+        h+='<div style="font-size:.56rem;color:rgba(253,230,138,.4);margin-top:1px">LAB</div>';
+      }else{
+        h+='<div style="font-weight:700;color:#fff;font-size:.7rem">'+cell.nm+'</div>';
+        if(cell.st)h+='<div style="color:rgba(255,255,255,.35);font-size:.58rem">'+cell.st+'</div>';
+      }
+      h+='</td>';
+    }
+    h+='</tr>';
+  });
+  h+='</tbody></table></div>';
+  if(grid)grid.innerHTML=h;
+}// async function api(defined above
+
+// ATTENDANCE functions
+function fAttLoad(){
+  var sub=g('fatt-sub').value,dt=g('fatt-date').value;
+  var yr=g('fatt-yr').value,sec=g('fatt-sec').value;
+  var selPeriod=g('fatt-period')?g('fatt-period').value:'';
+  if(!sub||!dt){alert('Select subject and date!');return;}
+  if(!selPeriod){alert('Select which period (P1–P7)!');return;}
+  var stuList=D.students.filter(function(s){
+    return (s.dept===curFac.dept||s.department===curFac.dept)&&
+      (!yr||(s.yr||s.year||'')=== yr)&&
+      (!sec||(s.sec||s.section||'')=== sec);
+  });
+  if(!stuList.length){g('fatt-table').innerHTML='<div style="color:rgba(255,255,255,.4);text-align:center;padding:20px">No students found.</div>';return;}
+
+  // Fetch ALL attendance for this dept+date (period lock check)
+  api('GET','/api/attendance?dept='+encodeURIComponent(curFac.dept)+'&date='+encodeURIComponent(dt)).then(function(existing){
+    var exRecs=Array.isArray(existing)?existing:[];
+
+    // Build day map: student_id -> period -> {status, subject}
+    var dayMap={};
+    exRecs.forEach(function(r){
+      var sid=String(r.student_id);
+      var pn=String(r.period);
+      if(!dayMap[sid])dayMap[sid]={};
+      if(!dayMap[sid][pn])dayMap[sid][pn]={status:r.status,subject:r.subject};
+    });
+
+    // Check if selected period is already done today
+    var periodDone=false;
+    var doneSubject='';
+    Object.keys(dayMap).forEach(function(sid){
+      if(dayMap[sid][selPeriod]){
+        periodDone=true;
+        doneSubject=dayMap[sid][selPeriod].subject||'';
+      }
+    });
+
+    var PERIOD_TIMES=['8:00-8:50','8:50-9:40','9:50-10:40','10:40-11:30','11:30-12:20','1:00-1:50','1:50-2:40'];
+    var pTime=PERIOD_TIMES[parseInt(selPeriod)-1]||'';
+
+    // Show header with period info
+    var headerBg=periodDone?'rgba(239,68,68,.08)':'rgba(37,99,235,.08)';
+    var headerBorder=periodDone?'rgba(239,68,68,.3)':'rgba(37,99,235,.3)';
+    var headerColor=periodDone?'#ef4444':'#4a9eff';
+
+    var h='<div style="background:'+headerBg+';border:1px solid '+headerBorder+';border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">';
+    if(periodDone){
+      h+='<div><div style="font-size:.85rem;font-weight:700;color:#ef4444">🔒 P'+selPeriod+' Already Marked</div>';
+      h+='<div style="font-size:.72rem;color:#94a3b8;margin-top:2px">Marked for '+doneSubject+' · '+dt+'</div></div>';
+      h+='<span style="background:rgba(239,68,68,.15);color:#ef4444;border-radius:20px;padding:4px 12px;font-size:.72rem;font-weight:700">Locked</span>';
+    } else {
+      h+='<div><div style="font-size:.85rem;font-weight:700;color:#4a9eff">📝 P'+selPeriod+' — '+sub+'</div>';
+      h+='<div style="font-size:.72rem;color:#94a3b8;margin-top:2px">'+pTime+' · '+dt+'</div></div>';
+      h+='<span style="background:rgba(37,99,235,.15);color:#4a9eff;border-radius:20px;padding:4px 12px;font-size:.72rem;font-weight:700">Open</span>';
+    }
+    h+='</div>';
+
+    if(periodDone){
+      // Show locked state - no dropdowns
+      h+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.8rem">';
+      h+='<thead><tr style="background:#0a1628"><th style="padding:10px 8px;text-align:left;color:rgba(255,255,255,.6);border-bottom:1px solid rgba(255,255,255,.08)">Student</th>';
+      h+='<th style="padding:10px 8px;text-align:center;color:#ef4444;border-bottom:1px solid rgba(255,255,255,.08)">P'+selPeriod+' ('+pTime+') 🔒</th></tr></thead><tbody>';
+      stuList.forEach(function(s){
+        var nm=s.nm||s.name||''; var reg=s.reg||s.reg_no||'';
+        var rec=dayMap[String(s.id)]&&dayMap[String(s.id)][selPeriod];
+        var st=rec?rec.status:'—';
+        var col=st==='Present'?'#22c55e':st==='Absent'?'#ef4444':'#f59e0b';
+        h+='<tr style="border-bottom:1px solid rgba(255,255,255,.04)">';
+        h+='<td style="padding:8px;color:#1a2332;font-weight:700">'+nm+'<br/><span style="color:rgba(255,255,255,.35);font-size:.68rem;font-weight:400">'+reg+'</span></td>';
+        h+='<td style="padding:8px;text-align:center"><span style="color:'+col+';font-weight:700;font-size:.85rem">🔒 '+st+'</span></td>';
+        h+='</tr>';
+      });
+      h+='</tbody></table></div>';
+    } else {
+      // Show dropdowns for selected period only
+      h+='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.8rem">';
+      h+='<thead><tr style="background:#0a1628"><th style="padding:10px 8px;text-align:left;color:rgba(255,255,255,.6);border-bottom:1px solid rgba(255,255,255,.08)">Student</th>';
+      h+='<th style="padding:10px 8px;text-align:center;color:#4a9eff;border-bottom:1px solid rgba(255,255,255,.08)">P'+selPeriod+' ('+pTime+')</th></tr></thead><tbody>';
+      stuList.forEach(function(s){
+        var nm=s.nm||s.name||''; var reg=s.reg||s.reg_no||'';
+        h+='<tr style="border-bottom:1px solid rgba(255,255,255,.04)">';
+        h+='<td style="padding:8px;color:#1a2332;font-weight:700">'+nm+'<br/><span style="color:rgba(255,255,255,.35);font-size:.68rem;font-weight:400">'+reg+'</span></td>';
+        h+='<td style="padding:8px;text-align:center"><select id="att_'+s.id+'_'+selPeriod+'" style="background:#0d2a4a;border:1.5px solid #2563eb;color:#fff;border-radius:8px;padding:6px 8px;font-size:.78rem;width:90px;font-family:inherit"><option value="Present">✅ Present</option><option value="Absent">❌ Absent</option><option value="OD">🟡 OD</option></select></td>';
+        h+='</tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+
+    g('fatt-table').innerHTML=h;
+    g('fatt-table')._stuList=stuList;
+    g('fatt-table')._selPeriod=selPeriod;
+    g('fatt-save-btn').style.display=periodDone?'none':'block';
+  });
+}async function fAttSave(){
+  var sub=g('fatt-sub').value,dt=g('fatt-date').value;
+  var stuList=g('fatt-table')._stuList||[];
+  var selPeriod=g('fatt-table')._selPeriod||g('fatt-period').value;
+  if(!stuList.length){alert('Load students first!');return;}
+  if(!selPeriod){alert('No period selected!');return;}
+  var records=[];
+  stuList.forEach(function(s){
+    var sel=g('att_'+s.id+'_'+selPeriod);
+    if(sel)records.push({student_id:s.id,student_nm:s.nm||s.name||'',dept:curFac.dept,subject:sub,date:dt,period:parseInt(selPeriod),status:sel.value});
+  });
+  if(!records.length){toast('Nothing to save!','error');return;}
+  var res=await api('POST','/api/attendance',{records:records});
+  if(res.ok){
+    toast('P'+selPeriod+' attendance saved for '+sub+'! ✅','success');
+    fAttLoad(); // reload to show locked state
+  } else toast('Error saving!','error');
+}
+// MARKS functions
+function fMrkLoad(){
+  var sub=g('fmrk-sub').value,exam=g('fmrk-exam').value;
+  var yr=g('fmrk-yr').value,sec=g('fmrk-sec')?g('fmrk-sec').value:'';
+  var max=parseInt(g('fmrk-max').value)||100;
+  if(!sub){alert('Select subject!');return;}
+  var stuList=D.students.filter(function(s){
+    return (s.dept===curFac.dept||s.department===curFac.dept)&&
+      (!yr||(s.yr||s.year||'')=== yr)&&
+      (!sec||(s.sec||s.section||'')=== sec);
+  });
+  if(!stuList.length){
+    g('fmrk-table').innerHTML='<div style="color:rgba(255,255,255,.4);text-align:center;padding:20px">No students found. Select Year & Section.</div>';
+    return;
+  }
+  // Fetch existing marks for this subject+exam+dept
+  api('GET','/api/marks?dept='+encodeURIComponent(curFac.dept)+'&subject='+encodeURIComponent(sub)).then(function(existing){
+    var exMap={};
+    if(Array.isArray(existing)){
+      existing.forEach(function(m){
+        if(m.exam_type===exam)exMap[String(m.student_id)]=m.mark;
+      });
+    }
+    var h='<div style="background:#0d1929;border-radius:12px;padding:12px">';
+    h+='<div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:10px">'+exam+' — '+sub+' — Max: '+max+'</div>';
+    stuList.forEach(function(s){
+      var nm=s.nm||s.name||''; var reg=s.reg||s.reg_no||'';
+      var existMark=exMap[String(s.id)];
+      h+='<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)">'
+        +'<div style="flex:1"><div style="font-size:.82rem;font-weight:600;color:#1a2332">'+nm+'</div>'
+        +'<div style="font-size:.7rem;color:rgba(255,255,255,.4)">'+reg+'</div></div>'
+        +'<input type="number" id="mrk_'+s.id+'" min="0" max="'+max+'" value="'+(existMark!=null?existMark:'')+'" placeholder="0" style="width:70px;background:#111;border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:6px 8px;font-size:.82rem;text-align:center"/>'
+        +'<span style="font-size:.7rem;color:rgba(255,255,255,.3)">/'+max+'</span>'
+        +'</div>';
+    });
+    h+='</div>';
+    g('fmrk-table').innerHTML=h;
+    g('fmrk-table')._stuList=stuList;
+    g('fmrk-table')._max=max;
+    g('fmrk-save-btn').style.display='block';
+  });
+}
+async function fMrkSave(){
+  var sub=g('fmrk-sub').value,exam=g('fmrk-exam').value;
+  var stuList=g('fmrk-table')._stuList||[];
+  var max=g('fmrk-table')._max||100;
+  if(!stuList.length){alert('Load students first!');return;}
+  var records=[];
+  stuList.forEach(function(s){
+    var inp=g('mrk_'+s.id);
+    if(inp&&inp.value!=='')records.push({student_id:s.id,student_nm:s.nm||s.name||'',dept:curFac.dept,subject:sub,exam_type:exam,mark:parseInt(inp.value)||0,max_mark:max});
+  });
+  var res=await api('POST','/api/marks',{records:records});
+  if(res.ok)toast('Marks saved! ✅','success');
+  else toast('Error saving!','error');
+}
+
+async function rnLeaves(){
+  var el=g('leaves-list');
+  if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.4);text-align:center;padding:20px">Loading...</div>';
+  var rows=await api('GET','/api/leaves');
+  if(!rows||!rows.length){el.innerHTML='<div style="color:rgba(255,255,255,.4);text-align:center;padding:20px">No leave requests yet.</div>';return;}
+  var h='';
+  rows.forEach(function(lv){
+    var sc=lv.status==='Approved'?'#059669':lv.status==='Rejected'?'#e11d48':'#d97706';
+    var sbg=lv.status==='Approved'?'#dcfce7':lv.status==='Rejected'?'#fee2e2':'#fef3c7';
+    var stc=lv.status==='Approved'?'#166534':lv.status==='Rejected'?'#991b1b':'#92400e';
+    var ic=lv.status==='Approved'?'fa-check-circle':lv.status==='Rejected'?'fa-times-circle':'fa-clock';
+    h+='<div style="background:#fff;border:1px solid #e2e8f0;border-left:4px solid '+sc+';border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(0,0,0,.04)">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+      +'<div style="font-size:.85rem;font-weight:800;color:#1a2332">'+lv.leave_type+'</div>'
+      +'<span style="background:'+sbg+';color:'+stc+';border-radius:20px;padding:3px 12px;font-size:.7rem;font-weight:700">'+lv.status+'</span>'
+      +'</div>'
+      +'<div style="font-size:.75rem;color:#64748b">'+(lv.from_date||'')+' → '+(lv.to_date||'')+'  &bull;  '+(lv.days||1)+' day(s)</div>'
+      +(lv.reason?'<div style="font-size:.73rem;color:#94a3b8;margin-top:5px">"'+lv.reason+'"</div>':'')
+      +'</div>';
+  });
+  el.innerHTML=h;
+}
+async function leaveAction(id,status){
+  var res=await api('PUT','/api/leaves/'+id,{status:status});
+  if(res.ok){toast(status+' ✅','success');rnLeaves();}
+}
+async function doAdmin(){var u=g('au').value.trim(),p=g('ap').value.trim(),ae=g('ae');var res=await api('POST','/api/login/admin',{username:u,password:p});if(!res.ok){ae.classList.add('show');return;}ae.classList.remove('show');closeM('m-admin');g('aUN').textContent=res.name;g('aGr').textContent=res.name;await loadData();sessionStorage.setItem('ucsp_session',JSON.stringify({role:'admin',page:'dash'}));aPanel('dash');
+  document.querySelectorAll('.page').forEach(function(p){p.style.display='none';});
+  document.getElementById('pg-admin').style.display='block';
+  window.scrollTo(0,0);
+}
+async function doFaculty(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  var u=g('fu').value.trim(),p=g('fp').value.trim(),d=g('fd').value,fe=g('fe');
+  if(!d){alert('Select Department!');return;}
+  console.log('[Faculty Login] Attempting login...',u,d);
+  var res=await api('POST','/api/login/faculty',{username:u,password:p,dept:d});
+  console.log('[Faculty Login] Response:',res);
+  if(!res||!res.ok){
+    console.log('[Faculty Login] Failed:',res&&res.msg);
+    if(fe){fe.style.display='block';fe.textContent=res&&res.msg||'Invalid credentials';}
+    return;
+  }
+  if(fe)fe.style.display='none';
+  var f=res.faculty;
+  f.nm=f.nm||f.name||f.username||'Faculty';
+  f.un=f.un||f.username||'';
+  f.pw=f.pw||f.password||'';
+  f.dept=f.dept||d;
+  f.role=f.role||'Faculty';
+  curFac=f;
+  try{localStorage.setItem('ucsp_fac',JSON.stringify(f));sessionStorage.setItem('ucsp_session',JSON.stringify({role:'faculty',page:'main'}));}catch(ex){}
+  console.log('[Faculty Login] curFac set, redirecting to /faculty...');
+  // Save to localStorage for faculty.html to use
+  try{localStorage.setItem('ucsp_fac',JSON.stringify(f));}catch(ex){}
+  window.location.href='/faculty';
+}
+function showFacDash(page){
+  // Show pg-faculty (position:fixed overlay)
+  var pgf=document.getElementById('pg-faculty');
+  if(pgf) pgf.style.display='block';
+  // Close modal
+  var mf=document.getElementById('m-faculty');
+  if(mf){mf.classList.remove('open');mf.style.display='none';}
+  // Show correct fac sub-page only
+  document.querySelectorAll('.fac-page').forEach(function(p){p.style.display='none';});
+  var target=document.getElementById('fp-'+(page||'main'))||document.getElementById('fp-main');
+  if(target) target.style.display='block';
+  window.scrollTo(0,0);
+  // Populate header info
+  if(!curFac)return;
+  var f=curFac;
+  var dmap={'Computer Science & Engineering':'CSE','Electronics & Communication':'ECE','Information Technology':'IT','MCA':'MCA','Mechanical Engineering':'MECH','MBA':'MBA','Civil Engineering':'CIVIL'};
+  var dc=dmap[f.dept]||f.dept.substring(0,3).toUpperCase();
+  var safeSet=function(id,v){var el=document.getElementById(id);if(el)el.textContent=v;};
+  safeSet('fn-deptname',dc);safeSet('fn-dept',dc);safeSet('fn-role',f.role);
+  var fs=document.getElementById('fs-deptfull');if(fs)fs.textContent=f.dept;
+  ['fpd-addstu','fpd-viewstu','fpd-attend','fpd-marks','fpd-notes','fpd-assign','fpd-tt','fpd-frankholders','fpd-fplaced','fpd-subjects'].forEach(function(id){safeSet(id,dc);});
+  var chips='';
+  D.faculty.filter(function(x){return (x.dept||x.department||'')===f.dept;}).forEach(function(s){var role=s.role||'Faculty';var roleIcon=role==='HOD'?'👑':role==='Professor'?'🎓':'👤';chips+='<div class="fchip">'+roleIcon+' '+(s.nm||s.name||'')+' <span style="font-size:.65rem;color:#4a90d9;margin-left:3px;font-weight:700">· '+role+'</span></div>';});
+  if(!chips)chips='<span class="fstaff-no">No staff yet</span>';
+  var sc=document.getElementById('fstaff-chips');if(sc)sc.innerHTML=chips;
+  var dateEl=document.getElementById('fatt-date');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
+  try{fBuildCal();}catch(ex){}
+  try{fPopulateStuDrop();}catch(ex){}
+  console.log('[showFacDash] Done. page=',page||'main');
+
+}
+async function doStudent(){var u=g('su').value.trim(),p=g('sp').value.trim(),d=g('sd').value,se=g('se');if(!d){se.classList.add('show');se.textContent='Select Department!';return;}var res=await api('POST','/api/login/student',{username:u,password:p,dept:d});if(!res.ok){se.classList.add('show');return;}se.classList.remove('show');closeM('m-student');curStu=res.student;g('stu-nm').textContent=curStu.nm;g('stu-reg').textContent=curStu.reg;g('stu-dept').textContent=curStu.dept;g('stu-yr').textContent=curStu.yr;var pi=g('stu-photo-prev');if(pi){pi.style.background=BG2[0];pi.innerHTML='<span style="font-size:1.6rem">👤</span>';}document.querySelectorAll('.page').forEach(function(p){p.style.display='none';});
+  var pgs=document.getElementById('pg-student');if(pgs)pgs.style.display='block';
+  window.scrollTo(0,0);
+}
+async function addFac(){var n=g('fn-nm').value.trim(),u=g('fn-un').value.trim(),p=g('fn-pw').value.trim(),r=g('fn-ro').value,d=g('fn-dp').value,ph=g('fn-ph').value.trim(),ex=g('fn-ex').value.trim(),photo=g('fn-photo-data').value;if(!n||!u||!p||!d){alert('Fill required fields!');return;}var res=await api('POST','/api/faculty',{nm:n,un:u,pw:p,role:r,dept:d,ph:ph,exp:ex,photo:photo});if(!res.ok){alert(res.msg||'Error');return;}D.faculty.push({id:res.id,nm:n,un:u,pw:p,role:r,dept:d,ph:ph,exp:ex,photo:photo});g('fn-nm').value='';g('fn-un').value='';g('fn-pw').value='';g('fn-ph').value='';g('fn-ex').value='';g('fn-photo-data').value='';var pp=g('fn-photo-prev'),pph=g('fn-photo-ph');if(pp)pp.style.display='none';if(pph)pph.style.display='flex';updStats();rnFac();toast('Faculty added!','success');}
+async function delFac(id){if(!confirm('Delete faculty?'))return;await api('DELETE','/api/faculty/'+id);D.faculty=D.faculty.filter(function(f){return f.id!==id;});updStats();rnFac();}
+async function addBus(){var l=g('bn-lb').value.trim();if(!l){alert('Enter route label!');return;}var dt=g('bn-dt').value,dtFmt=dt?new Date(dt).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'';var inn=g('bn-in-data').value,out=g('bn-out-data').value;var res=await api('POST','/api/bus',{lb:l,dt:dtFmt,inn:inn,out:out});if(!res||!res.ok){toast('Error adding bus: '+(res&&res.msg||'Server error'),'error');return;}D.bus.push({id:res.id,lb:l,dt:dtFmt,inn:inn,out:out});g('bn-lb').value='';g('bn-dt').value='';g('bn-in-data').value='';g('bn-out-data').value='';g('bn-in-prev').style.display='none';g('bn-in-ph').style.display='flex';g('bn-out-prev').style.display='none';g('bn-out-ph').style.display='flex';g('bn-in-f').value='';g('bn-out-f').value='';updStats();rnBs();rnHomeBusPreview();toast('Bus route added! ✅','success');}
+async function delBs(id){await api('DELETE','/api/bus/'+id);D.bus=D.bus.filter(function(b){return b.id!==id;});updStats();rnBs();rnHomeBusPreview();}
+async function addEv(){var n=g('ev-nm').value.trim(),d=g('ev-dt').value;if(!n||!d){alert('Enter name and date!');return;}var dept=g('ev-dp').value,photo=g('ev-photo-data').value;var res=await api('POST','/api/events',{nm:n,dt:d,dept:dept,photo:photo});D.events.push({id:res.id,nm:n,dt:d,dept:dept,photo:photo});g('ev-nm').value='';g('ev-dt').value='';g('ev-photo-data').value='';g('ev-photo-prev').style.display='none';g('ev-photo-ph').style.display='flex';updStats();rnEv();toast('Event added!','success');}
+async function delEv(id){await api('DELETE','/api/events/'+id);D.events=D.events.filter(function(e){return e.id!==id;});updStats();rnEv();}
+async function addPl(){var n=g('pl-nm').value.trim(),c=g('pl-co').value.trim(),d=g('pl-dp').value;if(!n||!c||!d){alert('Fill required fields!');return;}var ctc=g('pl-ct').value.trim(),photo=g('pl-photo-data').value;var res=await api('POST','/api/placed',{nm:n,name:n,co:c,company:c,dept:d,ctc:ctc,pkg:ctc,package:ctc,photo:photo,yr:g('pl-yr')?g('pl-yr').value:'',year:g('pl-yr')?g('pl-yr').value:''});D.placed.push({id:res.id,nm:n,co:c,dept:d,ctc:ctc,photo:photo});g('pl-nm').value='';g('pl-co').value='';g('pl-ct').value='';g('pl-dp').value='';g('pl-photo-data').value='';g('pl-photo-prev').style.display='none';g('pl-photo-ph').style.display='flex';updStats();rnPl();toast('Placed student added!','success');}
+async function delPl(id){await api('DELETE','/api/placed/'+id);D.placed=D.placed.filter(function(p){return p.id!==id;});updStats();rnPl();}
+async function addRk(){var n=g('rk-nm').value.trim(),rno=g('rk-no').value,cg=g('rk-cg').value,d=g('rk-dp').value;if(!n||!rno||!cg||!d){alert('Fill required fields!');return;}var yr=g('rk-yr').value,photo=g('rk-photo-data').value;var res=await api('POST','/api/rank',{nm:n,rno:parseInt(rno),cgpa:parseFloat(cg),dept:d,yr:yr,photo:photo});D.rank.push({id:res.id,nm:n,rno:parseInt(rno),cgpa:cg,dept:d,yr:yr,photo:photo});g('rk-nm').value='';g('rk-no').value='';g('rk-cg').value='';g('rk-dp').value='';g('rk-photo-data').value='';g('rk-photo-prev').style.display='none';g('rk-photo-ph').style.display='flex';updStats();rnRk();toast('Rank holder added!','success');}
+async function delRk(id){await api('DELETE','/api/rank/'+id);D.rank=D.rank.filter(function(r){return r.id!==id;});updStats();rnRk();}
+async function addUpd(){var msg=g('upd-msg').value.trim(),type=g('upd-type').value;if(!msg){alert('Enter a message!');return;}var res=await api('POST','/api/updates',{msg:msg,type:type});if(!D.updates)D.updates=[];D.updates.unshift({id:res.id,msg:msg,type:type});g('upd-msg').value='';rnUpd();updTicker();toast('Update added!','success');}
+async function delUpd(id){await api('DELETE','/api/updates/'+id);D.updates=D.updates.filter(function(u){return u.id!==id;});rnUpd();updTicker();}
+
+
+// ══════ SUBJECT + TIMETABLE FUNCTIONS ══════
+function ttKey(dept,yr,sec){
+  var yrN={'1st Year':1,'2nd Year':2,'3rd Year':3,'4th Year':4}[yr]||parseInt(yr)||2;
+  return dept+'|'+yrN+'|'+(sec||'A');
+}
+function ttYrN(yr){return {'1st Year':1,'2nd Year':2,'3rd Year':3,'4th Year':4}[yr]||2;}
+
+async function loadTTConfig(){
+  if(!curFac)return;
+  var db=await api('GET','/api/timetable?dept='+encodeURIComponent(curFac.dept));
+  if(db&&typeof db==='object'&&!Array.isArray(db))Object.assign(D.ttConfig,db);
+}
+
+// ══════ SUBJECT + TIMETABLE FUNCTIONS ══════
+// D already defined
+// var D=D||{};if(!D.ttConfig)D.ttConfig={};
+// function ttKey(defined above
+async function fRnSubjects(){
+  if(!curFac)return;
+  var yr=g('fsub-yr')?g('fsub-yr').value:'2nd Year';
+  var sec=g('fsub-sec')?g('fsub-sec').value:'A';
+  var el=g('fsub-list');if(!el)return;
+  await loadTTConfig();
+  var key=ttKey(curFac.dept,yr,sec);
+  var cfg=D.ttConfig[key]||{subjects:[],labs:[]};
+  var subs=(cfg.subjects||[]).map(function(s){return Object.assign({},s,{type:s.type||'Theory'});});
+  var labs=(cfg.labs||[]).map(function(l){return Object.assign({},l,{type:'Lab'});});
+  var all=subs.concat(labs);
+  if(!all.length){el.innerHTML='<div style="text-align:center;color:rgba(255,255,255,.35);padding:30px;font-size:.85rem">📚 No subjects for '+yr+' Sec '+sec+'<br><span style="font-size:.73rem;opacity:.6">Add subjects using the form above</span></div>';return;}
+  var tColor={Theory:'rgba(59,130,246,.18)',Lab:'rgba(234,179,8,.15)',Elective:'rgba(168,85,247,.18)'};
+  el.innerHTML=all.map(function(s,i){var tp=s.type||'Theory';
+      return '<div style="background:'+(tColor[tp]||tColor.Theory)+';border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:12px 14px;margin-bottom:8px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start">'
+      +'<div style="flex:1">'
+      +'<div style="font-size:.88rem;font-weight:700;color:#fff;margin-bottom:5px">'+s.nm+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:5px;font-size:.7rem">'
+      +'<span style="background:rgba(255,255,255,.08);border-radius:5px;padding:2px 8px;color:rgba(255,255,255,.6)">📅 '+yr+'</span>'
+      +'<span style="background:rgba(255,255,255,.08);border-radius:5px;padding:2px 8px;color:rgba(255,255,255,.6)">🏷️ Sec '+sec+'</span>'
+      +(s.code?'<span style="background:rgba(255,255,255,.1);border-radius:5px;padding:2px 8px;color:#fff;font-weight:700">'+s.code+'</span>':'')
+      +'<span style="border:1px solid rgba(255,255,255,.2);border-radius:5px;padding:2px 8px;color:rgba(255,255,255,.7)">'+tp+'</span>'
+      +'</div>'
+      +'</div>'
+      +'<button type="button" onclick="fDelSubjectIdx('+i+')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#ef4444;border-radius:7px;padding:4px 10px;font-size:.72rem;cursor:pointer;flex-shrink:0;margin-left:8px">🗑️</button>'
+      +'</div></div>';}).join('');
+}
+async function fAddSubject(){
+  if(!curFac)return;
+  var nm=g('fsub-nm').value.trim(),code=g('fsub-code').value.trim(),type=g('fsub-type').value,staff='';
+  var yr=g('fsub-yr').value,sec=g('fsub-sec').value;
+  if(!nm||!code){alert('Subject name and code are required!');return;}
+  var yrN=ttYrN(yr),key=ttKey(curFac.dept,yr,sec);
+  if(!D.ttConfig[key])D.ttConfig[key]={subjects:[],labs:[]};
+  var cfg=D.ttConfig[key];
+  var entry={nm:nm,code:code,type:type,staff:staff};
+  if(type==='Lab'){if(!cfg.labs)cfg.labs=[];cfg.labs.push(entry);}
+  else{if(!cfg.subjects)cfg.subjects=[];cfg.subjects.push(entry);}
+  var res=await api('POST','/api/timetable',{dept:curFac.dept,year_no:yrN,section:sec,config:{subjects:cfg.subjects||[],labs:cfg.labs||[]}});
+  if(!res||!res.ok){toast('Error saving!','error');return;}
+  g('fsub-nm').value='';g('fsub-code').value='';
+  toast('Subject added ✅','success');fRnSubjects();
+}
+function fDelSubjectIdx(idx){
+  var yr=g('fsub-yr')?g('fsub-yr').value:'2nd Year';
+  var sec=g('fsub-sec')?g('fsub-sec').value:'A';
+  fDelSubject(idx,yr,sec);
+}
+async function fDelSubject(idx,yr,sec){
+  if(!confirm('Remove this subject?'))return;
+  var yrN=ttYrN(yr),key=ttKey(curFac.dept,yr,sec);
+  var cfg=D.ttConfig[key]||{subjects:[],labs:[]};
+  var subs=(cfg.subjects||[]);var labs=(cfg.labs||[]);
+  var allSubs=subs.map(function(s,i){return {i:i,src:'sub'};});
+  var allLabs=labs.map(function(l,i){return {i:i,src:'lab'};});
+  var all=allSubs.concat(allLabs);
+  var item=all[idx];if(!item)return;
+  if(item.src==='lab')cfg.labs=labs.filter(function(_,i){return i!==item.i;});
+  else cfg.subjects=subs.filter(function(_,i){return i!==item.i;});
+  var res=await api('POST','/api/timetable',{dept:curFac.dept,year_no:yrN,section:sec,config:{subjects:cfg.subjects,labs:cfg.labs}});
+  if(res&&res.ok){D.ttConfig[key]={subjects:cfg.subjects,labs:cfg.labs};toast('Removed','success');fRnSubjects();}
+}
+async function fLoadSubjectsDrop(dropId){
+  if(!curFac)return;
+  var el=g(dropId);if(!el)return;
+  await loadTTConfig();
+  var yrSel=dropId==='fatt-sub'?g('fatt-yr'):dropId==='fasn-sub'?g('fasn-yr'):g('fmrk-yr');
+  var secSel=dropId==='fatt-sub'?g('fatt-sec'):dropId==='fasn-sub'?g('fasn-sec'):g('fmrk-sec');
+  var yr=yrSel?yrSel.value:'2nd Year';
+  var sec=secSel?secSel.value:'A';
+  var key=ttKey(curFac.dept,yr,sec);
+  var cfg=D.ttConfig[key]||{subjects:[],labs:[]};
+  var names=(cfg.subjects||[]).map(function(s){return s.nm;}).concat((cfg.labs||[]).map(function(l){return l.nm;}));
+  el.innerHTML=names.length?names.map(function(s){return '<option>'+s+'</option>';}).join(''):'<option value="">— Add subjects in Subject page —</option>';
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  // Get faculty from server session (works even if localStorage blocked)
+  fetch('/api/faculty/session').then(function(r){return r.json();}).then(function(res){
+    if(!res.ok){window.location.href='/';return;}
+    var f=res.faculty;
+    f.nm=f.nm||f.name||'';
+    f.un=f.un||f.username||'';
+    f.pw=f.pw||f.password||'';
+    f.dept=f.dept||'';
+    f.role=f.role||'Faculty';
+    curFac=f;
+    var pgf=document.getElementById('pg-faculty');
+    if(pgf){pgf.style.display='block';}
+    // Show fp-main immediately
+    document.querySelectorAll('.fac-page').forEach(function(p){p.style.display='none';});
+    var fpm=document.getElementById('fp-main');
+    if(fpm)fpm.style.display='block';
+    loadData().then(function(){
+      initFacDash();
+      try{
+        var lastPage=sessionStorage.getItem('ucsp_fac_page')||'main';
+        fGo(lastPage);
+      }catch(ex){fGo('main');}
+    }).catch(function(){
+      initFacDash();
+      fGo('main');
+    });
+  }).catch(function(){window.location.href='/';});
+});
+// ── EDIT STUDENT ─────────────────────────────────────────────────────
+var editStuModal=null;
+function fOpenEditStu(id){
+  var s=D.students.find(function(x){return x.id===id||x.id==id;});
+  if(!s)return;
+  // Remove old modal if exists
+  var old=document.getElementById('fes-modal');if(old)old.remove();
+  // Build fresh modal
+  var el=document.createElement('div');
+  el.id='fes-modal';
+  el.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  var html='<div style="background:#111827;border:1px solid rgba(255,255,255,.15);border-radius:18px;padding:24px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto;position:relative">'
+    +'<button onclick="g(\'fes-modal\').remove()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.1);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem">✕</button>'
+    +'<div style="font-size:1rem;font-weight:800;color:#fff;margin-bottom:16px">✏️ Edit Student</div>'
+    +'<input type="hidden" id="fes-id" value="'+s.id+'"/>'
+    +'<label class="flbl">Full Name</label><input class="finp" id="fes-nm" value="'+(s.nm||'').replace(/"/g,"&quot;")+'"/>'
+    +'<label class="flbl">Register No</label><input class="finp" id="fes-reg" value="'+(s.reg||'').replace(/"/g,"&quot;")+'"/>'
+    +'<label class="flbl">Email</label><input class="finp" id="fes-em" value="'+(s.email||s.em||'').replace(/"/g,"&quot;")+'"/>'
+    +'<label class="flbl">Phone</label><input class="finp" id="fes-ph" maxlength="10" value="'+(s.phone||s.ph||'').replace(/"/g,"&quot;")+'"/>'
+    +'<div class="frow2">'
+      +'<div><label class="flbl">Year</label>'
+      +'<select class="finp" id="fes-yr">'
+      +['1st Year','2nd Year','3rd Year','4th Year'].map(function(y){return '<option'+(y===(s.yr||s.year||'')?'selected':'')+'>'+y+'</option>';}).join('')
+      +'</select></div>'
+      +'<div><label class="flbl">Section</label>'
+      +'<select class="finp" id="fes-sec">'
+      +['A','B'].map(function(sc){return '<option'+(sc===(s.sec||s.section||'A')?'selected':'')+'>'+sc+'</option>';}).join('')
+      +'</select></div>'
+    +'</div>'
+    +'<label class="flbl">Username</label><input class="finp" id="fes-un" value="'+(s.un||'').replace(/"/g,"&quot;")+'"/>'
+    +'<label class="flbl">Password</label><input class="finp" id="fes-pw" value="'+(s.pw||'').replace(/"/g,"&quot;")+'"/>'
+    +'<button onclick="fSaveEditStu()" class="fbtn-main" style="margin-top:8px">💾 Save Changes</button>'
+    +'</div>';
+  el.innerHTML=html;
+  document.body.appendChild(el);
+}
+async function fSaveEditStu(){
+  var id=parseInt(g('fes-id').value);
+  var nm=g('fes-nm').value.trim(),un=g('fes-un').value.trim(),pw=g('fes-pw').value.trim();
+  if(!nm||!un||!pw){toast('Name, username & password required!','error');return;}
+  var yr=g('fes-yr').value,sec=g('fes-sec').value;
+  var res=await api('PUT','/api/students/'+id,{
+    nm:nm,name:nm,un:un,username:un,pw:pw,password:pw,
+    reg:g('fes-reg').value,reg_no:g('fes-reg').value,
+    em:g('fes-em').value,email:g('fes-em').value,
+    ph:g('fes-ph').value,phone:g('fes-ph').value,
+    yr:yr,year:yr,sec:sec,section:sec
+  });
+  if(!res||!res.ok){toast('Error: '+(res.msg||'Failed'),'error');return;}
+  var s=D.students.find(function(x){return x.id===id;});
+  if(s){s.nm=s.name=nm;s.un=s.username=un;s.pw=s.password=pw;
+    s.reg=s.reg_no=g('fes-reg').value;s.email=s.em=g('fes-em').value;
+    s.phone=s.ph=g('fes-ph').value;s.yr=s.year=yr;s.sec=s.section=sec;}
+  g('fes-modal').style.display='none';fRnStu();toast('Student updated! ✅','success');
+}
+
+
+// ── HOD EXAM TIMETABLE ────────────────────────────────────────────
+function fettImgRead(inp){
+  if(!inp.files||!inp.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var data=e.target.result;
+    document.getElementById('fett-img-data').value=data;
+    var prev=document.getElementById('fett-img-prev');
+    var ph=document.getElementById('fett-img-ph-txt');
+    if(prev){prev.src=data;prev.style.display='block';}
+    if(ph)ph.style.display='none';
+  };
+  reader.readAsDataURL(inp.files[0]);
+}
+async function fAddETT(){
+  var label=(g('fett-label')||{value:''}).value.trim();
+  var image=(g('fett-img-data')||{value:''}).value;
+  var dept=(g('fett-dept')||{value:''}).value||curFac.dept;
+  if(!label){toast('Enter a label!','error');return;}
+  if(!image){toast('Upload an image!','error');return;}
+  var res=await api('POST','/api/exam_timetables',{label:label,dept:dept,image:image});
+  if(!res||!res.ok){toast('Error!','error');return;}
+  g('fett-label').value='';g('fett-img-data').value='';
+  var ph=g('fett-img-ph-txt');var pr=g('fett-img-prev');
+  if(ph)ph.style.display='block';if(pr)pr.style.display='none';
+  toast('Timetable added! ✅','success');
+  fLoadETT();
+}
+async function fLoadETT(){
+  var el=g('fett-list');if(!el)return;
+  var rows=await api('GET','/api/exam_timetables');
+  if(!rows||!rows.length){el.innerHTML='<div style="color:rgba(255,255,255,.35);text-align:center;padding:20px;font-size:.82rem">No timetables yet</div>';return;}
+  el.innerHTML=rows.map(function(t){
+    return '<div style="background:#0d1929;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px">'
+      +'<div style="flex:1"><div style="font-size:.82rem;font-weight:700;color:#fff">'+t.label+'</div>'+(t.dept?'<div style="font-size:.68rem;color:rgba(255,255,255,.4)">'+t.dept+'</div>':'')+'</div>'
+      +(curFac&&curFac.role==="HOD"?'<button onclick="fDelETT('+t.id+')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#ef4444;border-radius:7px;padding:5px 10px;font-size:.7rem;cursor:pointer"><i class="fas fa-trash"></i></button>':'')
+      +'</div>';
+  }).join('');
+}
+function fShowETTImg(id){
+  api('GET','/api/exam_timetables').then(function(rows){
+    if(!Array.isArray(rows))return;
+    var t=rows.find(function(x){return x.id===id||x.id==id;});
+    if(!t||!t.image){toast('No image!','error');return;}
+    var old=document.getElementById('fett-view-modal');if(old)old.remove();
+    var title=(t.sem_name||t.label)+(t.semester?' · '+t.semester:'');
+    var sub=[(t.year||''),(t.dept||'')].filter(Boolean).join(' · ');
+    var wrap=document.createElement('div');
+    wrap.id='fett-view-modal';
+    wrap.style.cssText='position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.9);z-index:99999999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    var box=document.createElement('div');
+    box.style.cssText='background:#fff;border-radius:18px;padding:22px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;position:relative;';
+    var cb=document.createElement('button');
+    cb.innerHTML='×';cb.style.cssText='position:absolute;top:12px;right:12px;background:#f1f5f9;border:none;color:#1a2332;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1.2rem;';
+    cb.onclick=function(){wrap.remove();};
+    var h1=document.createElement('div');h1.textContent=title;h1.style.cssText='font-size:1rem;font-weight:800;color:#1a2332;margin-bottom:4px;padding-right:36px;';
+    var h2=document.createElement('div');h2.textContent=sub;h2.style.cssText='font-size:.72rem;color:#64748b;margin-bottom:12px;';
+    var img=document.createElement('img');
+    img.src=t.image;
+    img.style.cssText='width:100%;border-radius:10px;display:block;margin-bottom:14px;';
+    var dl=document.createElement('a');
+    dl.href=t.image;dl.download=(title||'timetable')+'.jpg';
+    dl.innerHTML='<i class="fas fa-download" style="margin-right:6px"></i>Download';
+    dl.style.cssText='display:flex;align-items:center;justify-content:center;width:100%;background:#2563eb;color:#fff;border-radius:10px;padding:10px;font-size:.85rem;font-weight:700;text-decoration:none;';
+    box.appendChild(cb);box.appendChild(h1);box.appendChild(h2);box.appendChild(img);box.appendChild(dl);
+    wrap.appendChild(box);document.body.appendChild(wrap);
+    wrap.onclick=function(e){if(e.target===wrap)wrap.remove();};
+  });
+}async function fDelETT(id){
+  if(!confirm('Delete?'))return;
+  await api('DELETE','/api/exam_timetables/'+id);
+  fLoadETT();toast('Deleted','success');
+}
+
+
+
+
+
+async function fRnDefaulters(){
+  if(!curFac)return;
+  var el=g('def-list');var statsEl=g('def-stats');if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px">Loading...</div>';
+  var thresh=parseInt(g('def-thresh')?g('def-thresh').value:75)||75;
+  var yr=g('def-yr')?g('def-yr').value:'';
+  var selSub=g('def-sub')?g('def-sub').value:'';
+  // Populate subject dropdown
+  var subSel=g('def-sub');
+  if(subSel&&subSel.options.length<=1){
+    var cfg=D.ttConfig||{};
+    var allSubs=new Set();
+    Object.values(cfg).forEach(function(c){(c.subjects||[]).forEach(function(s){allSubs.add(s.nm);});});
+    allSubs.forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;subSel.appendChild(o);});
+  }
+  // Get all attendance for dept
+  var atts=await api('GET','/api/attendance?dept='+encodeURIComponent(curFac.dept));
+  if(!Array.isArray(atts)){el.innerHTML='No data';return;}
+  // Filter by yr
+  var stuList=D.students.filter(function(s){return (s.dept===curFac.dept)&&(!yr||(s.yr||s.year||'')===yr);});
+  // Build per-student per-subject attendance
+  var stuAtt={};
+  atts.forEach(function(a){
+    if(selSub&&a.subject!==selSub)return;
+    var sid=String(a.student_id);
+    if(!stuAtt[sid])stuAtt[sid]={};
+    if(!stuAtt[sid][a.subject])stuAtt[sid][a.subject]={p:0,t:0};
+    stuAtt[sid][a.subject].t++;
+    if(a.status==='Present')stuAtt[sid][a.subject].p++;
+  });
+  var defaulters=[];
+  stuList.forEach(function(s){
+    var sid=String(s.id);
+    var sData=stuAtt[sid]||{};
+    Object.keys(sData).forEach(function(sub){
+      var d=sData[sub];
+      var pct=d.t>0?Math.round(d.p/d.t*100):100;
+      if(pct<thresh)defaulters.push({name:s.nm||s.name,reg:s.reg||s.reg_no,yr:s.yr||s.year,sub:sub,pct:pct,p:d.p,t:d.t});
+    });
+  });
+  // Stats
+  if(statsEl){
+    statsEl.innerHTML='<div class="fls-card"><div class="fls-n" style="color:#ef4444">'+defaulters.length+'</div><div class="fls-l">Defaulters</div></div>'
+      +'<div class="fls-card"><div class="fls-n fn-green">'+(stuList.length-new Set(defaulters.map(function(d){return d.name;})).size)+'</div><div class="fls-l">Safe</div></div>'
+      +'<div class="fls-card"><div class="fls-n">'+stuList.length+'</div><div class="fls-l">Total Students</div></div>';
+  }
+  if(!defaulters.length){el.innerHTML='<div style="color:#22c55e;text-align:center;padding:30px;font-size:.85rem">No defaulters! All students above '+thresh+'%</div>';return;}
+  el.innerHTML='';
+  defaulters.sort(function(a,b){return a.pct-b.pct;});
+  defaulters.forEach(function(d){
+    var col=d.pct<50?'#ef4444':d.pct<65?'#f97316':'#f59e0b';
+    var div=document.createElement('div');
+    div.style.cssText='background:#fff;border:1px solid #e2e8f0;border-left:4px solid '+col+';border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;';
+    div.innerHTML='<div style="flex:1"><div style="font-size:.88rem;font-weight:700;color:#1a2332">'+d.name+'</div>'
+      +'<div style="font-size:.7rem;color:#64748b;margin-top:2px">'+d.reg+' · '+d.yr+' · '+d.sub+'</div></div>'
+      +'<div style="text-align:center"><div style="font-size:1.1rem;font-weight:800;color:'+col+'">'+d.pct+'%</div>'
+      +'<div style="font-size:.65rem;color:#64748b">'+d.p+'/'+d.t+' classes</div></div>';
+    el.appendChild(div);
+  });
+}
+
+async function fRnPerformance(){
+  if(!curFac)return;
+  var el=g('perf-list');if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px">Loading...</div>';
+  var yr=g('perf-yr')?g('perf-yr').value:'';
+  var sec=g('perf-sec')?g('perf-sec').value:'';
+  var stuList=D.students.filter(function(s){
+    return (s.dept===curFac.dept)&&(!yr||(s.yr||s.year||'')===yr)&&(!sec||(s.sec||s.section||'')===sec);
+  });
+  if(!stuList.length){el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px">No students found</div>';return;}
+  // Get marks
+  var allMarks=await api('GET','/api/marks?dept='+encodeURIComponent(curFac.dept));
+  if(!Array.isArray(allMarks)){el.innerHTML='No marks data';return;}
+  el.innerHTML='';
+  stuList.forEach(function(s){
+    var stuMarks=allMarks.filter(function(m){return String(m.student_id)===String(s.id);});
+    if(!stuMarks.length)return;
+    // Group by subject
+    var subs={};
+    stuMarks.forEach(function(m){
+      if(!subs[m.subject])subs[m.subject]=[];
+      subs[m.subject].push(m);
+    });
+    var card=document.createElement('div');
+    card.style.cssText='background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:10px;';
+    var hdr=document.createElement('div');
+    hdr.style.cssText='font-size:.88rem;font-weight:700;color:#1a2332;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f1f5f9;';
+    hdr.textContent=(s.nm||s.name)+' · '+(s.reg||s.reg_no||'');
+    card.appendChild(hdr);
+    Object.keys(subs).forEach(function(sub){
+      var mList=subs[sub];
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:8px;';
+      var lbl=document.createElement('div');lbl.style.cssText='font-size:.78rem;color:#64748b;width:100px;flex-shrink:0;';lbl.textContent=sub;
+      row.appendChild(lbl);
+      mList.forEach(function(m){
+        var pct=m.max_mark>0?m.mark/m.max_mark:0;
+        var col=pct>=0.75?'#22c55e':pct>=0.5?'#f59e0b':'#ef4444';
+        var chip=document.createElement('span');
+        chip.style.cssText='font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:6px;background:'+col+'20;color:'+col+';border:1px solid '+col+'50;';
+        chip.textContent=m.exam_type+': '+m.mark+'/'+m.max_mark;
+        row.appendChild(chip);
+      });
+      card.appendChild(row);
+    });
+    el.appendChild(card);
+  });
+  if(!el.children.length)el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px">No marks data yet</div>';
+}
+
+
+
+async function fRnFacCirculars(){
+  var el=g('fac-circ-list');if(!el)return;
+  el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:20px">Loading...</div>';
+  var rows=await api('GET','/api/circulars?dept='+encodeURIComponent(curFac.dept));
+  if(!Array.isArray(rows)||!rows.length){el.innerHTML='<div style="color:rgba(255,255,255,.3);text-align:center;padding:30px">No circulars yet.</div>';return;}
+  el.innerHTML='';
+  rows.forEach(function(c){
+    var div=document.createElement('div');
+    div.style.cssText='background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;';
+    div.innerHTML='<div style="flex:1"><div style="font-size:.88rem;font-weight:700;color:#1a2332">'+c.title+'</div>'
+      +'<div style="font-size:.7rem;color:#64748b;margin-top:3px">'+(c.dept==='All'?'All Departments':c.dept)+' · '+(c.created_at?c.created_at.substring(0,10):'')+'</div></div>';
+    if(c.file_name){
+      var btn=document.createElement('button');
+      btn.style.cssText='background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);color:#2563eb;border-radius:8px;padding:7px 12px;font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;';
+      btn.textContent='Download';
+      btn.onclick=(function(cid,fn){return function(){fDlCirc(cid,fn);};})(c.id,c.file_name);
+      div.appendChild(btn);
+    }
+    el.appendChild(div);
+  });
+}
+
+async function fDlCirc(cid,fname){
+  var res=await api('GET','/api/circulars/'+cid);
+  if(res&&res.file_data){var a=document.createElement('a');a.href=res.file_data;a.download=fname;document.body.appendChild(a);a.click();document.body.removeChild(a);}
+}
+
+function facSearch(q){
+  var res=document.getElementById('fac-search-res');
+  if(!q||q.length<2){res.style.display='none';return;}
+  var results=(D.students||[]).filter(function(s){
+    var nm=(s.nm||s.name||'').toLowerCase();
+    var reg=(s.reg||s.reg_no||'').toLowerCase();
+    return nm.includes(q.toLowerCase())||reg.includes(q.toLowerCase());
+  });
+  if(!results.length){res.style.display='none';return;}
+  res.innerHTML='';
+  results.slice(0,8).forEach(function(s){
+    var div=document.createElement('div');
+    div.style.cssText='padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px;';
+    div.innerHTML='<div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;flex-shrink:0">'+(s.nm||s.name||'?')[0].toUpperCase()+'</div>'
+      +'<div><div style="font-size:.82rem;font-weight:600;color:#e2e8f0">'+(s.nm||s.name||'')+'</div>'
+      +'<div style="font-size:.68rem;color:#64748b">'+(s.reg||s.reg_no||'')+' · '+(s.yr||s.year||'')+' Sec '+(s.sec||s.section||'')+'</div></div>';
+    div.onmouseenter=function(){this.style.background='rgba(255,255,255,.06)';};
+    div.onmouseleave=function(){this.style.background='';};
+    div.onclick=function(){
+      document.getElementById('fac-search').value='';
+      res.style.display='none';
+      fGo('viewstu');
+    };
+    res.appendChild(div);
+  });
+  res.style.display='block';
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#fac-search')&&!e.target.closest('#fac-search-res')){
+    var r=document.getElementById('fac-search-res');if(r)r.style.display='none';
+  }
+});
+
+// ── THEME ────────────────────────────────────────────────────
+function fApplyTheme(){
+  var isDark=localStorage.getItem('ucsp_theme')!=='light';
+  var btn=document.getElementById('ftheme-btn');
+  if(isDark){document.body.classList.remove('light-theme');if(btn)btn.textContent='☀️';}
+  else{document.body.classList.add('light-theme');if(btn)btn.textContent='🌙';}
+}
+function fToggleTheme(){
+  var isDark=localStorage.getItem('ucsp_theme')!=='light';
+  localStorage.setItem('ucsp_theme',isDark?'light':'dark');
+  fApplyTheme();
+}
+fApplyTheme();
+</script>
+
+<!-- HOD EXAM TIMETABLE PAGE -->
+
+
+
+</body>
+</html>
+

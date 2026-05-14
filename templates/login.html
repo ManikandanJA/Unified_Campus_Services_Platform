@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Login – UCSP{% endblock %}
+
+{% block body %}
+<div class="login-page">
+  <div class="login-bg"></div>
+
+  <div class="login-box">
+    <div class="login-header">
+      <a href="{{ url_for('index') }}" class="back-link"><i class="fas fa-arrow-left me-1"></i>Home</a>
+      <div class="login-logo"><i class="fas fa-university"></i></div>
+      <h2 class="login-title">UCSP</h2>
+      <p class="login-sub">Unified Campus Services Platform</p>
+    </div>
+
+    <!-- ROLE TABS -->
+    <div class="role-tabs">
+      <a href="{{ url_for('login', role='admin') }}"   class="role-tab {% if role == 'admin'   %}active{% endif %}"><i class="fas fa-shield-alt me-1"></i>Admin</a>
+      <a href="{{ url_for('login', role='faculty') }}" class="role-tab {% if role == 'faculty' %}active{% endif %}"><i class="fas fa-chalkboard-teacher me-1"></i>Faculty</a>
+      <a href="{{ url_for('login', role='student') }}" class="role-tab {% if role == 'student' %}active{% endif %}"><i class="fas fa-graduation-cap me-1"></i>Student</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('login') }}" class="login-form">
+      <input type="hidden" name="role" value="{{ role }}"/>
+
+      <div class="mb-3">
+        <label class="form-label text-white-50 small">
+          {% if role == 'student' %}Register Number{% else %}Username{% endif %}
+        </label>
+        <div class="input-group">
+          <span class="input-group-text bg-transparent border-secondary text-white-50">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="text" name="username" class="form-control form-control-dark"
+            placeholder="Enter username" required autofocus/>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label text-white-50 small">Password</label>
+        <div class="input-group">
+          <span class="input-group-text bg-transparent border-secondary text-white-50">
+            <i class="fas fa-lock"></i>
+          </span>
+          <input type="password" name="password" id="pwdField" class="form-control form-control-dark"
+            placeholder="Enter password" required/>
+          <button type="button" class="input-group-text bg-transparent border-secondary text-white-50"
+            onclick="togglePwd()">
+            <i class="fas fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Demo hints -->
+      <div class="demo-box mb-4">
+        <div class="demo-title">
+          <i class="fas fa-info-circle me-1"></i>Demo Credentials
+        </div>
+        {% if role == 'admin' %}
+        <div class="demo-item" onclick="fillDemo('admin','admin123')">admin / admin123</div>
+        <div class="demo-item" onclick="fillDemo('principal','prin@2026')">principal / prin@2026</div>
+        {% elif role == 'faculty' %}
+        <div class="demo-item text-white-50 small">Use credentials added by Admin</div>
+        {% else %}
+        <div class="demo-item" onclick="fillDemo('22CS001','student123')">22CS001 / student123</div>
+        <div class="demo-item" onclick="fillDemo('22IT001','student123')">22IT001 / student123</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="login-submit-btn">
+        <i class="fas fa-sign-in-alt me-2"></i>Login as
+        {% if role == 'admin' %}Admin{% elif role == 'faculty' %}Faculty{% else %}Student{% endif %}
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+function togglePwd() {
+  var f = document.getElementById('pwdField');
+  var i = document.getElementById('eyeIcon');
+  if (f.type === 'password') { f.type = 'text'; i.className = 'fas fa-eye-slash'; }
+  else { f.type = 'password'; i.className = 'fas fa-eye'; }
+}
+function fillDemo(u, p) {
+  var uf = document.querySelector('input[name=username]');
+  var pf = document.getElementById('pwdField');
+  if (uf) uf.value = u;
+  if (pf) pf.value = p;
+}
+</script>
+{% endblock %}

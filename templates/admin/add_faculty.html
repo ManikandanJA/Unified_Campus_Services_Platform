@@ -1,0 +1,82 @@
+{% extends 'admin/base.html' %}
+{% block title %}Add Faculty – UCSP{% endblock %}
+{% block page_title %}Add Faculty{% endblock %}
+{% block m_addfac %}active{% endblock %}
+
+{% block content %}
+<div class="form-card">
+  <div class="form-card-header">
+    <i class="fas fa-user-plus me-2"></i>Add New Faculty
+  </div>
+  <div class="form-card-body">
+    <form method="POST" action="{{ url_for('add_faculty') }}" enctype="multipart/form-data">
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Full Name <span class="text-danger">*</span></label>
+          <input type="text" name="name" class="form-control form-control-dark" placeholder="Dr. Ramesh Kumar" required/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" name="phone" class="form-control form-control-dark" placeholder="9876543210"/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Years of Experience</label>
+          <input type="text" name="experience" class="form-control form-control-dark" placeholder="e.g. 5 years"/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Role <span class="text-danger">*</span></label>
+          <select name="role" class="form-select form-control-dark" required>
+            <option value="">— Select Role —</option>
+            <option value="HOD">HOD</option>
+            <option value="Professor">Professor</option>
+            <option value="Assistant Professor">Assistant Professor</option>
+            <option value="Lab Incharge">Lab Incharge</option>
+            <option value="Office Worker">Office Worker</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Department <span class="text-danger">*</span></label>
+          <select name="department" class="form-select form-control-dark" required>
+            <option value="">— Select Department —</option>
+            <option>Computer Science &amp; Engineering</option>
+            <option>Electronics &amp; Communication</option>
+            <option>Information Technology</option>
+            <option>MCA</option>
+            <option>Mechanical Engineering</option>
+            <option>MBA</option>
+            <option>Civil Engineering</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Profile Photo</label>
+          <input type="file" name="image" class="form-control form-control-dark" accept="image/*"/>
+          <div class="form-text text-white-50">JPG, PNG or WebP. Max 2MB.</div>
+        </div>
+
+        <div class="col-12"><hr class="border-secondary"/></div>
+        <div class="col-12">
+          <div class="section-title mb-3"><i class="fas fa-key me-2"></i>Login Credentials</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Username <span class="text-danger">*</span></label>
+          <input type="text" name="username" class="form-control form-control-dark" placeholder="ramesh.k" required/>
+          <div class="form-text text-white-50">Faculty uses this to login.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Password <span class="text-danger">*</span></label>
+          <input type="text" name="password" class="form-control form-control-dark" placeholder="faculty123" required/>
+        </div>
+
+        <div class="col-12 d-flex gap-2 mt-2">
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="fas fa-save me-2"></i>Add Faculty
+          </button>
+          <a href="{{ url_for('view_faculty') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
